@@ -7,6 +7,7 @@ import Tripmap from "./screen/Tripmap";
 import { Provider } from "react-redux";
 import { store } from "./store";
 import Forgetpassword from "./screen/Forgetpassword";
+import DriverProfile from "./screen/Drive/DriverProfile";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -14,6 +15,13 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="driversprofile"
+            component={DriverProfile}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="Login"
             component={Login}

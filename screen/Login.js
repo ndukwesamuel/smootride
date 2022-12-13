@@ -40,6 +40,8 @@ const Login = () => {
     };
 
     dispatch(login(userData));
+
+    navigation.navigate("driversprofile");
   };
 
   return (
