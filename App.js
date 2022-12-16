@@ -16,19 +16,20 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="driversprofile"
-            component={DriverProfile}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
             name="Login"
             component={Login}
             options={{
               headerShown: false,
             }}
           />
+          <Stack.Screen
+            name="driversprofile"
+            component={DriverProfile}
+            options={{
+              headerShown: false,
+            }}
+          />
+
           <Stack.Screen
             name="Tripmap"
             component={Tripmap}
