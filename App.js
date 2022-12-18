@@ -10,6 +10,7 @@ import Forgetpassword from "./screen/Forgetpassword";
 import DriverProfile from "./screen/Drive/DriverProfile";
 import Pending from "./screen/Drive/Pending";
 import DriverTripmap from "./screen/Drive/DriverTripmap";
+import Trip from "./screen/Drive/Trip";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -17,6 +18,13 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Trip"
+            component={Trip}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="DriverTripmap"
             component={DriverTripmap}
