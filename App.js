@@ -8,6 +8,8 @@ import { Provider } from "react-redux";
 import { store } from "./store";
 import Forgetpassword from "./screen/Forgetpassword";
 import DriverProfile from "./screen/Drive/DriverProfile";
+import Pending from "./screen/Drive/Pending";
+import DriverTripmap from "./screen/Drive/DriverTripmap";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -16,8 +18,16 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
-            name="Login"
-            component={Login}
+            name="DriverTripmap"
+            component={DriverTripmap}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="Pending"
+            component={Pending}
             options={{
               headerShown: false,
             }}
@@ -25,6 +35,13 @@ export default function App() {
           <Stack.Screen
             name="driversprofile"
             component={DriverProfile}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={Login}
             options={{
               headerShown: false,
             }}
