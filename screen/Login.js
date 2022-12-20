@@ -32,7 +32,16 @@ const Login = () => {
     (state) => state.LoginSlice
   );
 
-  console.log(user + "mmm22@#");
+  console.log(isSuccess);
+
+  useEffect(() => {
+    if (isSuccess) {
+      navigation.navigate("driversprofile");
+    }
+
+    return () => {};
+  }, [isSuccess]);
+
   const handleLogin = () => {
     const userData = {
       email,
@@ -40,8 +49,6 @@ const Login = () => {
     };
 
     dispatch(login(userData));
-
-    navigation.navigate("driversprofile");
   };
 
   return (
