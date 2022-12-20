@@ -36,7 +36,6 @@ const Login = () => {
     if (user) {
       navigation.navigate("forgetpassword");
     }
-
     return () => {};
   }, [isSuccess, user]);
 
