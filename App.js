@@ -16,9 +16,6 @@ import RiderRequest from "./screen/rider/RiderRequest";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import Pending from "./screen/Drive/Pending";
-import DriverTripmap from "./screen/Drive/DriverTripmap";
-import Trip from "./screen/Drive/Trip";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -64,80 +61,63 @@ export function TabNavigation() {
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-        <Stack.Screen
-            name="TabNavigation"
-            component={TabNavigation}
-            options={{
-              headerShown: false,
-            }} 
-          />
-          <Stack.Screen
-            name="driversprofile"
-            component={DriverProfile}
-            options={{
-              headerShown: false,
-            }}
-          />
-        <Stack.Navigator initialRouteName="Login">
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{
-              headerShown: false,
-            }}
-          />
+    // <Provider store={store}>
+    //   <NavigationContainer>
+    //     <Stack.Navigator>
+    //     <Stack.Screen
+    //         name="TabNavigation"
+    //         component={TabNavigation}
+    //         options={{
+    //           headerShown: false,
+    //         }} 
+    //       />
+    //     {/* <Stack.Screen
+    //         name="RiderTrips"
+    //         component={RiderTrips}
+    //         options={{
+    //           headerShown: false,
+    //         }} 
+    //       /> */}
+    //     {/* <Stack.Screen
+    //         name="riderprofile"
+    //         component={RiderProfile}
+    //         options={{
+    //           headerShown: false,
+    //         }}
+    //       /> */}
+    //       <Stack.Screen
+    //         name="driversprofile"
+    //         component={DriverProfile}
+    //         options={{
+    //           headerShown: false,
+    //         }}
+    //       />
+    //       <Stack.Screen
+    //         name="Login"
+    //         component={Login}
+    //         options={{
+    //           headerShown: false,
+    //         }}
+    //       />
+    //       <Stack.Screen
+    //         name="Tripmap"
+    //         component={Tripmap}
+    //         options={{
+    //           headerShown: false,
+    //         }}
+    //       />
 
-          <Stack.Screen
-            name="Trip"
-            component={Trip}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="DriverTripmap"
-            component={DriverTripmap}
-            options={{
-              headerShown: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="Pending"
-            component={Pending}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="driversprofile"
-            component={DriverProfile}
-            options={{
-              headerShown: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="Tripmap"
-            component={Tripmap}
-            options={{
-              headerShown: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="forgetpassword"
-            component={Forgetpassword}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    //       <Stack.Screen
+    //         name="forgetpassword"
+    //         component={Forgetpassword}
+    //         options={{
+    //           headerShown: false,
+    //         }}
+    //       />
+    //     </Stack.Navigator>
+    //   </NavigationContainer>
+    // </Provider>
+    <Text>it works</Text>
   );
 }
 
