@@ -3,6 +3,8 @@ import axios from "axios";
 
 import { APP_NAME, APIBASEURL } from "@env";
 
+let userAPi = "https://www.smoothride.ng/taxi/api/login";
+
 const initialState = {
   user: null,
   isError: false,
@@ -11,20 +13,20 @@ const initialState = {
   message: "why me",
 };
 
-console.log(APIBASEURL + "this");
-
 const loginfetchDatahandle = async (userData) => {
-  console.log(userData + "userdat");
+  // console.log(userData);
 
-  const response = await axios.post(APIBASEURL + "candidatelogin", userData);
-
-  // if (response.data) {
-  //   localStorage.setItem('user', JSON.stringify(response.data))
-  // }
-  return response.data;
+  try {
+    const response = await axios.post(userAPi, userData);
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
+  // console.log(user);
   try {
     return await loginfetchDatahandle(user);
   } catch (error) {

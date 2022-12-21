@@ -32,7 +32,13 @@ const Login = () => {
     (state) => state.LoginSlice
   );
 
-  console.log(user + "mmm22@#");
+  useEffect(() => {
+    if (user) {
+      navigation.navigate("forgetpassword");
+    }
+    return () => {};
+  }, [isSuccess, user]);
+
   const handleLogin = () => {
     const userData = {
       email,
@@ -40,8 +46,6 @@ const Login = () => {
     };
 
     dispatch(login(userData));
-
-    navigation.navigate("driversprofile");
   };
 
   return (
