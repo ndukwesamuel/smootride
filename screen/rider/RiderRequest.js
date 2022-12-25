@@ -3,11 +3,42 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import clientimg from "../../assets/images/profile.jpg";
 import {View, Text,Dimensions,StatusBar,TouchableHighlight,Alert, ImageBackground,SafeAreaView,ActivityIndicator,StyleSheet,TextInput, TouchableOpacity, ScrollView, Image} from 'react-native';
 import CardView from 'react-native-cardview';
+import { GOOGLE_MAPS_APIKEYS} from "@env";
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+
+
+const {width, height} = Dimensions.get('window');
+
+const ASPECT_RATIO =  width / height;
+const LATITUDE_DELTA = 0.006339428281933124;
+const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
+const INITIAL_POSITION = {
+    latitude: 40.767110,
+    longitude: -73.979704,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA
+};
+
 
 const RiderRequest = () => {
   return (
     <View style={styles.container}>
-    <MapView style={styles.map} provider={PROVIDER_GOOGLE} />
+    <MapView style={styles.map} provider={PROVIDER_GOOGLE} showsUserLocation initialRegion={INITIAL_POSITION}/>
+    <View style={{position:"absolute", width:"90%", backgroundColor:"white", 
+shadowColor:"black", shadowOffset:{width: 2, height:2}, shadowOpacity: 0.5, shadowRadius: 4,
+marginLeft: "5%", top: 60}}>
+    <GooglePlacesAutocomplete
+      placeholder='Search'
+      onPress={(data, details = null) => {
+        // 'details' is provided when fetchDetails = true
+        console.log(data, details);
+      }}
+      query={{
+        key: GOOGLE_MAPS_APIKEYS,
+        language: 'en',
+      }}
+    />
+    </View>
     <View style={{backgroundColor:"white", borderTopLeftRadius: 15, borderTopRightRadius: 20}}>
         <Text style={{color:'#007cc2', textAlign:"center", fontSize:20, marginTop: 25}}>
             Hi, Reginald Umah - Test
