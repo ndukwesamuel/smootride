@@ -33,8 +33,8 @@ const Login = () => {
   );
 
   useEffect(() => {
-    if (user) {
-      navigation.navigate("forgetpassword");
+    if (user== true) {
+      navigation.navigate("TabNavigation", {screen:"RiderRequest"});
     }
     return () => {};
   }, [isSuccess, user]);
