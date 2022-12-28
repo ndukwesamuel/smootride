@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
 import { APP_NAME, APIBASEURL } from "@env";
@@ -6,19 +7,21 @@ import { APP_NAME, APIBASEURL } from "@env";
 let userAPi = "https://www.smoothride.ng/taxi/api/login";
 
 const initialState = {
-  user: null,
+  user: false,
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: "why me",
+  data: null
 };
 
 const loginfetchDatahandle = async (userData) => {
-  // console.log(userData);
+ 
 
   try {
     const response = await axios.post(userAPi, userData);
-    // console.log(response.data);
+    console.log(response.data);
+    await AsyncStorage.setItem("token", response.data.access_token)
     return response.data;
   } catch (error) {
     console.log(error);
@@ -57,13 +60,14 @@ export const LoginSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.user = true;
+        state.data= action.payload;
       })
       .addCase(login.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.user = null;
+        state.user = false;
       });
   },
 });
