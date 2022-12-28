@@ -65,6 +65,13 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
         <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              headerShown: false,
+            }}
+          />
+        <Stack.Screen
             name="TabNavigation"
             component={TabNavigation}
             options={{
@@ -92,13 +99,7 @@ export default function App() {
               headerShown: false,
             }}
           />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{
-              headerShown: false,
-            }}
-          />
+          
           <Stack.Screen
             name="Tripmap"
             component={Tripmap}

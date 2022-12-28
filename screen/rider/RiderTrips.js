@@ -1,9 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {View, Text,Dimensions,StatusBar,TouchableHighlight,Alert, ImageBackground,SafeAreaView,ActivityIndicator,StyleSheet,TextInput, TouchableOpacity, ScrollView} from 'react-native';
+import { useDispatch } from 'react-redux';
+import { GetTrip } from '../../Slice/auth/GetTrips';
 
 const RiderTrips = () => {
+
+  const dispatch= useDispatch()
+  
+  useEffect(()=>{
+    dispatch(GetTrip())
+  }, [])
+
+
   return (<SafeAreaView style={styles.container}>
     <View style={{borderWidth:1,borderColor:'#005091',margin:7,borderBottomLeftRadius:5,borderBottomRightRadius:5}}>
                         <View style={{backgroundColor:'#005091',padding:7}}>
