@@ -11,21 +11,24 @@ import {
   ScrollView,
 } from "react-native";
 import PTRView from "react-native-pull-to-refresh";
-import CardView from "react-native-rn-cardview";
+// import CardView from "react-native-rn-cardview";
 import { ProgressDialog } from "react-native-simple-dialogs";
 
 const status_bar_height = Platform.OS == "ios" ? 20 : 0;
 
 const Pending = () => {
   const [items, setItems] = useState("mynae");
+  const [modalVisible, setModalVisible] = useState(false);
 
   const refresh = () => {
     // Fetch new data and update the items state
     setItems("we name");
   };
   return (
-    <PTRView onRefresh={refresh}>
-      <Modal>
+    // <PTRView onRefresh={refresh}>
+
+    <View>
+      <Modal visible={modalVisible}>
         <SafeAreaView
           style={{
             backgroundColor: "#fff",
@@ -241,7 +244,8 @@ const Pending = () => {
           */}
         </View>
       </ScrollView>
-    </PTRView>
+    </View>
+    // </PTRView>
   );
 };
 

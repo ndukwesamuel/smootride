@@ -14,6 +14,7 @@ import RiderProfile from "./screen/rider/RiderProfile";
 import RiderTrips from "./screen/rider/RiderTrips";
 import RiderRequest from "./screen/rider/RiderRequest";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import DriverTabNavigation from "./screen/Drive/DriverTabNavigation";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Stack = createNativeStackNavigator();
@@ -87,10 +88,29 @@ export function TabNavigation() {
 }
 
 export default function App() {
+  let user = false;
   return (
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          {user ? (
+            <Stack.Screen
+              name="TabNavigation"
+              component={TabNavigation}
+              options={{
+                headerShown: false,
+              }}
+            />
+          ) : (
+            <Stack.Screen
+              name="DriverTabNavigation"
+              component={DriverTabNavigation}
+              options={{
+                headerShown: false,
+              }}
+            />
+          )}
+
           <Stack.Screen
             name="Login"
             component={Login}
@@ -98,13 +118,7 @@ export default function App() {
               headerShown: false,
             }}
           />
-          <Stack.Screen
-            name="TabNavigation"
-            component={TabNavigation}
-            options={{
-              headerShown: false,
-            }}
-          />
+
           {/* <Stack.Screen
             name="RiderTrips"
             component={RiderTrips}
@@ -119,21 +133,6 @@ export default function App() {
               headerShown: false,
             }}
           /> */}
-          <Stack.Screen
-            name="driversprofile"
-            component={DriverProfile}
-            options={{
-              headerShown: false,
-            }}
-          />
-
-          <Stack.Screen
-            name="Tripmap"
-            component={Tripmap}
-            options={{
-              headerShown: false,
-            }}
-          />
 
           <Stack.Screen
             name="forgetpassword"
