@@ -33,9 +33,26 @@ const Login = () => {
   );
 
   useEffect(() => {
-    if (user== true) {
-      navigation.navigate("TabNavigation", {screen:"RiderRequest"});
+    // if (user == true) {
+    //   navigation.navigate("TabNavigation", { screen: "RiderRequest" });
+    // }
+
+    if (isLoading) {
+      console.log(isLoading + "is loading ");
     }
+
+    if (isError) {
+      console.log(isError + "is isError ");
+    }
+
+    if (isSuccess) {
+      console.log(isSuccess + "is isSuccess ");
+    }
+
+    if (message) {
+      console.log(message + "is message ");
+    }
+
     return () => {};
   }, [isSuccess, user]);
 
@@ -49,7 +66,7 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView style={GlobalStyles.droidSafeArea} className="h-full ">
+    <SafeAreaView>
       <ImageBackground
         source={require("../assets/images/Smot.jpg")}
         style={{ width: "100%", height: "100%" }}

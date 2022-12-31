@@ -93,6 +93,13 @@ export default function App() {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{
+              headerShown: false,
+            }}
+          />
           {user ? (
             <Stack.Screen
               name="TabNavigation"
@@ -110,14 +117,6 @@ export default function App() {
               }}
             />
           )}
-
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{
-              headerShown: false,
-            }}
-          />
 
           {/* <Stack.Screen
             name="RiderTrips"
