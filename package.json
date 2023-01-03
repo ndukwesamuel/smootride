@@ -18,6 +18,7 @@
     "@react-navigation/native-stack": "^6.9.6",
     "@reduxjs/toolkit": "^1.9.1",
     "axios": "^1.2.1",
+    "eas-cli": "^0.60.0",
     "expo": "~47.0.8",
     "expo-status-bar": "~1.4.2",
     "nativewind": "^2.0.11",

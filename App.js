@@ -100,7 +100,7 @@ export default function App() {
               headerShown: false,
             }}
           />
-          {user ? (
+          
             <Stack.Screen
               name="TabNavigation"
               component={TabNavigation}
@@ -108,7 +108,7 @@ export default function App() {
                 headerShown: false,
               }}
             />
-          ) : (
+          
             <Stack.Screen
               name="DriverTabNavigation"
               component={DriverTabNavigation}
@@ -116,7 +116,7 @@ export default function App() {
                 headerShown: false,
               }}
             />
-          )}
+          
 
           {/* <Stack.Screen
             name="RiderTrips"

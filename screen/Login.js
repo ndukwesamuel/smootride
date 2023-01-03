@@ -28,33 +28,25 @@ const Login = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  const { user, data, isError, isSuccess, message } = useSelector(
     (state) => state.LoginSlice
   );
+  console.log(data)
 
   useEffect(() => {
     // if (user == true) {
     //   navigation.navigate("TabNavigation", { screen: "RiderRequest" });
     // }
 
-    if (isLoading) {
-      console.log(isLoading + "is loading ");
+    if (user == true){
+      if (data?.user.userType == "staff"){
+        navigation.navigate("TabNavigation", { screen: "RiderRequest" });
+      }
+      else if(data?.user.userType == "driver"){
+        navigation.navigate("DriverTabNavigation", { screen: "Driver" });
+      }
     }
-
-    if (isError) {
-      console.log(isError + "is isError ");
-    }
-
-    if (isSuccess) {
-      console.log(isSuccess + "is isSuccess ");
-    }
-
-    if (message) {
-      console.log(message + "is message ");
-    }
-
-    return () => {};
-  }, [isSuccess, user]);
+  }, [user, data]);
 
   const handleLogin = () => {
     const userData = {
