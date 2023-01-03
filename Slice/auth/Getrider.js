@@ -20,7 +20,6 @@ export const GetRider= createAsyncThunk(
           return await instance
             .get("listofdrivers")
             .then( async (response) => {
-              console.warn("driver info ", response.data);
               return response.data;
             })
              
@@ -29,13 +28,42 @@ export const GetRider= createAsyncThunk(
     }
 )
 
+
+
+export const GetTrips= createAsyncThunk(
+  "getridertrip/Ridertrip", async(_, {rejectWithValue})=>{
+      const tokengot = await  AsyncStorage.getItem("token")
+      const infoneeded= `Bearer ${tokengot}`
+      const instance = axios.create({
+          baseURL: "https://www.smoothride.ng/taxi/api/",
+          timeout: 30000,
+    
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": infoneeded
+          },
+        });
+        return await instance
+          .get("getridertrip")
+          .then( async (response) => {
+            console.warn("trip info ", response.data);
+            return response.data;
+          })
+           
+    .catch(err => console.log(err))
+      
+  }
+)
+
 const initialState = {
     user: false,
     isError: false,
     isSuccess: false,
     isLoading: false,
     message: "",
-    data: null
+    data: null,
+    trips: null
   };
 
   export const GetRiderSlice = createSlice({
@@ -53,9 +81,24 @@ const initialState = {
           state.isSuccess = true;
           state.user = true;
           state.data= action.payload;
-          console.warn("data stored ",action.payload);
         })
         .addCase(GetRider.rejected, (state, action) => {
+          state.isLoading = false;
+          state.isError = true;
+          state.message = action.payload;
+          state.user = false;
+        })
+        .addCase(GetTrips.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(GetTrips.fulfilled, (state, action) => {
+          
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.trips= action.payload;
+          console.warn("trips stored ",action.payload);
+        })
+        .addCase(GetTrips.rejected, (state, action) => {
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
