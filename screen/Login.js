@@ -30,16 +30,25 @@ const Login = () => {
   const dispatch = useDispatch();
   const [loading, setLoading]= useState(false)
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  const { user, data, isError, isSuccess, message } = useSelector(
     (state) => state.LoginSlice
   );
+  console.log(data)
 
   useEffect(() => {
-    if (user== true) {
-      navigation.navigate("TabNavigation", {screen:"RiderRequest"});
+    // if (user == true) {
+    //   navigation.navigate("TabNavigation", { screen: "RiderRequest" });
+    // }
+
+    if (user == true){
+      if (data?.user.userType == "staff"){
+        navigation.navigate("TabNavigation", { screen: "RiderRequest" });
+      }
+      else if(data?.user.userType == "driver"){
+        navigation.navigate("DriverTabNavigation", { screen: "Driver" });
+      }
     }
-    return () => {};
-  }, [isSuccess, user]);
+  }, [user, data]);
 
   const handleLogin = async () => {
     const userData = {
@@ -52,7 +61,7 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView style={GlobalStyles.droidSafeArea} className="h-full ">
+    <View>
       <ImageBackground
         source={require("../assets/images/Smot.jpg")}
         style={{ width: "100%", height: "100%" }}
@@ -172,7 +181,7 @@ const Login = () => {
           </View>
         </KeyboardAvoidingView>
       </ImageBackground>
-    </SafeAreaView>
+    </View>
   );
 };
 
