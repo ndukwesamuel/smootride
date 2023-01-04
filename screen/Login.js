@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Button,
   Image,
   ImageBackground,
@@ -27,6 +28,7 @@ const Login = () => {
   const origin = useSelector(selectOrigin);
   const navigation = useNavigation();
   const dispatch = useDispatch();
+  const [loading, setLoading]= useState(false)
 
   const { user, data, isError, isSuccess, message } = useSelector(
     (state) => state.LoginSlice
@@ -48,17 +50,18 @@ const Login = () => {
     }
   }, [user, data]);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     const userData = {
       email,
       password,
     };
-
-    dispatch(login(userData));
+    setLoading(true)
+    await dispatch(login(userData));
+    setLoading(false)
   };
 
   return (
-    <SafeAreaView>
+    <View>
       <ImageBackground
         source={require("../assets/images/Smot.jpg")}
         style={{ width: "100%", height: "100%" }}
@@ -136,6 +139,8 @@ const Login = () => {
                   padding: 7,
                 }}
               >
+                {loading? <ActivityIndicator animating={true} color="white"/>
+                    :
                 <Text
                   style={{
                     alignSelf: "center",
@@ -144,7 +149,7 @@ const Login = () => {
                   }}
                 >
                   LOGIN
-                </Text>
+                </Text>}
                 {/* <Button
                   onPress={() => {
                     navigation.navigate("Tripmap");
@@ -176,7 +181,7 @@ const Login = () => {
           </View>
         </KeyboardAvoidingView>
       </ImageBackground>
-    </SafeAreaView>
+    </View>
   );
 };
 

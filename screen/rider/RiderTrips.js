@@ -1,30 +1,46 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import {View, Text,Dimensions,StatusBar,TouchableHighlight,Alert, ImageBackground,SafeAreaView,ActivityIndicator,StyleSheet,TextInput, TouchableOpacity, ScrollView} from 'react-native';
-import { useDispatch } from 'react-redux';
-import { GetTrip } from '../../Slice/auth/GetTrips';
+import {View, Text,Dimensions,StatusBar,TouchableHighlight,Alert, ImageBackground,SafeAreaView,ActivityIndicator,StyleSheet,TextInput, TouchableOpacity, ScrollView, FlatList} from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { GetTrips } from '../../Slice/auth/Getrider';
 
 const RiderTrips = () => {
 
   const dispatch= useDispatch()
+  const [loading, setLoading]= useState(false)
   
   useEffect(()=>{
-    dispatch(GetTrip())
+
+    const trial= async()=>{
+      setLoading(true)
+    await dispatch(GetTrips())
+    setLoading(false)
+    }
+    trial()
   }, [])
 
 
+  const trips = useSelector((state)=> state?.GetRiderSlice?.trips)
+  console.warn("trips known tips ", trips)
+
   return (<SafeAreaView style={styles.container}>
-    <View style={{borderWidth:1,borderColor:'#005091',margin:7,borderBottomLeftRadius:5,borderBottomRightRadius:5}}>
+         {loading? <View style={{flex:1, justifyContent:"center", alignItems:"center"}}><ActivityIndicator animating={true} color="black"/></View>
+                    :
+    <FlatList data={trips} keyExtractor={item=> item.id} 
+    renderItem={({item})=>{
+      return <>
+     
+                    <View style={{borderWidth:1,borderColor:'#005091',margin:7,borderBottomLeftRadius:5,borderBottomRightRadius:5}}>
                         <View style={{backgroundColor:'#005091',padding:7}}>
                             <View style = {{flexDirection:"row"}}>
                                 <View style={{width:'50%'}}>
-                                   <Text style={{color:'#fff',alignSelf:'flex-start',fontSize:12}}> Tunde trial</Text>
+                                   <Text style={{color:'#fff',alignSelf:'flex-start',fontSize:12}}> {item?.name}</Text>
                                    <Text style={{color:'#fff',alignSelf:'flex-start',fontSize:12}}> Travel Time: 10:50pm</Text>
                                 </View>
                                 
                                 <View style={{width:'50%'}}>
-                                    <Text style={{alignSelf:'flex-end',color:'#fff',fontSize:12}}>NGN 1,356</Text>
+                                    <Text style={{alignSelf:'flex-end',color:'#fff',fontSize:12}}>NGN {parseFloat(item?.tripAmt).toFixed(2)}</Text>
                                     <View style={{width:'60%',backgroundColor:'#007cc2',alignSelf:'flex-end',borderRadius:5}}>
                                        <Text 
                                       //  onPress = {()=>this.savedetails(d)} 
@@ -36,17 +52,17 @@ const RiderTrips = () => {
                         </View>
                         <View style={{borderBottomColor:'#005091',borderBottomWidth:1,marginBottom:7}}>
                             <View style = {styles.info}>  
-                            <Text style={{marginTop:1,color:'#877A80'}}> <Ionicons name='md-pin' size={15} style={{color:'green',marginTop:10}}/> ketu</Text>
+                            <Text style={{marginTop:1,color:'#877A80'}}> <Ionicons name='md-pin' size={15} style={{color:'green',marginTop:10}}/> {item?.pickUpAddress}</Text>
                             
                             </View>
                         </View>
                         <View style={{marginBottom:7}}>
                             <View style = {styles.info}>  
-                            <Text style={{marginTop:1,color:'#877A80'}}> <Ionicons name='md-pin' size={15} style={{color:'red',marginTop:10}}/> ojota</Text>
+                            <Text style={{marginTop:1,color:'#877A80'}}> <Ionicons name='md-pin' size={15} style={{color:'red',marginTop:10}}/> {item?.destAddress}</Text>
                             
                             </View>
                         </View>
-                    </View>  
+                    </View></> }} />}
                     </SafeAreaView>
 );
 }
