@@ -58,7 +58,7 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView>
+    <View>
       <ImageBackground
         source={require("../assets/images/Smot.jpg")}
         style={{ width: "100%", height: "100%" }}
@@ -176,7 +176,7 @@ const Login = () => {
           </View>
         </KeyboardAvoidingView>
       </ImageBackground>
-    </SafeAreaView>
+    </View>
   );
 };
 

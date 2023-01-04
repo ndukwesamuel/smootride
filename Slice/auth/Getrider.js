@@ -20,7 +20,6 @@ export const GetRider= createAsyncThunk(
           return await instance
             .get("listofdrivers")
             .then( async (response) => {
-              console.warn("driver info ", response.data);
               return response.data;
             })
              
@@ -53,7 +52,6 @@ const initialState = {
           state.isSuccess = true;
           state.user = true;
           state.data= action.payload;
-          console.warn("data stored ",action.payload);
         })
         .addCase(GetRider.rejected, (state, action) => {
           state.isLoading = false;
