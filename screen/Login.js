@@ -28,23 +28,22 @@ const Login = () => {
   const origin = useSelector(selectOrigin);
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [loading, setLoading]= useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const { user, data, isError, isSuccess, message } = useSelector(
+  const { user, data, isError, isSuccess, message, isLoading } = useSelector(
     (state) => state.LoginSlice
   );
-  console.log(data)
+  console.log(data);
 
   useEffect(() => {
     // if (user == true) {
     //   navigation.navigate("TabNavigation", { screen: "RiderRequest" });
     // }
 
-    if (user == true){
-      if (data?.user.userType == "staff"){
+    if (user == true) {
+      if (data?.user.userType == "staff") {
         navigation.navigate("TabNavigation", { screen: "RiderRequest" });
-      }
-      else if(data?.user.userType == "driver"){
+      } else if (data?.user.userType == "driver") {
         navigation.navigate("DriverTabNavigation", { screen: "Driver" });
       }
     }
@@ -55,9 +54,9 @@ const Login = () => {
       email,
       password,
     };
-    setLoading(true)
+    // setLoading(true)
     await dispatch(login(userData));
-    setLoading(false)
+    // setLoading(false)
   };
 
   return (
@@ -139,17 +138,19 @@ const Login = () => {
                   padding: 7,
                 }}
               >
-                {loading? <ActivityIndicator animating={true} color="white"/>
-                    :
-                <Text
-                  style={{
-                    alignSelf: "center",
-                    color: "#fff",
-                    fontSize: 17,
-                  }}
-                >
-                  LOGIN
-                </Text>}
+                {isLoading ? (
+                  <ActivityIndicator animating={true} color="white" />
+                ) : (
+                  <Text
+                    style={{
+                      alignSelf: "center",
+                      color: "#fff",
+                      fontSize: 17,
+                    }}
+                  >
+                    LOGIN
+                  </Text>
+                )}
                 {/* <Button
                   onPress={() => {
                     navigation.navigate("Tripmap");
