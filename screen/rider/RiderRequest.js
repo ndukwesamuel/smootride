@@ -52,12 +52,12 @@ const RiderRequest = () => {
 
   return (
     <View style={styles.container}>
-      {/* <MapView
+      <MapView
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         // showsUserLocation
         initialRegion={INITIAL_POSITION}
-      /> */}
+      />
       <View
         style={{
           position: "absolute",
