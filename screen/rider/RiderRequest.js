@@ -26,24 +26,48 @@ import requestfile from "../../assets/images/requestfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { GetRider } from "../../Slice/auth/Getrider";
 import { RequestRide } from "../../Slice/auth/Requestride";
+import * as Location from 'expo-location';
+import { Marker } from "react-native-maps";
 
 const { width, height } = Dimensions.get("window");
 
-const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.006339428281933124;
-const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
-const INITIAL_POSITION = {
-  latitude: 40.76711,
-  longitude: -73.979704,
-  latitudeDelta: LATITUDE_DELTA,
-  longitudeDelta: LONGITUDE_DELTA,
-};
+
 
 const RiderRequest = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const dispatch = useDispatch();
   const [purpose, setPurpose] = useState("");
   const [loading, setLoading] = useState(false);
+  const [location, setLocation] = useState(null);
+  const [maplocation, setMaplocation] = useState(false);
+  const [userLocation, setUerLocation] = useState(null);
+
+  useEffect(() => {
+    const getPermissions = async()=>{
+      setMaplocation(true)
+      let {status} = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted'){
+        console.log("Please grant Location permissions");
+        return;
+      }
+
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      setLocation(currentLocation);
+      setMaplocation(false)
+    }
+    getPermissions();
+  }, []);
+
+
+  const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.006339428281933124;
+const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
+const INITIAL_POSITION = {
+  latitude: location?.coords.latitude,
+  longitude: location?.coords.longitude,
+  latitudeDelta: LATITUDE_DELTA,
+  longitudeDelta: LONGITUDE_DELTA,
+};
 
   const handlePurpose= async () =>{
     const userdata={
@@ -60,16 +84,25 @@ const RiderRequest = () => {
     dispatch(GetRider());
   }, []);
   const knowdata = useSelector((state) => state.GetRiderSlice?.data?.drivers);
-  const number = 8;
+  const number = knowdata?.length;
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
+      <View
+        style={styles.map}>
+          {maplocation? <View style={{flex: 1, justifyContent:"center",
+           alignItems:"center"}}>
+            <ActivityIndicator animating={true} color="black" />
+            </View>: <MapView
         provider={PROVIDER_GOOGLE}
+        style={styles.map}
         // showsUserLocation
         initialRegion={INITIAL_POSITION}
-      />
+      >
+        <Marker coordinate={INITIAL_POSITION} />
+        </MapView>}
+      
+      </View>
       <View
         style={{
           position: "absolute",
@@ -83,7 +116,7 @@ const RiderRequest = () => {
           top: 60,
         }}
       >
-        <GooglePlacesAutocomplete
+        {/* <GooglePlacesAutocomplete
           placeholder="Search"
           onPress={(data, details = null) => {
             // 'details' is provided when fetchDetails = true
@@ -93,7 +126,7 @@ const RiderRequest = () => {
             key: GOOGLE_MAPS_APIKEYS,
             language: "en",
           }}
-        />
+        /> */}
       </View>
       <View
         style={{

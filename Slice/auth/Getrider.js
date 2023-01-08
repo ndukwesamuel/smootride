@@ -52,7 +52,7 @@ export const GetTrips= createAsyncThunk(
         return await instance
           .get("getridertrip")
           .then( async (response) => {
-            console.warn("trip info ", response.data);
+            // console.warn("trip info ", response.data);
             return response.data;
           })
            
@@ -105,7 +105,7 @@ const initialState = {
           state.isLoading = false;
           state.isSuccess = true;
           state.trips= action.payload;
-          console.warn("trips stored ",action.payload);
+          // console.warn("trips stored ",action.payload);
         })
         .addCase(GetTrips.rejected, (state, action) => {
           state.isLoading = false;
