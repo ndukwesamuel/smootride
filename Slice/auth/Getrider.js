@@ -23,10 +23,15 @@ export const GetRider= createAsyncThunk(
               return response.data;
             })
              
-      .catch(err => console.log(err))
+      .catch((err) =>{ 
+        let errdata = err.response.data;
+        return rejectWithValue(errdata)
+        // console.log(err)
+      })
         
     }
 )
+
 
 
 
@@ -51,7 +56,11 @@ export const GetTrips= createAsyncThunk(
             return response.data;
           })
            
-    .catch(err => console.log(err))
+    .catch((err) =>{ 
+      let errdata = err.response.data;
+      return rejectWithValue(errdata)
+      // console.log(err)
+    })
       
   }
 )
@@ -61,7 +70,7 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: "",
+    message: null,
     data: null,
     trips: null
   };

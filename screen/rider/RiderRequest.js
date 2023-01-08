@@ -25,6 +25,7 @@ import Modal from "react-native-modal";
 import requestfile from "../../assets/images/requestfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { GetRider } from "../../Slice/auth/Getrider";
+import { RequestRide } from "../../Slice/auth/Requestride";
 
 const { width, height } = Dimensions.get("window");
 
@@ -41,6 +42,17 @@ const INITIAL_POSITION = {
 const RiderRequest = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const dispatch = useDispatch();
+  const [purpose, setPurpose] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handlePurpose= async () =>{
+    const userdata={
+      purpose: purpose
+    }
+    setLoading(true)
+    await dispatch(RequestRide(userdata))
+    setLoading(false)
+  }
 
   const handleModal = () => setIsModalVisible(!isModalVisible);
   useEffect(() => {
@@ -48,7 +60,6 @@ const RiderRequest = () => {
   }, []);
   const knowdata = useSelector((state) => state.GetRiderSlice?.data?.drivers);
   const number = 8;
-  console.log("knowndata ", number);
 
   return (
     <View style={styles.container}>
@@ -254,6 +265,8 @@ const RiderRequest = () => {
               width: "94%",
               alignSelf: "center",
             }}
+            value={purpose}
+            onChangeText={setPurpose}
             placeholder="State your reason"
           />
           <View
@@ -274,7 +287,11 @@ const RiderRequest = () => {
                 marginTop: 2,
                 borderRadius: 5,
               }}
+              onPress={handlePurpose}
             >
+              {loading ? (
+                  <ActivityIndicator animating={true} color="white" />
+                ) : (
               <Text
                 style={{
                   color: "#fff",
@@ -285,7 +302,7 @@ const RiderRequest = () => {
                 }}
               >
                 Submit
-              </Text>
+              </Text>)}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleModal}
