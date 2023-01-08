@@ -52,6 +52,7 @@ const RiderRequest = () => {
     setLoading(true)
     await dispatch(RequestRide(userdata))
     setLoading(false)
+    setIsModalVisible(false)
   }
 
   const handleModal = () => setIsModalVisible(!isModalVisible);
