@@ -49,13 +49,13 @@ const Login = () => {
     }
   }, [user, data]);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     const userData = {
       email,
       password,
     };
     // setLoading(true)
-    await dispatch(login(userData));
+    dispatch(login(userData));
     // setLoading(false)
   };
 

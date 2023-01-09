@@ -8,6 +8,6 @@ export const store = configureStore({
   reducer: {
     nav: navReducer,
     LoginSlice: LoginSlice,
-    GetRiderSlice: GetRiderSlice,
+    // GetRiderSlice: GetRiderSlice,
   },
 });
