@@ -33,7 +33,6 @@ const Login = () => {
   const { user, data, isError, isSuccess, message, isLoading } = useSelector(
     (state) => state.LoginSlice
   );
-  console.log(data);
 
   useEffect(() => {
     // if (user == true) {
@@ -49,13 +48,13 @@ const Login = () => {
     }
   }, [user, data]);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     const userData = {
       email,
       password,
     };
     // setLoading(true)
-    await dispatch(login(userData));
+    dispatch(login(userData));
     // setLoading(false)
   };
 
@@ -176,7 +175,7 @@ const Login = () => {
                   marginTop: 15,
                 }}
               >
-                RESET PASSWORD?
+                Forget PASSWORD?
               </Text>
             </View>
           </View>

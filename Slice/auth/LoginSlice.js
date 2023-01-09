@@ -18,16 +18,12 @@ const initialState = {
 const loginfetchDatahandle = async (userData) => {
   try {
     const response = await axios.post(userAPi, userData);
-    console.log(response.data);
     await AsyncStorage.setItem("token", response.data.access_token);
     return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
-  // console.log(user);
   try {
     return await loginfetchDatahandle(user);
   } catch (error) {

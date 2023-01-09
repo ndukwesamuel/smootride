@@ -1,4 +1,6 @@
 import {
+  ActivityIndicator,
+  Alert,
   Button,
   Image,
   ImageBackground,
@@ -9,14 +11,64 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import GlobalStyles from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
 
+import { login } from "../Slice/auth/LoginSlice";
+import {
+  PasswordReset_fuc,
+  reset as reset_PasswordReset_fuc,
+} from "../Slice/auth/PassowrdReset";
 const Forgetpassword = () => {
   const navigation = useNavigation();
+  const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+
+  const { ResetUser, data, isError, isSuccess, message, isLoading } =
+    useSelector((state) => state.PassowrdReset);
+
+  console.log(ResetUser);
+  const RestPassword = () => {
+    if (email == "") {
+      Alert.alert(
+        "Alert",
+
+        "Email field is required",
+        [{ text: "OK" }],
+        { cancelable: false }
+      );
+      return false;
+    }
+    let reset_password_data = { email };
+
+    dispatch(PasswordReset_fuc(reset_password_data));
+  };
+
+  useEffect(() => {
+    if (ResetUser?.success == true) {
+      Alert.alert(
+        "Alert",
+        "Check your Email for your new Password",
+        [{ text: "OK" }],
+        { cancelable: false }
+      );
+
+      dispatch(reset_PasswordReset_fuc());
+    }
+
+    if (ResetUser?.success == false) {
+      Alert.alert("Alert", "User does not exist", [{ text: "OK" }], {
+        cancelable: false,
+      });
+      dispatch(reset_PasswordReset_fuc());
+    }
+
+    return () => {};
+  }, [isError, ResetUser, isLoading]);
 
   return (
     <View>
@@ -52,6 +104,7 @@ const Forgetpassword = () => {
 
             <View>
               <TextInput
+                onChangeText={(text) => setEmail(text)}
                 placeholder="Email"
                 placeholderTextColor="#fff"
                 style={{
@@ -66,7 +119,7 @@ const Forgetpassword = () => {
                 }}
               />
 
-              <TouchableOpacity>
+              <TouchableOpacity onPress={RestPassword}>
                 <View
                   style={{
                     marginTop: 20,
@@ -75,11 +128,19 @@ const Forgetpassword = () => {
                     borderRadius: 30,
                   }}
                 >
-                  <Text
-                    style={{ alignSelf: "center", color: "#fff", fontSize: 17 }}
-                  >
-                    RESET PASSWORD
-                  </Text>
+                  {!isLoading && (
+                    <Text
+                      style={{
+                        alignSelf: "center",
+                        color: "#fff",
+                        fontSize: 17,
+                      }}
+                    >
+                      RESETPASSWORD
+                    </Text>
+                  )}
+
+                  {isLoading && <ActivityIndicator color="#fff" size="large" />}
                 </View>
               </TouchableOpacity>
 
