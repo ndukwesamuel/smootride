@@ -22,7 +22,7 @@ const RiderTrips = () => {
 
 
   const trips = useSelector((state)=> state?.GetRiderSlice?.trips)
-  console.warn("trips known tips ", trips)
+  // console.warn("trips known tips ", trips)
 
   return (<SafeAreaView style={styles.container}>
          {loading? <View style={{flex:1, justifyContent:"center", alignItems:"center"}}><ActivityIndicator animating={true} color="black"/></View>

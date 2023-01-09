@@ -23,10 +23,15 @@ export const GetRider= createAsyncThunk(
               return response.data;
             })
              
-      .catch(err => console.log(err))
+      .catch((err) =>{ 
+        let errdata = err.response.data;
+        return rejectWithValue(errdata)
+        // console.log(err)
+      })
         
     }
 )
+
 
 
 
@@ -47,11 +52,15 @@ export const GetTrips= createAsyncThunk(
         return await instance
           .get("getridertrip")
           .then( async (response) => {
-            console.warn("trip info ", response.data);
+            // console.warn("trip info ", response.data);
             return response.data;
           })
            
-    .catch(err => console.log(err))
+    .catch((err) =>{ 
+      let errdata = err.response.data;
+      return rejectWithValue(errdata)
+      // console.log(err)
+    })
       
   }
 )
@@ -61,7 +70,7 @@ const initialState = {
     isError: false,
     isSuccess: false,
     isLoading: false,
-    message: "",
+    message: null,
     data: null,
     trips: null
   };
@@ -96,7 +105,7 @@ const initialState = {
           state.isLoading = false;
           state.isSuccess = true;
           state.trips= action.payload;
-          console.warn("trips stored ",action.payload);
+          // console.warn("trips stored ",action.payload);
         })
         .addCase(GetTrips.rejected, (state, action) => {
           state.isLoading = false;
