@@ -1,19 +1,29 @@
-import React from 'react'
-import {View, Text, Image,Alert,StyleSheet,TextInput, TouchableOpacity, ScrollView,StatusBar} from 'react-native';
+import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  Alert,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  StatusBar,
+} from "react-native";
 import GlobalStyles from "../../GlobalStyles";
 import IonIcon from "react-native-vector-icons/Ionicons";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const RiderProfile = ({navigation}) => {
+const RiderProfile = ({ navigation }) => {
+  const handleLogout = async () => {
+    // await AsyncStorage.removeItem("token");
+    // navigation.navigate("Login")
 
-  const handleLogout= async ()=>{
-    await AsyncStorage.removeItem("token");
-    navigation.navigate("Login")
-  }
-
+    console.log("the log out is working ");
+  };
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} >
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View
         style={{
           flexDirection: "row",
@@ -181,7 +191,10 @@ const RiderProfile = ({navigation}) => {
                     }
                      */}
 
-        <TouchableOpacity style={{ flexDirection: "row", marginTop: 50 }} onPress={handleLogout}>
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginTop: 50 }}
+          onPress={handleLogout}
+        >
           <View style={{ width: "10%", marginTop: 30 }}>
             <IonIcon name="md-log-out" size={20} color="#000000"></IonIcon>
           </View>
@@ -191,7 +204,7 @@ const RiderProfile = ({navigation}) => {
         </TouchableOpacity>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 export default RiderProfile;

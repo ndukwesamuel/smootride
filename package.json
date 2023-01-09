@@ -36,11 +36,8 @@
     "react-native-timeline-flatlist": "^0.8.0",
     "react-redux": "^8.0.5",
     "tailwindcss": "^3.2.4",
-<<<<<<< HEAD
-    "expo-location": "~15.0.1"
-=======
+    "expo-location": "~15.0.1",
     "@react-native-community/datetimepicker": "6.5.2"
->>>>>>> master
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

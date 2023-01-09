@@ -4,14 +4,25 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from "react-native";
 import React from "react";
 import GlobalStyles from "../../GlobalStyles";
 import IonIcon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
 SafeAreaView;
 const DriverProfile = () => {
+  const navigation = useNavigation();
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("token");
+    navigation.navigate("Login");
+    console.log("the log out is working ");
+  };
+
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
       <View
@@ -181,14 +192,17 @@ const DriverProfile = () => {
                     }
                      */}
 
-        <View style={{ flexDirection: "row", marginTop: 50 }}>
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginTop: 50 }}
+          onPress={handleLogout}
+        >
           <View style={{ width: "10%", marginTop: 30 }}>
             <IonIcon name="md-log-out" size={20} color="#000000"></IonIcon>
           </View>
           <View style={{ flexDirection: "row", width: "90%", marginTop: 30 }}>
             <Text style={{ fontSize: 12, width: "90%" }}>Log Out</Text>
           </View>
-        </View>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
