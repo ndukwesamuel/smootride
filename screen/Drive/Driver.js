@@ -14,17 +14,34 @@ import React, { useState } from "react";
 import { ProgressDialog } from "react-native-simple-dialogs";
 import PTRView from "react-native-pull-to-refresh";
 import CardView from "react-native-cardview";
+import GlobalStyles from "../../GlobalStyles";
 
-const status_bar_height = Platform.OS == "ios" ? 20 : 0;
 const { width, height } = Dimensions.get("window");
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.006339428281933124;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+let mapheight = (height * 4) / 5;
+let maplow = (height * 1) / 5;
+let maphalf = height / 2;
+//let mapheight = height;
+const mapviewheight = parseInt(mapheight);
+const status_bar_height = Platform.OS == "ios" ? 20 : 0;
+let watchID;
+let permissionMsg = "";
+const managestate = [
+  { label: "Offline", value: "Offline" },
+  { label: "Online", value: "Online" },
+];
+const tripissues = [
+  { label: "Unavailable for Trip", value: "reassign" },
+  { label: "Trip Declined by Rider", value: "decline" },
+];
+
 const Driver = () => {
   const [modalVisible, setModalVisible] = useState(false);
   let data = "test";
   return (
-    <PTRView
-      style={styles.container}
-      classname="flex-1 border-2 border-red-600"
-    >
+    <PTRView classname="flex-1 border-2 border-red-600">
       <View classname="flex-1 bg-red-600 ">
         {/* {
                    this.props.drivertrip.IsjustSubmittedTrip == true && 
@@ -40,6 +57,29 @@ const Driver = () => {
             title="Updating Driver Availability"
             message="Please, wait..."
           />
+
+          <View style={styles.header}>
+            <Text style={styles.headerText}>
+              Trip Request{" "}
+              <Text style={{ fontSize: 12 }}>
+                {/* {this.state.driver_mode} */}
+                online
+              </Text>
+            </Text>
+            <Text
+              // onPress={this.toggleDialog}
+              style={{
+                fontSize: 12,
+                alignSelf: "flex-end",
+                borderRadius: 5,
+                color: "#fff",
+                backgroundColor: "#a31225",
+                padding: 3,
+              }}
+            >
+              Status
+            </Text>
+          </View>
 
           <Modal
             visible={false}
@@ -680,7 +720,92 @@ const Driver = () => {
 
           {/* pls there is still component  */}
 
-          <Text> kaka</Text>
+          <View classname="border-2 border-red-400">
+            {/* {(Object.keys(this.props.drivertrip.position).length > 0 ||
+              Object.keys(this.state.initialLocation).length > 0) && (
+              <MapView
+                provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                style={{
+                  height:
+                    this.props.rider.rider_id == "" ? mapviewheight : maphalf,
+                }}
+                showUserLocation
+                followUserLocation
+                loadingEnabled
+                region={this.getMapRegion()}
+              >
+                <Polyline
+                  coordinates={this.props.drivertrip.routeCoordinates}
+                  strokeWidth={2}
+                />
+                <Marker.Animated
+                  ref={(marker) => {
+                    this.marker = marker;
+                  }}
+                  coordinate={this.state.coordinate}
+                />
+              </MapView>
+            )} */}
+
+            {/* {this.props.rider.rider_name == "" &&
+              this.props.data.isFetching == false && (
+                <View style={{ padding: 10, height: maplow }}>
+                  <CardView
+                    cardElevation={0}
+                    cardMaxElevation={0}
+                    cornerRadius={5}
+                    style={styles.cardview}
+                  >
+                    <Text
+                      style={{
+                        color: "#877A80",
+                        alignSelf: "center",
+                        fontSize: 16,
+                      }}
+                    >
+                      No Ride Request Assigned Yet
+                    </Text>
+                  </CardView>
+                </View>
+              )} */}
+
+            {/* {
+              //Object.keys(this.props.drivertrip.position).length == 0 &&
+              this.props.drivertrip.isReady == false &&
+                this.props.drivertrip.isStarted == true && (
+                  <View style={{ textAlign: "center" }}>
+                    <Text style={{ color: "#877A80", alignSelf: "center" }}>
+                      Please wait...
+                    </Text>
+                    <ActivityIndicator color="#007cc2" size="large" />
+                  </View>
+                )
+            } */}
+
+            <View>
+              {/* {
+                       this.props.rider.rider_name == '' && this.props.data.isFetching == false && */}
+              <View style={{ padding: 10, height: maplow }}>
+                {/* <CardView
+                  cardElevation={0}
+                  cardMaxElevation={0}
+                  cornerRadius={5}
+                  style={styles.cardview}
+                > */}
+                <Text
+                  style={{
+                    color: "#877A80",
+                    alignSelf: "center",
+                    fontSize: 16,
+                  }}
+                >
+                  No Ride Request Assigned Yet
+                </Text>
+                {/* </CardView> */}
+              </View>
+              {/* } */}
+            </View>
+          </View>
         </ScrollView>
       </View>
     </PTRView>
@@ -696,6 +821,7 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 14,
     flexDirection: "row",
+    paddingTop: 40,
   },
   fab: {
     position: "absolute",
