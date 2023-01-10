@@ -2,7 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-import { APP_NAME, APIBASEURL } from "@env";
+import {
+  APP_NAME,
+  APIBASEURL,
+  SMOOTHRIDEAPIURL,
+  SMOOTH_RIDE_OLD_API_URL,
+} from "@env";
+import { Alert } from "react-native";
 
 let userAPi = "https://www.smoothride.ng/taxi/api/login";
 
@@ -18,9 +24,15 @@ const initialState = {
 const loginfetchDatahandle = async (userData) => {
   try {
     const response = await axios.post(userAPi, userData);
-    await AsyncStorage.setItem("token", response.data.access_token);
-    return response.data;
-  } catch (error) {}
+    if (response.data) {
+      await AsyncStorage.setItem("token", response.data.access_token);
+      return response.data;
+    }
+  } catch (error) {
+    if (error.response.data.message) {
+      Alert.alert("Username and Password does not Match");
+    }
+  }
 };
 
 export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
@@ -31,6 +43,7 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
+
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -50,6 +63,7 @@ export const LoginSlice = createSlice({
     builder
       .addCase(login.pending, (state) => {
         state.isLoading = true;
+        state.null = true;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.isLoading = false;

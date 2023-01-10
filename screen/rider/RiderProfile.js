@@ -16,10 +16,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const RiderProfile = ({ navigation }) => {
   const handleLogout = async () => {
-    // await AsyncStorage.removeItem("token");
-    // navigation.navigate("Login")
-
-    console.log("the log out is working ");
+    await AsyncStorage.removeItem("token");
+    navigation.navigate("Login");
   };
 
   return (

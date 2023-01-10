@@ -2,7 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
-import { APP_NAME, APIBASEURL, SMOOTHRIDEAPIURL } from "@env";
+import {
+  APP_NAME,
+  APIBASEURL,
+  SMOOTHRIDEAPIURL,
+  SMOOTH_RIDE_OLD_API_URL,
+} from "@env";
 
 const initialState = {
   ResetUser: null,
@@ -13,7 +18,7 @@ const initialState = {
 };
 
 const ResetpasswordService = async (userData) => {
-  let url = SMOOTHRIDEAPIURL + "forgotpassword";
+  let url = SMOOTH_RIDE_OLD_API_URL + "forgotpassword";
 
   const response = await axios.post(url, userData);
 
