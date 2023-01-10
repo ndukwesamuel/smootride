@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   Button,
   Image,
   ImageBackground,
@@ -35,8 +36,23 @@ const Login = () => {
   );
 
   useEffect(() => {
+    if (isError) {
+      console.log(message + "this is now");
+    }
+    if (isLoading) {
+      console.log("is loading true");
+    } else {
+      console.log("is loading s flase");
+    }
+
     // if (user == true) {
     //   navigation.navigate("TabNavigation", { screen: "RiderRequest" });
+
+    console.log("start");
+    console.log(user);
+    console.log(data);
+    console.log(message);
+    console.log("end");
     // }
 
     if (user == true) {
@@ -46,9 +62,18 @@ const Login = () => {
         navigation.navigate("DriverTabNavigation", { screen: "Driver" });
       }
     }
-  }, [user, data]);
+  }, [user, data, isLoading, isError]);
 
   const handleLogin = () => {
+    if (email == "" || password == "") {
+      Alert.alert(
+        "Alert",
+        "Email and Password field is required",
+        [{ text: "OK" }],
+        { cancelable: false }
+      );
+      return false;
+    }
     const userData = {
       email,
       password,
