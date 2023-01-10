@@ -100,23 +100,22 @@ export default function App() {
               headerShown: false,
             }}
           />
-          
-            <Stack.Screen
-              name="TabNavigation"
-              component={TabNavigation}
-              options={{
-                headerShown: false,
-              }}
-            />
-          
-            <Stack.Screen
-              name="DriverTabNavigation"
-              component={DriverTabNavigation}
-              options={{
-                headerShown: false,
-              }}
-            />
-          
+
+          <Stack.Screen
+            name="TabNavigation"
+            component={TabNavigation}
+            options={{
+              headerShown: false,
+            }}
+          />
+
+          <Stack.Screen
+            name="DriverTabNavigation"
+            component={DriverTabNavigation}
+            options={{
+              headerShown: false,
+            }}
+          />
 
           {/* <Stack.Screen
             name="RiderTrips"

@@ -21,11 +21,8 @@ const Driver = () => {
   const [modalVisible, setModalVisible] = useState(false);
   let data = "test";
   return (
-    <PTRView
-      style={styles.container}
-      classname="flex-1 border-2 border-red-600"
-    >
-      <View classname="flex-1 bg-red-600 ">
+    <PTRView style={styles.container}>
+      <View>
         {/* {
                    this.props.drivertrip.IsjustSubmittedTrip == true && 
                    <View>
@@ -679,8 +676,6 @@ const Driver = () => {
           </Modal>
 
           {/* pls there is still component  */}
-
-          <Text> kaka</Text>
         </ScrollView>
       </View>
     </PTRView>
