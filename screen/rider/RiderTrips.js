@@ -4,6 +4,7 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import {View, Text,Dimensions,StatusBar,TouchableHighlight,Alert, ImageBackground,SafeAreaView,ActivityIndicator,StyleSheet,TextInput, TouchableOpacity, ScrollView, FlatList} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetTrips } from '../../Slice/auth/Getrider';
+// import moment from "moment";
 
 const RiderTrips = () => {
 
@@ -22,7 +23,7 @@ const RiderTrips = () => {
 
 
   const trips = useSelector((state)=> state?.GetRiderSlice?.trips)
-  // console.warn("trips known tips ", trips)
+  // console.warn("trips time tips ", trips[14]?.travelTime)
 
   return (<SafeAreaView style={styles.container}>
          {loading? <View style={{flex:1, justifyContent:"center", alignItems:"center"}}><ActivityIndicator animating={true} color="black"/></View>
@@ -36,7 +37,7 @@ const RiderTrips = () => {
                             <View style = {{flexDirection:"row"}}>
                                 <View style={{width:'50%'}}>
                                    <Text style={{color:'#fff',alignSelf:'flex-start',fontSize:12}}> {item?.name}</Text>
-                                   <Text style={{color:'#fff',alignSelf:'flex-start',fontSize:12}}> Travel Time: 10:50pm</Text>
+                                   <Text style={{color:'#fff',alignSelf:'flex-start',fontSize:12}}> Travel Time: {new Date(item?.travelTime * 1000).toISOString().slice(11, 19)}</Text>
                                 </View>
                                 
                                 <View style={{width:'50%'}}>
