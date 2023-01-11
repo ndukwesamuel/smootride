@@ -59,7 +59,8 @@ build/Release
 node_modules/
 jspm_packages/
 package-lock.json/
-
+/package-lock.json
+package-lock.json
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
@@ -150,5 +151,3 @@ dist
 
 
 
-/package-lock.json
-package-lock.json
