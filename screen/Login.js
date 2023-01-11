@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   Button,
   Image,
   ImageBackground,
@@ -33,11 +34,25 @@ const Login = () => {
   const { user, data, isError, isSuccess, message, isLoading } = useSelector(
     (state) => state.LoginSlice
   );
-  console.log(data);
 
   useEffect(() => {
+    if (isError) {
+      console.log(message + "this is now");
+    }
+    if (isLoading) {
+      console.log("is loading true");
+    } else {
+      console.log("is loading s flase");
+    }
+
     // if (user == true) {
     //   navigation.navigate("TabNavigation", { screen: "RiderRequest" });
+
+    console.log("start");
+    console.log(user);
+    console.log(data);
+    console.log(message);
+    console.log("end");
     // }
 
     if (user == true) {
@@ -47,15 +62,24 @@ const Login = () => {
         navigation.navigate("DriverTabNavigation", { screen: "Driver" });
       }
     }
-  }, [user, data]);
+  }, [user, data, isLoading, isError]);
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
+    if (email == "" || password == "") {
+      Alert.alert(
+        "Alert",
+        "Email and Password field is required",
+        [{ text: "OK" }],
+        { cancelable: false }
+      );
+      return false;
+    }
     const userData = {
       email,
       password,
     };
     // setLoading(true)
-    await dispatch(login(userData));
+    dispatch(login(userData));
     // setLoading(false)
   };
 
@@ -176,7 +200,7 @@ const Login = () => {
                   marginTop: 15,
                 }}
               >
-                RESET PASSWORD?
+                Forget PASSWORD?
               </Text>
             </View>
           </View>

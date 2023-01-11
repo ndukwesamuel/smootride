@@ -1,14 +1,32 @@
+<<<<<<< HEAD
 import React, { useState } from 'react'
 import {View, Text, Image,Alert,StyleSheet,TextInput, TouchableOpacity, ScrollView,StatusBar} from 'react-native';
 import GlobalStyles from "../../GlobalStyles";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+=======
+import React from "react";
+import {
+  View,
+  Text,
+  Image,
+  Alert,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  ScrollView,
+  StatusBar,
+} from "react-native";
+import GlobalStyles from "../../GlobalStyles";
+import IonIcon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+>>>>>>> master
 
-const RiderProfile = ({navigation}) => {
-
-  const handleLogout= async ()=>{
+const RiderProfile = ({ navigation }) => {
+  const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
+<<<<<<< HEAD
     navigation.navigate("Login")
   }
 
@@ -21,9 +39,13 @@ const RiderProfile = ({navigation}) => {
     setSupport(!support)
   }
 
+=======
+    navigation.navigate("Login");
+  };
+>>>>>>> master
 
   return (
-    <ScrollView showsVerticalScrollIndicator={false} >
+    <ScrollView showsVerticalScrollIndicator={false}>
       <View
         style={{
           flexDirection: "row",
@@ -209,7 +231,10 @@ const RiderProfile = ({navigation}) => {
 
         
 
-        <TouchableOpacity style={{ flexDirection: "row", marginTop: 50 }} onPress={handleLogout}>
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginTop: 50 }}
+          onPress={handleLogout}
+        >
           <View style={{ width: "10%", marginTop: 30 }}>
             <IonIcon name="md-log-out" size={20} color="#000000"></IonIcon>
           </View>
@@ -219,7 +244,7 @@ const RiderProfile = ({navigation}) => {
         </TouchableOpacity>
       </View>
     </ScrollView>
-  )
-}
+  );
+};
 
 export default RiderProfile;

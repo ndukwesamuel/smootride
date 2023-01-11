@@ -39,7 +39,7 @@ const Driver = () => {
           />
 
           <Modal
-            visible={modalVisible}
+            visible={false}
             // isVisible={this.state.costAvailable  }
           >
             <View
@@ -51,6 +51,8 @@ const Driver = () => {
                 paddingTop: 5,
                 marginRight: 0,
                 alignSelf: "center",
+                borderWidth: 3,
+                borderColor: "red",
               }}
             >
               <Image
@@ -700,7 +702,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: "#fff",
     fontSize: 18,
-    fontFamily: "Roboto-Regular",
+    // fontFamily: "Roboto-Regular",
   },
   viewcard: {
     borderTopLeftRadius: 50,
@@ -722,13 +724,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#fff",
     width: "90%",
-    fontFamily: "Roboto-Regular",
+    // fontFamily: "Roboto-Regular",
     marginTop: status_bar_height,
   },
   details: {
     padding: 10,
     fontSize: 14,
-    fontFamily: "Roboto-Regular",
+    // fontFamily: "Roboto-Regular",
   },
   time: {
     color: "#877A80",
