@@ -15,6 +15,7 @@ import { ProgressDialog } from "react-native-simple-dialogs";
 import PTRView from "react-native-pull-to-refresh";
 import CardView from "react-native-cardview";
 import GlobalStyles from "../../GlobalStyles";
+import { useSelector } from "react-redux";
 
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
@@ -39,7 +40,23 @@ const tripissues = [
 
 const Driver = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [driver_mode, setDriver_mode] = useState("Online");
+  const [driverrequest, setDriverrequest] = useState(false);
+
+  const {
+    user,
+    data: userlogdata,
+    isError,
+    isSuccess,
+    message,
+    isLoading,
+  } = useSelector((state) => state.LoginSlice);
   let data = "test";
+
+  console.log(userlogdata);
+  const toggleDialog_toChange_status = () => {
+    console.log("thi sis me");
+  };
   return (
     <PTRView classname="flex-1 border-2 border-red-600">
       <View classname="flex-1 bg-red-600 ">
@@ -60,14 +77,12 @@ const Driver = () => {
 
           <View style={styles.header}>
             <Text style={styles.headerText}>
-              Trip Request{" "}
-              <Text style={{ fontSize: 12 }}>
-                {/* {this.state.driver_mode} */}
-                online
-              </Text>
+              Trip Request <Text style={{ fontSize: 12 }}>{driver_mode}</Text>
             </Text>
             <Text
+              onPress={toggleDialog_toChange_status}
               // onPress={this.toggleDialog}
+
               style={{
                 fontSize: 12,
                 alignSelf: "flex-end",
@@ -169,28 +184,6 @@ const Driver = () => {
               </View>
             </View>
           </Modal>
-
-          <View
-            style={{ position: "absolute", top: 50, right: 20, zIndex: 90 }}
-          >
-            {/* <Text style={styles.headerText}>
-                           Trip Request <Text style={{fontSize:12}}>{this.state.driver_mode}</Text>
-                       </Text> */}
-            <Text
-              //  onPress={this.toggleDialog}
-
-              style={{
-                fontSize: 12,
-                alignSelf: "flex-end",
-                borderRadius: 5,
-                color: "#fff",
-                backgroundColor: "#a31225",
-                padding: 3,
-              }}
-            >
-              Status
-            </Text>
-          </View>
 
           <Modal
             visible={modalVisible}
