@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+import React, { useState } from 'react'
+import {View, Text, Image,Alert,StyleSheet,TextInput, TouchableOpacity, ScrollView,StatusBar} from 'react-native';
+import GlobalStyles from "../../GlobalStyles";
+import IonIcon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+=======
 import React from "react";
 import {
   View,
@@ -13,12 +21,28 @@ import {
 import GlobalStyles from "../../GlobalStyles";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+>>>>>>> master
 
 const RiderProfile = ({ navigation }) => {
   const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
+<<<<<<< HEAD
+    navigation.navigate("Login")
+  }
+
+  const [social, setSocial]= useState(false)
+  const [support, setSupport]= useState(false)
+  const handleSocial = () =>{
+    setSocial(!social)
+  }
+  const handleSupport = () =>{
+    setSupport(!support)
+  }
+
+=======
     navigation.navigate("Login");
   };
+>>>>>>> master
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -83,7 +107,8 @@ const RiderProfile = ({ navigation }) => {
           <View style={{ width: "10%", marginTop: 30 }}>
             <IonIcon name="md-headset" size={20} color="#000000"></IonIcon>
           </View>
-          <View
+          <TouchableOpacity
+          onPress={handleSupport}
             style={{
               flexDirection: "row",
               width: "90%",
@@ -94,16 +119,39 @@ const RiderProfile = ({ navigation }) => {
             }}
           >
             <Text style={{ fontSize: 12, width: "90%" }}>Support Center</Text>
-            {/* { 
-                                this.state.select !== 'support' && 
-                                <IonIcon name="ios-arrow-forward" size={20} color="#000000" style={{width:'5%'}}></IonIcon>
-                            }
-                            { 
-                                this.state.select == 'support' && 
-                                <IonIcon name="ios-arrow-down" size={20} color="#000000" style={{width:'5%'}}></IonIcon>
-                            } */}
-          </View>
+            {support? <SimpleLineIcons name="arrow-down" size={20} color="#000000" style={{width:'5%'}}></SimpleLineIcons>
+            :
+           <SimpleLineIcons name="arrow-right" size={18} color="#000000" style={{width:'5%'}}></SimpleLineIcons>}
+            
+          </TouchableOpacity>
         </View>
+
+        {support && <View> 
+                        <View style={{flexDirection:'row',marginTop:-10}}>
+                              <View style={{width:'10%',marginTop:0}}>
+                                 
+                              </View>
+                              <View style={{flexDirection:'row', width:'90%',marginTop:30,paddingBottom:4}}>
+                              <Image
+                                          source={require('../../assets/images/email.png')}
+                                          style={{width:20,aspectRatio:1.3,alignSelf:'center',width:'10%',margin:5}}
+                                 />
+                                 <Text style={{fontSize:12,color:'#000',width:'80%',marginTop:10,marginStart:10}}>info@smoothride.ng</Text>
+                              </View>
+                        </View>
+                        <View style={{flexDirection:'row',marginTop:-10}}>
+                              <View style={{width:'10%',marginTop:0}}>
+                                 
+                              </View>
+                              <View style={{flexDirection:'row', width:'90%',marginTop:30,paddingBottom:4}}>
+                              <Image
+                                          source={require('../../assets/images/smartphone.png')}
+                                          style={{width:20,aspectRatio:0.9,alignSelf:'center',width:'10%',margin:5}}
+                                 />
+                                 <Text style={{fontSize:12,color:'#000',width:'80%',marginTop:10,marginStart:10}}>08113975330</Text>
+                              </View>
+                        </View>
+                    </View>}
 
         {/* {
                       this.state.select == 'support' && 
@@ -135,7 +183,7 @@ const RiderProfile = ({ navigation }) => {
                     </View>
                    } */}
 
-        <View style={{ flexDirection: "row" }}>
+        <TouchableOpacity style={{ flexDirection: "row" }} onPress={handleSocial}>
           <View style={{ width: "10%", marginTop: 30 }}>
             <IonIcon name="md-globe" size={20} color="#000000"></IonIcon>
           </View>
@@ -150,27 +198,21 @@ const RiderProfile = ({ navigation }) => {
             }}
           >
             <Text style={{ fontSize: 12, width: "90%" }}>Socials</Text>
+            {social? <SimpleLineIcons name="arrow-down" size={20} color="#000000" style={{width:'5%'}}></SimpleLineIcons>
+            :
+           <SimpleLineIcons name="arrow-right" size={18} color="#000000" style={{width:'5%'}}></SimpleLineIcons>}
 
-            {/* { 
-                            this.state.select !== 'social' && 
-                            <IonIcon name="ios-arrow-forward" size={20} color="#000000" style={{width:'5%'}}></IonIcon>
-                         }
-                         { 
-                            this.state.select == 'social' && 
-                            <IonIcon name="ios-arrow-down" size={20} color="#000000" style={{width:'5%'}}></IonIcon>
-                         } */}
+            
           </View>
-        </View>
+        </TouchableOpacity>
 
-        {/* {
-                       this.state.select == 'social' && 
-                       <View> 
+        {social && <View> 
                          <View style={{flexDirection:'row'}}>
                                <View style={{width:'10%',marginTop:30}}>
                                   
                                </View>
                                <View style={{flexDirection:'row', width:'90%',marginTop:30,paddingBottom:4}}>
-                               <Text style={{fontFamily:'Roboto-Regular',fontSize:15,width:'90%'}}>Follow us on</Text>
+                               <Text style={{fontSize:15,width:'90%'}}>Follow us on</Text>
                                </View>
                       
                          </View>
@@ -185,9 +227,9 @@ const RiderProfile = ({ navigation }) => {
                                </View>
                       
                          </View>
-                     </View>
-                    }
-                     */}
+                     </View>}
+
+        
 
         <TouchableOpacity
           style={{ flexDirection: "row", marginTop: 50 }}
