@@ -13,10 +13,14 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
 
-SafeAreaView;
 const DriverProfile = () => {
   const navigation = useNavigation();
+
+  const { user, data, isError, isSuccess, message, isLoading } = useSelector(
+    (state) => state.LoginSlice
+  );
 
   const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
@@ -30,6 +34,10 @@ const DriverProfile = () => {
   const handleSupport = () => {
     setSupport(!support);
   };
+
+  console.log("test");
+  console.log(user);
+  console.log(data);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
@@ -51,7 +59,7 @@ const DriverProfile = () => {
           />
         </View>
         <View style={{ width: "75%" }}>
-          <Text style={{ color: "#fff", marginTop: 10 }}>username</Text>
+          <Text style={{ color: "#fff", marginTop: 10 }}>{data.user.name}</Text>
           <View style={{ flexDirection: "row" }}>
             <View style={{ width: "50%" }}>
               <Text style={{ color: "#fff", marginTop: 4, fontSize: 13 }}>

@@ -25,121 +25,7 @@ const Pending = () => {
     setItems("we name");
   };
   return (
-    // <PTRView onRefresh={refresh}>
-
-    <View>
-      <Modal visible={modalVisible}>
-        <SafeAreaView
-          style={{
-            backgroundColor: "#fff",
-            width: Dimensions.get("window").width,
-            height: Dimensions.get("window").height,
-            padding: 15,
-            paddingTop: 5,
-            marginRight: 0,
-            alignSelf: "center",
-            marginTop: 20,
-          }}
-        >
-          <Text
-            style={{
-              color: "#000",
-              fontSize: 18,
-              textAlign: "center",
-              marginTop: 20,
-            }}
-          >
-            Input your pickup and Destination Address
-          </Text>
-          <Text
-            style={{
-              color: "#000",
-              fontSize: 15,
-              textAlign: "center",
-              marginTop: 5,
-            }}
-          ></Text>
-          <View
-            style={{
-              padding: 10,
-              alignSelf: "center",
-              marginTop: 5,
-              width: "100%",
-            }}
-          >
-            <KeyboardAvoidingView>
-              {/* 
-            <CardView
-                                        cardElevation={2}
-                                        cardMaxElevation={2}
-                                        cornerRadius={5} style={styles.cardview}>    
-                                        <TextInput onFocus = {this.resetaddress} onChangeText = {(text) => this.getaddressSpecified(text)} style={{width:'100%', height:40,borderColor:'gray'}} placeholder="Enter the pickup address"/>
-                                </CardView>
-                                <CardView
-                                        cardElevation={2}
-                                        cardMaxElevation={2}
-                                        cornerRadius={5} style={styles.cardview}>    
-                                        <TextInput onFocus = {this.resetaddress} onChangeText = {(text) => this.getaddressSpecified(text)} style={{width:'100%', height:40,borderColor:'gray'}} placeholder="Enter the Destination address"/>
-                                </CardView> */}
-
-              {/* this was not ment to be */}
-              <View>
-                <TextInput
-                  style={{ width: "100%", height: 40, borderColor: "gray" }}
-                  placeholder="Enter the pickup address"
-                />
-              </View>
-
-              {/* tiil here */}
-            </KeyboardAvoidingView>
-
-            {/* 
-            {
-                                    this.state.gettingInputLocation == true &&
-                                    <ActivityIndicator size="large" color="#005091"/>
-                                }  */}
-
-            <View
-              style={{ marginTop: 10 }}
-              showsVerticalScrollIndicator={false}
-            >
-              {/* {this.state.locationFromGoogle.length > 0 && (
-                <Text
-                  style={{
-                    textAlign: "center",
-                    marginBottom: 20,
-                    fontWeight: "bold",
-                  }}
-                >
-                  Select the Start Location below;
-                </Text>
-              )} */}
-              {/* {this.state.locationFromGoogle.map((location) => (
-                <TouchableOpacity
-                  value={location.description}
-                  key={location.description}
-                  onPress={() =>
-                    this.convertAddressToPoint(location.description)
-                  }
-                  style={{
-                    height: 40,
-                    width: "100%",
-                    borderWidth: 1,
-                    borderColor: "#c1c1c1",
-                    marginTop: 4,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text style={{ alignSelf: "flex-start", marginStart: 5 }}>
-                    {location.description}
-                  </Text>
-                </TouchableOpacity>
-              ))} */}
-            </View>
-          </View>
-        </SafeAreaView>
-      </Modal>
-
+    <PTRView onRefresh={refresh}>
       <ScrollView>
         <ProgressDialog
           visible={false}
@@ -148,7 +34,7 @@ const Pending = () => {
           message="Please, wait..."
         />
         <View style={styles.container}>
-          <View style={styles.header}>
+          <View style={styles.header} className="pt-10">
             <Text style={styles.headerText}>Pending Trip Information</Text>
           </View>
 
@@ -244,8 +130,7 @@ const Pending = () => {
           */}
         </View>
       </ScrollView>
-    </View>
-    // </PTRView>
+    </PTRView>
   );
 };
 
