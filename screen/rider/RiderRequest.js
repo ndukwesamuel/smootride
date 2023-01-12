@@ -26,13 +26,9 @@ import requestfile from "../../assets/images/requestfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { GetRider } from "../../Slice/auth/Getrider";
 import { RequestRide } from "../../Slice/auth/Requestride";
-import * as Location from 'expo-location';
+import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
-
 const { width, height } = Dimensions.get("window");
-
-
-
 const RiderRequest = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const dispatch = useDispatch();
@@ -41,7 +37,6 @@ const RiderRequest = () => {
   const [location, setLocation] = useState(null);
   const [maplocation, setMaplocation] = useState(false);
   const [userLocation, setUerLocation] = useState(null);
-
   // useEffect(() => {
   //   const getPermissions = async()=>{
   //     setMaplocation(true)
@@ -50,7 +45,6 @@ const RiderRequest = () => {
   //       console.log("Please grant Location permissions");
   //       return;
   //     }
-
   //     let currentLocation = await Location.getCurrentPositionAsync({});
   //     setLocation(currentLocation);
   //     console.log("location gotten ",currentLocation)
@@ -58,53 +52,51 @@ const RiderRequest = () => {
   //   }
   //   getPermissions();
   // }, []);
-
-
   const ASPECT_RATIO = width / height;
-const LATITUDE_DELTA = 0.006339428281933124;
-const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
-const INITIAL_POSITION = {
-  // latitude: location?.coords.latitude,
-  // longitude: location?.coords.longitude,
-  latitude: 6.549405360528134,
-  longitude: 3.366228245355276,
-  latitudeDelta: LATITUDE_DELTA,
-  longitudeDelta: LONGITUDE_DELTA,
-};
-
-  const handlePurpose= async () =>{
-    const userdata={
-      purpose: purpose
-    }
-    setLoading(true)
-    await dispatch(RequestRide(userdata))
-    setLoading(false)
-    setIsModalVisible(false)
-  }
-
+  const LATITUDE_DELTA = 0.006339428281933124;
+  const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
+  const INITIAL_POSITION = {
+    // latitude: location?.coords.latitude,
+    // longitude: location?.coords.longitude,
+    latitude: 6.549405360528134,
+    longitude: 3.366228245355276,
+    latitudeDelta: LATITUDE_DELTA,
+    longitudeDelta: LONGITUDE_DELTA,
+  };
+  const handlePurpose = async () => {
+    const userdata = {
+      purpose: purpose,
+    };
+    setLoading(true);
+    await dispatch(RequestRide(userdata));
+    setLoading(false);
+    setIsModalVisible(false);
+  };
   const handleModal = () => setIsModalVisible(!isModalVisible);
   useEffect(() => {
     dispatch(GetRider());
   }, []);
   const knowdata = useSelector((state) => state.GetRiderSlice?.data?.drivers);
   const number = knowdata?.length;
-
   return (
     <View style={styles.container}>
-      <View
-        style={styles.map}>
-          {maplocation? <View style={{flex: 1, justifyContent:"center",
-           alignItems:"center"}}>
+      <View style={styles.map}>
+        {maplocation ? (
+          <View
+            style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+          >
             <ActivityIndicator animating={true} color="black" />
-            </View>: <MapView
-        provider={PROVIDER_GOOGLE}
-        style={styles.map}
-        // showsUserLocation
-        initialRegion={INITIAL_POSITION}
-      >
-        <Marker coordinate={INITIAL_POSITION} />
-        </MapView>}
-      
+          </View>
+        ) : (
+          <MapView
+            provider={PROVIDER_GOOGLE}
+            style={styles.map}
+            // showsUserLocation
+            initialRegion={INITIAL_POSITION}
+          >
+            <Marker coordinate={INITIAL_POSITION} />
+          </MapView>
+        )}
       </View>
       <View
         style={{
@@ -140,7 +132,7 @@ const INITIAL_POSITION = {
       >
         <Text
           style={{
-            color: "#007cc2",
+            color: "#007CC2",
             textAlign: "center",
             fontSize: 20,
             marginTop: 25,
@@ -150,7 +142,7 @@ const INITIAL_POSITION = {
         </Text>
         <TouchableOpacity
           style={{
-            backgroundColor: "#ededed",
+            backgroundColor: "#EDEDED",
             padding: 1,
             width: "90%",
             marginLeft: "5%",
@@ -171,7 +163,7 @@ const INITIAL_POSITION = {
               fontSize: 20,
               alignSelf: "center",
               // fontFamily:'Roboto-Regular',1
-              color: "#c1c1c1",
+              color: "#C1C1C1",
             }}
           >
             {" "}
@@ -198,51 +190,53 @@ const INITIAL_POSITION = {
             marginLeft: "5%",
           }}
         >
-          {number == 0 ? <Text>No driver available</Text>
-          :
-          <FlatList
-            data={knowdata}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => {
-              return (
-                <View
-                  style={{
-                    flexDirection: "row",
-                    borderBottomWidth: 1,
-                    borderBottomColor: "#ededed",
-                    flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <View style={{ width: "15%", marginStart: 10 }}>
-                    <Image
-                      source={clientimg}
-                      style={{
-                        width: 50,
-                        height: 50,
-                        borderRadius: 20,
-                        alignSelf: "center",
-                        margin: 5,
-                      }}
-                    />
+          {number == 0 ? (
+            <Text>No driver available</Text>
+          ) : (
+            <FlatList
+              data={knowdata}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => {
+                return (
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      borderBottomWidth: 1,
+                      borderBottomColor: "#EDEDED",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <View style={{ width: "15%", marginStart: 10 }}>
+                      <Image
+                        source={clientimg}
+                        style={{
+                          width: 50,
+                          height: 50,
+                          borderRadius: 20,
+                          alignSelf: "center",
+                          margin: 5,
+                        }}
+                      />
+                    </View>
+                    <View style={{ width: "60%", marginLeft: 5 }}>
+                      <Text
+                        style={{
+                          fontSize: 17,
+                          marginTop: 10,
+                          color: "#877A80",
+                          fontWeight: "400",
+                        }}
+                      >
+                        {" "}
+                        {item?.name}{" "}
+                      </Text>
+                    </View>
                   </View>
-                  <View style={{ width: "60%", marginLeft: 5 }}>
-                    <Text
-                      style={{
-                        fontSize: 17,
-                        marginTop: 10,
-                        color: "#877A80",
-                        fontWeight: "400",
-                      }}
-                    >
-                      {" "}
-                      {item?.name}{" "}
-                    </Text>
-                  </View>
-                </View>
-              );
-            }}
-          />}
+                );
+              }}
+            />
+          )}
         </View>
         <TouchableOpacity
           style={{
@@ -265,7 +259,6 @@ const INITIAL_POSITION = {
           </Text>
         </TouchableOpacity>
       </View>
-
       <Modal isVisible={isModalVisible}>
         <View
           style={{
@@ -291,12 +284,11 @@ const INITIAL_POSITION = {
           <Text style={{ color: "#000", fontSize: 15, textAlign: "center" }}>
             Trip Request
           </Text>
-
           <TextInput
             style={{
               height: 50,
               color: "#000",
-              borderColor: "#c1c1c1",
+              borderColor: "#C1C1C1",
               marginTop: 10,
               paddingStart: 8,
               borderWidth: 1,
@@ -329,25 +321,26 @@ const INITIAL_POSITION = {
               onPress={handlePurpose}
             >
               {loading ? (
-                  <ActivityIndicator animating={true} color="white" />
-                ) : (
-              <Text
-                style={{
-                  color: "#fff",
-                  alignSelf: "center",
-                  fontSize: 13,
-                  padding: 12,
-                  marginRight: 5,
-                }}
-              >
-                Submit
-              </Text>)}
+                <ActivityIndicator animating={true} color="white" />
+              ) : (
+                <Text
+                  style={{
+                    color: "#fff",
+                    alignSelf: "center",
+                    fontSize: 13,
+                    padding: 12,
+                    marginRight: 5,
+                  }}
+                >
+                  Submit
+                </Text>
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleModal}
               style={{
                 width: "100%",
-                backgroundColor: "#a31225",
+                backgroundColor: "#A31225",
                 marginTop: 10,
                 borderRadius: 5,
               }}
@@ -370,7 +363,6 @@ const INITIAL_POSITION = {
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -379,5 +371,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
 export default RiderRequest;
