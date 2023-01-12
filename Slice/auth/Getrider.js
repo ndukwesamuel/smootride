@@ -36,7 +36,7 @@ export const GetRider= createAsyncThunk(
 
 
 export const GetTrips= createAsyncThunk(
-  "getridertrip/Ridertrip", async(_, {rejectWithValue})=>{
+  "getridertrips/Ridertrips", async(_, {rejectWithValue})=>{
       const tokengot = await  AsyncStorage.getItem("token")
       const infoneeded= `Bearer ${tokengot}`
       const instance = axios.create({
@@ -52,12 +52,13 @@ export const GetTrips= createAsyncThunk(
         return await instance
           .get("getridertrip")
           .then( async (response) => {
-            // console.warn("trip info ", response.data);
+            console.warn("trip info ", response.data);
             return response.data;
           })
            
     .catch((err) =>{ 
       let errdata = err.response.data;
+      // console.warn("trip error ", err.response.data);
       return rejectWithValue(errdata)
       // console.log(err)
     })
@@ -101,11 +102,10 @@ const initialState = {
           state.isLoading = true;
         })
         .addCase(GetTrips.fulfilled, (state, action) => {
-          
+          console.log("trips logs stored ",action.payload);          
           state.isLoading = false;
           state.isSuccess = true;
           state.trips= action.payload;
-          // console.warn("trips stored ",action.payload);
         })
         .addCase(GetTrips.rejected, (state, action) => {
           state.isLoading = false;

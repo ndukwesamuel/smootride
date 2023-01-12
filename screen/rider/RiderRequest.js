@@ -18,7 +18,7 @@ import {
   Image,
   FlatList,
 } from "react-native";
-import CardView from "react-native-cardview";
+// import CardView from "react-native-cardview";
 import { GOOGLE_MAPS_APIKEYS } from "@env";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Modal from "react-native-modal";
@@ -37,29 +37,29 @@ const RiderRequest = () => {
   const [location, setLocation] = useState(null);
   const [maplocation, setMaplocation] = useState(false);
   const [userLocation, setUerLocation] = useState(null);
-  // useEffect(() => {
-  //   const getPermissions = async()=>{
-  //     setMaplocation(true)
-  //     let {status} = await Location.requestForegroundPermissionsAsync();
-  //     if (status !== 'granted'){
-  //       console.log("Please grant Location permissions");
-  //       return;
-  //     }
-  //     let currentLocation = await Location.getCurrentPositionAsync({});
-  //     setLocation(currentLocation);
-  //     console.log("location gotten ",currentLocation)
-  //     setMaplocation(false)
-  //   }
-  //   getPermissions();
-  // }, []);
+  useEffect(() => {
+    const getPermissions = async()=>{
+      setMaplocation(true)
+      let {status} = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted'){
+        console.log("Please grant Location permissions");
+        return;
+      }
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      setLocation(currentLocation);
+      // console.log("location gotten ",currentLocation)
+      setMaplocation(false)
+    }
+    getPermissions();
+  }, []);
   const ASPECT_RATIO = width / height;
   const LATITUDE_DELTA = 0.006339428281933124;
   const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
   const INITIAL_POSITION = {
-    // latitude: location?.coords.latitude,
-    // longitude: location?.coords.longitude,
-    latitude: 6.549405360528134,
-    longitude: 3.366228245355276,
+    latitude: location?.coords.latitude,
+    longitude: location?.coords.longitude,
+    // latitude: 6.549405360528134,
+    // longitude: 3.366228245355276,
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   };

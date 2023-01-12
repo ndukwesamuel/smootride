@@ -65,7 +65,7 @@ const Login = () => {
   };
 
   return (
-    <SafeAreaView>
+    <View>
       <KeyboardAvoidingView>
         <ImageBackground
           source={require("../assets/images/Smot.jpg")}
@@ -189,7 +189,7 @@ const Login = () => {
           </KeyboardAvoidingView>
         </ImageBackground>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 

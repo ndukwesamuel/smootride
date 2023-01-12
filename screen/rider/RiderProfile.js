@@ -1,32 +1,26 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  Alert,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  StatusBar,
-} from "react-native";
+import React, { useState } from 'react'
+import {View, Text, Image,Alert,StyleSheet,TextInput, TouchableOpacity, ScrollView,StatusBar} from 'react-native';
 import GlobalStyles from "../../GlobalStyles";
 import IonIcon from "react-native-vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+
 const RiderProfile = ({ navigation }) => {
   const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
-    navigation.navigate("Login");
-  };
-  const [social, setSocial] = useState(false);
-  const [support, setSupport] = useState(false);
-  const handleSocial = () => {
-    setSocial(!social);
-  };
-  const handleSupport = () => {
-    setSupport(!support);
-  };
+    navigation.navigate("Login")
+  }
+
+  const [social, setSocial]= useState(false)
+  const [support, setSupport]= useState(false)
+  const handleSocial = () =>{
+    setSocial(!social)
+  }
+  const handleSupport = () =>{
+    setSupport(!support)
+  }
+
+
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View

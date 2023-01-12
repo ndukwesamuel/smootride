@@ -13,7 +13,7 @@ import {
 import React, { useState } from "react";
 import { ProgressDialog } from "react-native-simple-dialogs";
 import PTRView from "react-native-pull-to-refresh";
-import CardView from "react-native-cardview";
+// import CardView from "react-native-cardview";
 
 const status_bar_height = Platform.OS == "ios" ? 20 : 0;
 const { width, height } = Dimensions.get("window");
