@@ -1,32 +1,13 @@
-<<<<<<< HEAD
 import React, { useState } from 'react'
 import {View, Text, Image,Alert,StyleSheet,TextInput, TouchableOpacity, ScrollView,StatusBar} from 'react-native';
 import GlobalStyles from "../../GlobalStyles";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
-=======
-import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  Alert,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  StatusBar,
-} from "react-native";
-import GlobalStyles from "../../GlobalStyles";
-import IonIcon from "react-native-vector-icons/Ionicons";
-import AsyncStorage from "@react-native-async-storage/async-storage";
->>>>>>> master
 
 const RiderProfile = ({ navigation }) => {
   const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
-<<<<<<< HEAD
     navigation.navigate("Login")
   }
 
@@ -39,10 +20,6 @@ const RiderProfile = ({ navigation }) => {
     setSupport(!support)
   }
 
-=======
-    navigation.navigate("Login");
-  };
->>>>>>> master
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
