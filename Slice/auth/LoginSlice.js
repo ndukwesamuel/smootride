@@ -10,7 +10,7 @@ import {
 } from "@env";
 import { Alert } from "react-native";
 
-let userAPi = "https://www.smoothride.ng/taxi/api/login";
+let userAPi = process.env.SMOOTHRIDE_NEWAPI + "login";
 
 const initialState = {
   user: false,
@@ -25,6 +25,7 @@ const loginfetchDatahandle = async (userData) => {
   try {
     const response = await axios.post(userAPi, userData);
     if (response.data) {
+      console.warn("login data ", response.data)
       await AsyncStorage.setItem("token", response.data.access_token);
       return response.data;
     }

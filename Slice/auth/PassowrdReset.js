@@ -18,11 +18,12 @@ const initialState = {
 };
 
 const ResetpasswordService = async (userData) => {
-  let url = SMOOTH_RIDE_OLD_API_URL + "forgotpassword";
+  let url = process.env.SMOOTHRIDE_NEWAPI + "forgotpassword";
+  // console.log(url)
 
   const response = await axios.post(url, userData);
 
-  //   console.log(response.data);
+    // console.log(response.data);
   return response.data;
 };
 

@@ -38,9 +38,9 @@ const Pending = () => {
             <Text style={styles.headerText}>Pending Trip Information</Text>
           </View>
 
-          <CardView cardElevation={2} cardMaxElevation={2} cornerRadius={5}>
+          {/* <CardView cardElevation={2} cardMaxElevation={2} cornerRadius={5}>
             <Text>Elevation 0</Text>
-          </CardView>
+          </CardView> */}
 
           {/* 
             {this.state.isFetching == true && (

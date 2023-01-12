@@ -13,9 +13,9 @@ import {
 import React, { useState } from "react";
 import { ProgressDialog } from "react-native-simple-dialogs";
 import PTRView from "react-native-pull-to-refresh";
-import CardView from "react-native-cardview";
+// import CardView from "react-native-cardview";
 import GlobalStyles from "../../GlobalStyles";
-import CardView from "react-native-cardview";
+// import CardView from "react-native-cardview";
 import { useSelector } from "react-redux";
 
 const { width, height } = Dimensions.get("window");

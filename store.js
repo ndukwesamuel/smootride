@@ -10,7 +10,6 @@ export const store = configureStore({
     nav: navReducer,
     LoginSlice: LoginSlice,
     PassowrdReset: PassowrdReset,
-
-    // GetRiderSlice: GetRiderSlice,
+    GetRiderSlice: GetRiderSlice,
   },
 });
