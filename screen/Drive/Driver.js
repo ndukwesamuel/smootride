@@ -15,6 +15,7 @@ import { ProgressDialog } from "react-native-simple-dialogs";
 import PTRView from "react-native-pull-to-refresh";
 import CardView from "react-native-cardview";
 import GlobalStyles from "../../GlobalStyles";
+import CardView from "react-native-cardview";
 import { useSelector } from "react-redux";
 
 const { width, height } = Dimensions.get("window");
@@ -43,17 +44,10 @@ const Driver = () => {
   const [driver_mode, setDriver_mode] = useState("Online");
   const [driverrequest, setDriverrequest] = useState(false);
 
-  const {
-    user,
-    data: userlogdata,
-    isError,
-    isSuccess,
-    message,
-    isLoading,
-  } = useSelector((state) => state.LoginSlice);
-  let data = "test";
+  const { user, data, isError, isSuccess, message, isLoading } = useSelector(
+    (state) => state.LoginSlice
+  );
 
-  console.log(userlogdata);
   const toggleDialog_toChange_status = () => {
     console.log("thi sis me");
   };
