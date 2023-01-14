@@ -7,7 +7,7 @@ import Tripmap from "./screen/Tripmap";
 import { Provider } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { store } from "./store";
+import { store, persistor } from "./store";
 import Forgetpassword from "./screen/Forgetpassword";
 import DriverProfile from "./screen/Drive/DriverProfile";
 import RiderProfile from "./screen/rider/RiderProfile";
@@ -15,6 +15,7 @@ import RiderTrips from "./screen/rider/RiderTrips";
 import RiderRequest from "./screen/rider/RiderRequest";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import DriverTabNavigation from "./screen/Drive/DriverTabNavigation";
+import {PersistGate} from 'redux-persist/integration/react';
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Stack = createNativeStackNavigator();
@@ -91,6 +92,7 @@ export default function App() {
   let user = false;
   return (
     <Provider store={store}>
+      <PersistGate persistor={persistor}>
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen
@@ -141,6 +143,7 @@ export default function App() {
           />
         </Stack.Navigator>
       </NavigationContainer>
+      </PersistGate>
     </Provider>
     // <View style={styles.container}>
     // <Text>it works</Text>

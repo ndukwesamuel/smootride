@@ -8,7 +8,7 @@ export const GetRider= createAsyncThunk(
         const tokengot = await  AsyncStorage.getItem("token")
         const infoneeded= `Bearer ${tokengot}`
         const instance = axios.create({
-            baseURL: "https://www.smoothride.ng/taxi/api/",
+            baseURL: process.env.SMOOTHRIDE_NEWAPI,
             timeout: 20000,
       
             headers: {
@@ -40,7 +40,7 @@ export const GetTrips= createAsyncThunk(
       const tokengot = await  AsyncStorage.getItem("token")
       const infoneeded= `Bearer ${tokengot}`
       const instance = axios.create({
-          baseURL: "https://www.smoothride.ng/taxi/api/",
+          baseURL: process.env.SMOOTHRIDE_NEWAPI,
           timeout: 30000,
     
           headers: {
@@ -52,7 +52,7 @@ export const GetTrips= createAsyncThunk(
         return await instance
           .get("getridertrip")
           .then( async (response) => {
-            console.warn("trip info ", response.data);
+            // console.warn("trip info ", response.data);
             return response.data;
           })
            
@@ -102,7 +102,7 @@ const initialState = {
           state.isLoading = true;
         })
         .addCase(GetTrips.fulfilled, (state, action) => {
-          console.log("trips logs stored ",action.payload);          
+          // console.log("trips logs stored ",action.payload);          
           state.isLoading = false;
           state.isSuccess = true;
           state.trips= action.payload;

@@ -52,6 +52,9 @@ const RiderRequest = () => {
     }
     getPermissions();
   }, []);
+  
+  
+  // console.log("username shown ", username)
   const ASPECT_RATIO = width / height;
   const LATITUDE_DELTA = 0.006339428281933124;
   const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
@@ -64,6 +67,9 @@ const RiderRequest = () => {
     longitudeDelta: LONGITUDE_DELTA,
   };
   const handlePurpose = async () => {
+    if(purpose == 0){
+      Alert.alert("Please fill the field")
+    }else{
     const userdata = {
       purpose: purpose,
     };
@@ -71,12 +77,16 @@ const RiderRequest = () => {
     await dispatch(RequestRide(userdata));
     setLoading(false);
     setIsModalVisible(false);
+    setPurpose("")
+  }
   };
   const handleModal = () => setIsModalVisible(!isModalVisible);
   useEffect(() => {
     dispatch(GetRider());
   }, []);
   const knowdata = useSelector((state) => state.GetRiderSlice?.data?.drivers);
+  
+  const username= useSelector((state)=> state.LoginSlice?.data?.user?.name)
   const number = knowdata?.length;
   return (
     <View style={styles.container}>
@@ -138,7 +148,7 @@ const RiderRequest = () => {
             marginTop: 25,
           }}
         >
-          Hi, Reginald Umah - Test
+          Hi, {username}
         </Text>
         <TouchableOpacity
           style={{

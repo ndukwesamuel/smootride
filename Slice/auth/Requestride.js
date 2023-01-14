@@ -1,14 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { Alert } from "react-native";
 
 export const RequestRide= createAsyncThunk(
     "details/postdetail", async(requestdetails, {rejectWithValue})=>{
-      console.log(requestdetails)
+      // console.log(requestdetails)
         const tokengot = await  AsyncStorage.getItem("token")
         const infoneeded= `Bearer ${tokengot}`
         const instance = axios.create({
-            baseURL: "https://www.smoothride.ng/taxi/api/",
+            baseURL: process.env.SMOOTHRIDE_NEWAPI,
             timeout: 20000,
       
             headers: {
@@ -20,14 +21,19 @@ export const RequestRide= createAsyncThunk(
           return await instance
             .post("requestride", requestdetails)
             .then( async (response) => {
-              console.log(response.data)
+              console.log("requested response ",response.data)
               return response.data;
             })
              
       .catch((err) =>{ 
         let errdata = err.response.data;
-      return rejectWithValue(errdata)
-        // console.log(err)
+        if (errdata?.message== "No Driver Available"){
+          Alert.alert(errdata?.message)
+        }else{
+          Alert.alert(errdata?.message)
+        }
+        // console.log("request error ",errdata.message)
+      return rejectWithValue(err.response.data)
     })
         
     }
@@ -53,13 +59,14 @@ export const RequestRide= createAsyncThunk(
           state.isLoading = true;
         })
         .addCase(RequestRide.fulfilled, (state, action) => {
-          
+          Alert.alert("Trip requested")
           state.isLoading = false;
           state.isSuccess = true;
           state.user = true;
           state.data= action.payload;
         })
         .addCase(RequestRide.rejected, (state, action) => {
+          console.log("rejected values ",action.payload)
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
