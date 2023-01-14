@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PTRView from "react-native-pull-to-refresh";
 import Timeline from "react-native-timeline-flatlist";
 
@@ -22,6 +22,11 @@ const data = [
 ];
 const Trip = () => {
   const [modalVisible, setModalVisible] = useState(false);
+
+  useEffect(() => {
+    return () => {};
+  }, []);
+
   return (
     <PTRView>
       <ScrollView>
@@ -31,7 +36,7 @@ const Trip = () => {
           </View>
 
           <Modal
-            visible={modalVisible}
+            visible={true}
             style={{ width: width, backgroundColor: "#fff", margin: 0 }}
           >
             <View

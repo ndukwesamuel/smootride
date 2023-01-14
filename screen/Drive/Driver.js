@@ -17,6 +17,7 @@ import PTRView from "react-native-pull-to-refresh";
 import GlobalStyles from "../../GlobalStyles";
 // import CardView from "react-native-cardview";
 import { useSelector } from "react-redux";
+import ChangeDriveStatus from "../../components/Driver/ChangeDriveStatus";
 
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
@@ -40,6 +41,7 @@ const tripissues = [
 ];
 
 const Driver = () => {
+  const [driver_request_Status, setDriver_request_Status] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [driver_mode, setDriver_mode] = useState("Online");
   const [driverrequest, setDriverrequest] = useState(false);
@@ -48,8 +50,12 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
+  const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
+
+  console.log(drivestatus.success);
+
   const toggleDialog_toChange_status = () => {
-    console.log("thi sis me");
+    setDriver_request_Status(true);
   };
   return (
     <PTRView classname="flex-1 border-2 border-red-600">
@@ -75,8 +81,6 @@ const Driver = () => {
             </Text>
             <Text
               onPress={toggleDialog_toChange_status}
-              // onPress={this.toggleDialog}
-
               style={{
                 fontSize: 12,
                 alignSelf: "flex-end",
@@ -89,6 +93,11 @@ const Driver = () => {
               Status
             </Text>
           </View>
+
+          <ChangeDriveStatus
+            data1={driver_request_Status}
+            data2={setDriver_request_Status}
+          />
 
           <Modal
             visible={false}

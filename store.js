@@ -4,6 +4,7 @@ import GetRiderSlice from "./Slice/auth/Getrider";
 
 import navReducer from "./Slice/navSlice";
 import PassowrdReset from "./Slice/auth/PassowrdReset";
+import UpdateDriverStatusSlice from "./Slice/Driver/UpdateDriverStatusSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,5 +12,7 @@ export const store = configureStore({
     LoginSlice: LoginSlice,
     PassowrdReset: PassowrdReset,
     GetRiderSlice: GetRiderSlice,
+
+    UpdateDriverStatusSlice: UpdateDriverStatusSlice,
   },
 });

@@ -12,8 +12,15 @@ import { Alert } from "react-native";
 
 let userAPi = process.env.SMOOTHRIDE_NEWAPI + "login";
 
+async function retrieveData() {
+  const value = await AsyncStorage.getItem("userdata");
+  return value;
+}
+
+let user = retrieveData();
+
 const initialState = {
-  user: false,
+  user: null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -25,8 +32,8 @@ const loginfetchDatahandle = async (userData) => {
   try {
     const response = await axios.post(userAPi, userData);
     if (response.data) {
-      console.warn("login data ", response.data)
       await AsyncStorage.setItem("token", response.data.access_token);
+      await AsyncStorage.setItem("userdata", JSON.stringify(response.data));
       return response.data;
     }
   } catch (error) {
