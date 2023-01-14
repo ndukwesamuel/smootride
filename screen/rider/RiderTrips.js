@@ -23,12 +23,21 @@ const RiderTrips = () => {
 
 
   const trips = useSelector((state)=> state?.GetRiderSlice?.trips)
-  // console.warn("trips time tips ", trips[14]?.travelTime)
+  const tripslength = trips?.length
+  // console.warn("trips length tips ", tripslength)
 
   return (<SafeAreaView style={styles.container}>
-         {loading? <View style={{flex:1, justifyContent:"center", alignItems:"center"}}><ActivityIndicator animating={true} color="black"/></View>
+         {loading? <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
+          <ActivityIndicator animating={true} color="black"/>
+          </View>
                     :
-    <FlatList data={trips} keyExtractor={item=> item.id} 
+
+    <>{tripslength === 0 ?
+    <View style={{justifyContent:"center", alignItems:"center", flex: 1}}>
+      <Text style={{ fontSize: 20}}>No trips available</Text>
+      </View>
+      :
+      <FlatList data={trips} keyExtractor={item=> item.id} 
     renderItem={({item})=>{
       return <>
      
@@ -63,7 +72,7 @@ const RiderTrips = () => {
                             
                             </View>
                         </View>
-                    </View></> }} />}
+                    </View></> }} />}</>}
                     </SafeAreaView>
 );
 }

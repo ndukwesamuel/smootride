@@ -32,6 +32,7 @@ const loginfetchDatahandle = async (userData) => {
   try {
     const response = await axios.post(userAPi, userData);
     if (response.data) {
+      // console.warn("login data ", response.data)
       await AsyncStorage.setItem("token", response.data.access_token);
       await AsyncStorage.setItem("userdata", JSON.stringify(response.data));
       return response.data;
