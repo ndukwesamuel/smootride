@@ -164,13 +164,13 @@ return unsubscribe;
             }}
           />
 
-          <Stack.Screen
+          {/* <Stack.Screen
             name="TabNavigation"
             component={TabNavigation}
             options={{
               headerShown: false,
             }}
-          />
+          /> */}
 
           <Stack.Screen
             name="DriverTabNavigation"

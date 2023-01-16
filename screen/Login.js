@@ -19,7 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import GlobalStyles from "../GlobalStyles";
 import { selectOrigin } from "../Slice/navSlice";
-import { login } from "../Slice/auth/LoginSlice";
+import { login, reset } from "../Slice/auth/LoginSlice";
 
 const image = { uri: "https://reactjs.org/logo-og.png" };
 
@@ -35,7 +35,7 @@ const Login = () => {
     (state) => state.LoginSlice
   );
 
-  console.log("user status ", user)
+  console.log("user status ", user);
 
   useEffect(() => {
     if (user == true) {
@@ -63,6 +63,8 @@ const Login = () => {
     };
     // setLoading(true)
     dispatch(login(userData));
+
+    dispatch(reset());
     // setLoading(false)
   };
 
