@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "644627894625",
+    "firebase_url": "https://taxismoothride.firebaseio.com",
+    "project_id": "taxismoothride",
+    "storage_bucket": "taxismoothride.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644627894625:android:1fe9144a2387cf04627520",
+        "android_client_info": {
+          "package_name": "com.taxismoothrideapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644627894625-0nqba54g6uscc1npbr7qhr0fs4pochu6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYFGfFtYq6RP4Wy5rYmuG5hlxuo8-5O1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644627894625-0nqba54g6uscc1npbr7qhr0fs4pochu6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
