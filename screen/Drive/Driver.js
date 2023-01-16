@@ -50,9 +50,9 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
-  const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
+  console.log(data);
 
-  console.log(drivestatus.success);
+  const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);

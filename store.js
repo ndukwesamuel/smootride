@@ -32,6 +32,7 @@ import navReducer from "./Slice/navSlice";
 import PassowrdReset from "./Slice/auth/PassowrdReset";
 import UpdateDriverStatusSlice from "./Slice/Driver/UpdateDriverStatusSlice";
 import { combineReducers } from "redux";
+import GetAllDriverTripsSlice from "./Slice/Driver/GetAllDriverTripsSlice";
 
 const reducers = combineReducers({
   nav: navReducer,
@@ -40,11 +41,13 @@ const reducers = combineReducers({
   GetRiderSlice: GetRiderSlice,
 
   UpdateDriverStatusSlice: UpdateDriverStatusSlice,
+  GetAllDriverTripsSlice: GetAllDriverTripsSlice,
 });
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
+  blacklist: ["GetAllDriverTripsSlice"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

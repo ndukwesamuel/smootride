@@ -288,12 +288,12 @@ const DriverProfile = () => {
                   paddingBottom: 4,
                 }}
               >
-                <IonIcon
+                {/* <IonIcon
                   name="logo-twitter"
                   size={50}
                   color="#00ACEE"
                   style={{ width: "20%" }}
-                ></IonIcon>
+                ></IonIcon> */}
                 <IonIcon
                   name="logo-facebook"
                   size={50}

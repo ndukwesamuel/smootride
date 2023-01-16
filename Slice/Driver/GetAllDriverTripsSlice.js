@@ -14,32 +14,26 @@ const initialState = {
   message: "",
 };
 
-const GetAllDriverTripsService = async (userData, tokengot) => {
-  let url = SMOOTHRIDE_NEWAPI + "updatedriverstatus";
-
-  console.log(url);
-  console.log(tokengot);
-  console.log(userData);
+const GetAllDriverTripsService = async (token) => {
+  let url = SMOOTHRIDE_NEWAPI + "getdrivertrip";
 
   const config = {
     headers: {
-      Authorization: `Bearer ${tokengot}`,
+      Authorization: `Bearer ${token}`,
     },
   };
 
-  const response = await axios.post(url, userData, config);
-
-  console.log(response.data);
+  const response = await axios.get(url, config);
   return response.data;
 };
 
 // Get user goals
 export const GetAllDriverTrips = createAsyncThunk(
   "getalldriveTrips/data",
-  async (statusData, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
-      const tokengot = await AsyncStorage.getItem("token");
-      return await GetAllDriverTripsService(statusData, tokengot);
+      const token = thunkAPI.getState().LoginSlice.data?.access_token;
+      return await GetAllDriverTripsService(token);
     } catch (error) {
       console.log(error);
       const message =
@@ -61,15 +55,15 @@ export const GetAllDriverTripsSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(UpdateDriverStatus.pending, (state) => {
+      .addCase(GetAllDriverTrips.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(UpdateDriverStatus.fulfilled, (state, action) => {
+      .addCase(GetAllDriverTrips.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.drivestatus = action.payload;
+        state.drivertrip = action.payload;
       })
-      .addCase(UpdateDriverStatus.rejected, (state, action) => {
+      .addCase(GetAllDriverTrips.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
