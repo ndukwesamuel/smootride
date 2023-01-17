@@ -1,26 +1,19 @@
 import {
-  Alert,
-  Dimensions,
-  Modal,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-
 import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import uuid from "uuid-random";
-import Timeline from "react-native-timeline-flatlist";
-
-const { width, height } = Dimensions.get("window");
 
 const status_bar_height = Platform.OS == "ios" ? 20 : 0;
-const DriversTripcomponent = ({ data }) => {
-  console.table(data);
+const DriversTripcomponent = ({ driverTripData }) => {
+  console.log(driverTripData);
 
-  const startTimeAgain = ({}) => {
+  const startTimeAgain = (d) => {
     //console.error(d);
     // if(this.props.rider.rider_id != '') return false;
     Alert.alert(
@@ -36,11 +29,11 @@ const DriversTripcomponent = ({ data }) => {
       { cancelable: false }
     );
   };
-  const savedetails = (d) => {
-    console.log("hhhh");
+  const savedetails = () => {
+    console.log("");
   };
 
-  if (data.length == 0) {
+  if (driverTripData.length == 0) {
     return (
       <Text
         style={{
@@ -56,41 +49,8 @@ const DriversTripcomponent = ({ data }) => {
   }
 
   return (
-    <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={false}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          // setModalVisible(!modalVisible);
-        }}
-      >
-        <View
-          className="mt-32"
-          style={{
-            backgroundColor: "#fff",
-            width: "98%",
-            height: 480,
-            padding: 15,
-            paddingTop: 5,
-            marginRight: 0,
-            alignSelf: "center",
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: "#fff",
-              width: width,
-              height: height,
-              marginLeft: 0,
-            }}
-          >
-            <Text> jajaja</Text>
-          </View>
-        </View>
-      </Modal>
-      {data.map((d) => {
+    <ScrollView>
+      {driverTripData.map((d) => {
         return (
           <TouchableOpacity
             key={uuid()}
@@ -194,7 +154,7 @@ const DriversTripcomponent = ({ data }) => {
           </TouchableOpacity>
         );
       })}
-    </>
+    </ScrollView>
   );
 };
 

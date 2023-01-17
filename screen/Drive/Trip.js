@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   Dimensions,
-  FlatList,
   Modal,
   ScrollView,
   StyleSheet,
@@ -15,7 +14,6 @@ import Timeline from "react-native-timeline-flatlist";
 import { useDispatch, useSelector } from "react-redux";
 import { GetAllDriverTrips } from "../../Slice/Driver/GetAllDriverTripsSlice";
 import DriversTripcomponent from "../../components/Driver/DriverTrip/DriversTripcomponent";
-import uuid from "uuid-random";
 
 const { width, height } = Dimensions.get("window");
 const status_bar_height = Platform.OS == "ios" ? 20 : 0;
@@ -31,7 +29,6 @@ const Trip = () => {
     (state) => state.GetAllDriverTripsSlice
   );
 
-  console.log(drivertrip);
   const dispatch = useDispatch();
 
   const getdrivertrip = () => {
@@ -41,8 +38,7 @@ const Trip = () => {
   const [buttonText, setButtonText] = useState("Press me");
 
   useEffect(() => {
-    dispatch(GetAllDriverTrips());
-    console.log("working");
+    getdrivertrip();
     return () => {};
   }, []);
 
@@ -50,10 +46,91 @@ const Trip = () => {
     <PTRView>
       <View style={styles.container}>
         <View style={styles.header} className="pt-10">
-          <Text style={styles.headerText}>All Trips</Text>
+          <Text onPress={getdrivertrip} style={styles.headerText}>
+            All Trips
+          </Text>
         </View>
-        {drivertrip && <DriversTripcomponent data={drivertrip} />}
+
+        {/* <Modal
+            visible={true}
+            style={{ width: width, backgroundColor: "#fff", margin: 0 }}
+          >
+            <View
+              style={{
+                backgroundColor: "#fff",
+                width: width,
+                height: height,
+                marginLeft: 0,
+              }}
+            >
+
+              <Timeline data={data} />
+            </View>
+          </Modal> */}
+
+        {/* {
+                        this.state.isFetching == true && <ActivityIndicator color="#007cc2" size='large' />
+                    } */}
+
+        <View className="flex-1">
+          {drivertrip && <DriversTripcomponent driverTripData={drivertrip} />}
+        </View>
         {isLoading && <ActivityIndicator color="#007cc2" size="large" />}
+
+        {/* // this.state.data.map((d) =>
+                        // <TouchableOpacity  key = {uuid()} value={uuid()} onPress = {() => this.startTimeAgain(d)}>
+                        */}
+
+        {/*    
+                        <View style={styles.body}>
+                            <View style= {styles.img}>
+                                    <Ionicons name='md-car' size={30} style={{color:'#007cc2',marginTop:10}}/>
+                            </View>
+                                <View style = {styles.info}>
+                                <Text style={{marginTop:1,color:'#877A80'}}> <Ionicons name='md-pin' size={15} style={{color:'green',marginTop:10}}/> {d.pickUpAddress}</Text>
+                                <Text style={{marginTop:1,color:'#877A80'}}> <Ionicons name='md-pin' size={15} style={{color:'red',marginTop:10}}/> {d.destAddress}</Text>
+                                <Text style={{marginTop:1,color:'#877A80'}}> NGN {parseFloat(d.tripAmt).toFixed(2)}</Text>
+                                </View>
+                                
+                        </View>
+                        */}
+        {/* 
+                        // <View style={{borderWidth:1,borderColor:'#005091',margin:7,borderBottomLeftRadius:5,borderBottomRightRadius:5,borderTopLeftRadius:5,borderTopRightRadius:5}} key = {d.id} value = {d.id}>
+                        // <View style={{backgroundColor:'#005091',padding:7}}>
+                        //     <View style = {{flexDirection:"row"}}>
+                        //         <View style={{width:'70%'}}>
+                        //            <Text style={{color:'#fff'}}>{d.name}</Text>
+                        //            <Text style={{color:'#fff',fontSize:12}}>Travel Time: {this.toHHMMSS(d.travelTime)}</Text>
+                                   
+                        //         </View>
+                                
+                        //         <View style={{width:'30%'}}>
+                        //             <Text style={{alignSelf:'flex-end',color:'#fff',fontSize:12}}>NGN {parseFloat(d.tripAmt).toFixed(2)}</Text>
+                        //             <View style={{width:'60%',backgroundColor:'#007cc2',alignSelf:'flex-end',borderRadius:5}}>
+                        //                <Text onPress = {()=>this.savedetails(d)} style={{borderRadius:1,color:'#fff',padding:2,alignSelf:'center'}}>ROUTE</Text>
+                        //             </View>
+                                    
+                        //         </View>
+                        //     </View>
+                        //     <View>
+                        //     <Text style={{color:'#fff',fontSize:12}}>Start Time: {d.tripEndTime}</Text>
+                        //     </View>
+                        // </View>
+                        // <View style={{borderBottomColor:'#005091',borderBottomWidth:1,marginBottom:7}}>
+                        //     <View style = {{paddingTop:5,paddingBottom:5}}>  
+                        //     <Text style={{marginTop:1,color:'#877A80'}}> <Ionicons name='md-pin' size={15} style={{color:'green',marginTop:10}}/> {d.pickUpAddress}</Text>
+                            
+                        //     </View>
+                        // </View>
+                        // <View style={{marginBottom:7}}>
+                        //     <View style = {{paddingTop:5,paddingBottom:5}}>  
+                        //     <Text style={{marginTop:1,color:'#877A80'}}> <Ionicons name='md-pin' size={15} style={{color:'red',marginTop:10}}/> {d.destAddress}</Text>
+                            
+                        //     </View>
+                        // </View>
+                    // </View> 
+                        // </TouchableOpacity>
+                    // )}  */}
       </View>
     </PTRView>
   );

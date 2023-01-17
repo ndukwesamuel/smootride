@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Alert } from "react-native";
 import Login from "./screen/Login";
@@ -16,8 +16,8 @@ import RiderTrips from "./screen/rider/RiderTrips";
 import RiderRequest from "./screen/rider/RiderRequest";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import DriverTabNavigation from "./screen/Drive/DriverTabNavigation";
-import {PersistGate} from 'redux-persist/integration/react';
-import messaging from '@react-native-firebase/messaging';
+import { PersistGate } from "redux-persist/integration/react";
+// import messaging from "@react-native-firebase/messaging";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 const Stack = createNativeStackNavigator();
@@ -91,80 +91,78 @@ export function TabNavigation() {
 }
 
 export default function App() {
+  // const requestUserPermission = async () => {
+  //   const authStatus = await messaging().requestPermission();
+  //   const enabled =
+  //     authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+  //     authStatus === messaging.AuthorizationStatus.PROVISIONAL;
 
-  const requestUserPermission = async ()=>{
-    const authStatus = await messaging().requestPermission();
-  const enabled =
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  //   if (enabled) {
+  //     console.log("Authorization status:", authStatus);
+  //   }
+  // };
 
-  if (enabled) {
-    console.log('Authorization status:', authStatus);
-  }
-  }
+  // useEffect(() => {
+  //   if (requestUserPermission()) {
+  //     //return fcm token for the device
+  //     messaging()
+  //       .getToken()
+  //       .then((token) => {
+  //         console.log(token);
+  //       });
+  //   } else {
+  //     console.log("Failed token status", authStatus);
+  //   }
 
-  useEffect(()=>{
-    if (requestUserPermission()){
-      //return fcm token for the device
-      messaging().getToken().then(token => {
-        console.log(token)
-      })
-    }
-    else{
-      console.log("Failed token status", authStatus)
-    }
+  //   // Check whether an initial notification is available
+  //   messaging()
+  //     .getInitialNotification()
+  //     .then(async (remoteMessage) => {
+  //       if (remoteMessage) {
+  //         console.log(
+  //           "Notification caused app to open from quit state:",
+  //           remoteMessage.notification
+  //         );
+  //       }
+  //     });
 
-    // Check whether an initial notification is available
-    messaging()
-      .getInitialNotification()
-      .then(async (remoteMessage) => {
-        if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage.notification,
-          );
-        }
-      });
+  //   //when the app is running, but in the background
+  //   // Assume a message-notification contains a "type" property in the data payload of the screen to open
 
-      //when the app is running, but in the background
-      // Assume a message-notification contains a "type" property in the data payload of the screen to open
+  //   messaging().onNotificationOpenedApp(async (remoteMessage) => {
+  //     console.log(
+  //       "Notification caused app to open from background state:",
+  //       remoteMessage.notification
+  //     );
+  //   });
 
-    messaging().onNotificationOpenedApp(async (remoteMessage) => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage.notification,
-      );
-    });
+  //   // Register background handler
+  //   messaging().setBackgroundMessageHandler(async (remoteMessage) => {
+  //     console.log("Message handled in the background!", remoteMessage);
+  //   });
 
-    // Register background handler
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      console.log('Message handled in the background!', remoteMessage);
-    });
+  //   const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+  //     Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage));
+  //   });
 
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-return unsubscribe;
-
-  }, [])
-
+  //   return unsubscribe;
+  // }, []);
 
   let user = false;
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{
-              headerShown: false,
-            }}
-          />
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{
+                headerShown: false,
+              }}
+            />
 
-          {/* <Stack.Screen
+            {/* <Stack.Screen
             name="TabNavigation"
             component={TabNavigation}
             options={{
@@ -172,22 +170,22 @@ return unsubscribe;
             }}
           /> */}
 
-          <Stack.Screen
-            name="DriverTabNavigation"
-            component={DriverTabNavigation}
-            options={{
-              headerShown: false,
-            }}
-          />
+            <Stack.Screen
+              name="DriverTabNavigation"
+              component={DriverTabNavigation}
+              options={{
+                headerShown: false,
+              }}
+            />
 
-          {/* <Stack.Screen
+            {/* <Stack.Screen
             name="RiderTrips"
             component={RiderTrips}
             options={{
               headerShown: false,
             }} 
           /> */}
-          {/* <Stack.Screen
+            {/* <Stack.Screen
             name="riderprofile"
             component={RiderProfile}
             options={{
@@ -195,15 +193,15 @@ return unsubscribe;
             }}
           /> */}
 
-          <Stack.Screen
-            name="forgetpassword"
-            component={Forgetpassword}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+            <Stack.Screen
+              name="forgetpassword"
+              component={Forgetpassword}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
       </PersistGate>
     </Provider>
     // <View style={styles.container}>
