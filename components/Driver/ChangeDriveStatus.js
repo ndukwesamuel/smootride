@@ -20,8 +20,6 @@ import { SelectList } from "react-native-dropdown-select-list";
 
 const ChangeDriveStatus = ({ data1, data2 }) => {
   const dispatch = useDispatch();
-  const countries = ["Offline", "Online"];
-  const [selected, setSelected] = useState("");
 
   const { drivestatus, isError, isSuccess, message, isLoading } = useSelector(
     (state) => state.UpdateDriverStatusSlice
@@ -30,13 +28,12 @@ const ChangeDriveStatus = ({ data1, data2 }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [user_online_offline, setUser_online_offline] = useState("");
   const [user_Status_reason, setuser_Status_reason] = useState("");
+  const [selected, setSelected] = useState("");
 
   const data = [
-    { key: "1", value: "Offline" },
-    { key: "2", value: "Online" },
+    { key: "1", value: "offline" },
+    { key: "2", value: "online" },
   ];
-
-  console.log(drivestatus);
 
   const SendrequestStatus = () => {
     dispatch(UpdateDriverStatus({ isAvailable: selected }));
@@ -112,8 +109,6 @@ const ChangeDriveStatus = ({ data1, data2 }) => {
         >
           Request to Change State
         </Text>
-
-        <Text>sdlskldlk</Text>
 
         <SelectList
           setSelected={(val) => setSelected(val)}
