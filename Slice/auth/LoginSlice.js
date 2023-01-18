@@ -12,13 +12,6 @@ import { Alert } from "react-native";
 
 let userAPi = process.env.SMOOTHRIDE_NEWAPI + "login";
 
-async function retrieveData() {
-  const value = await AsyncStorage.getItem("userdata");
-  return value;
-}
-
-let user = retrieveData();
-
 const initialState = {
   user: null,
   isError: false,

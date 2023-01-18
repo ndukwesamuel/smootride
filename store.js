@@ -32,6 +32,8 @@ import navReducer from "./Slice/navSlice";
 import PassowrdReset from "./Slice/auth/PassowrdReset";
 import UpdateDriverStatusSlice from "./Slice/Driver/UpdateDriverStatusSlice";
 import { combineReducers } from "redux";
+
+import GetlastassigntripSlice from "./Slice/Driver/GetlastassigntripSlice";
 import GetAllDriverTripsSlice from "./Slice/Driver/GetAllDriverTripsSlice";
 import RequestRideSlice from "./Slice/auth/Requestride"
 
@@ -42,6 +44,7 @@ const reducers = combineReducers({
   GetRiderSlice: GetRiderSlice,
   RequestRideSlice: RequestRideSlice,
   UpdateDriverStatusSlice: UpdateDriverStatusSlice,
+  GetlastassigntripSlice: GetlastassigntripSlice,
   GetAllDriverTripsSlice: GetAllDriverTripsSlice,
 });
 
