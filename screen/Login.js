@@ -35,8 +35,6 @@ const Login = () => {
     (state) => state.LoginSlice
   );
 
-  console.log("user status ", user);
-
   useEffect(() => {
     if (user == true) {
       if (data?.user.userType == "staff") {

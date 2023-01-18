@@ -29,7 +29,6 @@ const ResetpasswordService = async (userData, tokengot) => {
 
   const response = await axios.post(url, userData, config);
 
-  console.log(response.data);
   return response.data;
 };
 
@@ -39,6 +38,7 @@ export const UpdateDriverStatus = createAsyncThunk(
   async (statusData, thunkAPI) => {
     try {
       const tokengot = await AsyncStorage.getItem("token");
+
       return await ResetpasswordService(statusData, tokengot);
     } catch (error) {
       console.log(error);

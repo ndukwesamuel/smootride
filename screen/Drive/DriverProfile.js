@@ -35,10 +35,6 @@ const DriverProfile = () => {
     setSupport(!support);
   };
 
-  console.log("test");
-  console.log(user);
-  console.log(data);
-
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View
