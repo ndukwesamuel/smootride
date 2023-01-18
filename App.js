@@ -17,6 +17,7 @@ import RiderRequest from "./screen/rider/RiderRequest";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import DriverTabNavigation from "./screen/Drive/DriverTabNavigation";
 import { PersistGate } from "redux-persist/integration/react";
+// import messaging from '@react-native-firebase/messaging';
 // import messaging from "@react-native-firebase/messaging";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -162,13 +163,13 @@ export default function App() {
               }}
             />
 
-            {/* <Stack.Screen
+            <Stack.Screen
             name="TabNavigation"
             component={TabNavigation}
             options={{
               headerShown: false,
             }}
-          /> */}
+          />
 
             <Stack.Screen
               name="DriverTabNavigation"

@@ -21,7 +21,7 @@ export const RequestRide= createAsyncThunk(
           return await instance
             .post("requestride", requestdetails)
             .then( async (response) => {
-              console.log("requested response ",response.data)
+              // console.log("requested response ",response.data)
               return response.data;
             })
              
@@ -32,7 +32,7 @@ export const RequestRide= createAsyncThunk(
         }else{
           Alert.alert(errdata?.message)
         }
-        // console.log("request error ",errdata.message)
+        // console.log("request error ",errdata)
       return rejectWithValue(err.response.data)
     })
         
@@ -46,7 +46,8 @@ export const RequestRide= createAsyncThunk(
     isSuccess: false,
     isLoading: false,
     message: null,
-    data: null
+    data: null,
+    isRequest: false
   };
 
   export const RequestRideSlice = createSlice({
@@ -71,6 +72,7 @@ export const RequestRide= createAsyncThunk(
           state.isError = true;
           state.message = action.payload;
           state.user = false;
+          state.isRequest= false;
         })
     },
   });

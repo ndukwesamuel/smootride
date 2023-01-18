@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import clientimg from "../../assets/images/profile.jpg";
+import { Ionicons } from '@expo/vector-icons'; 
 import {
   View,
   Text,
@@ -28,9 +29,17 @@ import { GetRider } from "../../Slice/auth/Getrider";
 import { RequestRide } from "../../Slice/auth/Requestride";
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
+import RideRequestSuccess from "../../components/rider/RideRequestSuccess";
+
+
+
+
+
+
 const { width, height } = Dimensions.get("window");
 const RiderRequest = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [accepted, setAccepted] = useState(false)
   const dispatch = useDispatch();
   const [purpose, setPurpose] = useState("");
   const [loading, setLoading] = useState(false);
@@ -66,6 +75,10 @@ const RiderRequest = () => {
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   };
+
+  const handleAccept= ()=>{
+    setAccepted(false)
+  }
   const handlePurpose = async () => {
     if(purpose == 0){
       Alert.alert("Please fill the field")
@@ -73,11 +86,17 @@ const RiderRequest = () => {
     const userdata = {
       purpose: purpose,
     };
+    
+    setIsModalVisible(false);
     setLoading(true);
     await dispatch(RequestRide(userdata));
     setLoading(false);
-    setIsModalVisible(false);
     setPurpose("")
+
+    
+  if (requeststat == true){
+    setAccepted(true)
+  }
   }
   };
   const handleModal = () => setIsModalVisible(!isModalVisible);
@@ -85,9 +104,12 @@ const RiderRequest = () => {
     dispatch(GetRider());
   }, []);
   const knowdata = useSelector((state) => state.GetRiderSlice?.data?.drivers);
-  
+  const requeststat = useSelector((state) => state.RequestRideSlice?.isRequest);
+  console.log("requested status ", requeststat)
   const username= useSelector((state)=> state.LoginSlice?.data?.user?.name)
   const number = knowdata?.length;
+
+
   return (
     <View style={styles.container}>
       <View style={styles.map}>
@@ -133,6 +155,93 @@ const RiderRequest = () => {
           }}
         /> */}
       </View>
+      {false == true ? 
+
+      <View
+      style={{
+        backgroundColor: "white",
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 20,
+      }}
+    >
+      <View style = {styles.viewcard}>
+                            <View>
+                            <View style={{padding:10}}>
+                                <Text style={{alignSelf:'center',marginTop:10,fontSize:15,color:'#007cc2'}}>Hi, {username}</Text>
+                            </View>    
+                            <View
+                    style={{
+                      flexDirection: "row",
+                      borderBottomWidth: 1,
+                      borderBottomColor: "#EDEDED",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                                    <View style={{flexDirection:'row'}}>
+                                    <View style= {{width:'22%',marginStart:10}}>
+                                    {/* {
+                                        this.props.driver.driver_image != null && 
+                                        <Image
+                                        source={{uri: `https://smoothride.ng/taxi/images/${this.props.driver.driver_image}`}}
+                                        style={{width:50,height:50, alignSelf:'center',margin:5,borderRadius:25}}
+                                        />
+                                    } 
+                                    {
+                                        this.props.driver.driver_image == null && 
+                                        <Image
+                                        source={require('../../asset/img/profile.jpg')}
+                                        style={{width:50,height:50, alignSelf:'center',margin:5,borderRadius:25}}
+                                        />
+                                    }    */}
+                                    <Image
+                                        source={clientimg}
+                                        style={{width:50,height:50, alignSelf:'center',margin:5,borderRadius:25}}
+                                        />
+                                    </View>
+                                    <View style = {{width:'60%',marginLeft:5}}>
+                                        <Text style={{fontSize:14,marginTop:1,color:'#877A80',fontWeight:'500'}}> tunde unknown</Text>
+                                        {/* {
+                                            this.props.driver.company_name == null &&
+                                            <Text style={{fontSize:16,fontWeight:'200',color:'#877A80',fontFamily: "Roboto-Regular"}}> Unknown </Text>
+                                        }
+                                        {
+                                            this.props.driver.company_name != null &&
+                                            <Text style={{fontSize:16,fontWeight:'800',color:'#007cc2',fontFamily: "Roboto-Regular"}}> company name</Text>
+                                        } */}
+                                                                                                
+                                    </View>
+                                    <View>
+                                        <View style={{borderColor:'#007cc2',borderWidth:2,borderRadius:17,width:35,height:35,marginTop:10}}>
+                                            <Ionicons 
+                                            // onPress={this.call} 
+                                            name='md-call' size={20} style={{color:'#007cc2',alignSelf:'center',marginTop:5}}/>
+                                        </View>
+                                        
+                                    </View>
+                                                
+                                    </View>
+                                    </View>
+                                  
+                            </View>   
+                            <View>
+                               <View style={{flexDirection:'row'}}>
+                                   <View style ={{width:'60%',justifyContent:'center'}}>
+                                   </View>
+                                   <View style ={{width:'40%'}}>
+                                           <TouchableOpacity
+                                            // onPress={this.oncompleted}  
+                                            style={{marginTop:7, backgroundColor:'#005091',padding:10,width:'100%',borderRadius:10,alignSelf:'center', marginBottom: 15}}>
+                                            <Text style={{alignSelf:'center',color:'#fff',fontSize:13}}>CANCEL REQUEST</Text> 
+                                           </TouchableOpacity>
+                                        
+                                   </View>
+                               </View>
+                            </View>   
+                            
+                        </View>
+      </View>
+      :
       <View
         style={{
           backgroundColor: "white",
@@ -261,14 +370,22 @@ const RiderRequest = () => {
           }}
           onPress={handleModal}
         >
+          
+          {loading ? (
+                <ActivityIndicator animating={true} color="white" />
+              ) : (
           <Text
             style={{ alignSelf: "center", color: "#fff", fontSize: 25 }}
             onPress={handleModal}
           >
             REQUEST A RIDE
           </Text>
+              )}
         </TouchableOpacity>
       </View>
+      
+      
+      }
       <Modal isVisible={isModalVisible}>
         <View
           style={{
@@ -330,9 +447,6 @@ const RiderRequest = () => {
               }}
               onPress={handlePurpose}
             >
-              {loading ? (
-                <ActivityIndicator animating={true} color="white" />
-              ) : (
                 <Text
                   style={{
                     color: "#fff",
@@ -344,7 +458,6 @@ const RiderRequest = () => {
                 >
                   Submit
                 </Text>
-              )}
             </TouchableOpacity>
             <TouchableOpacity
               onPress={handleModal}
@@ -370,6 +483,7 @@ const RiderRequest = () => {
           </View>
         </View>
       </Modal>
+      <RideRequestSuccess accepted={accepted} handleAccept={handleAccept} />
     </View>
   );
 };
