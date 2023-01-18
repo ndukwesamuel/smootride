@@ -21,9 +21,8 @@ import GlobalStyles from "../../GlobalStyles";
 import { useDispatch, useSelector } from "react-redux";
 import ChangeDriveStatus from "../../components/Driver/ChangeDriveStatus";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Getlastassigntrip } from "../../Slice/Driver/GetlastassigntripSlice";
+import { GetLastAssignTrip } from "../../Slice/Driver/GetLastAssignTripSlice";
 let driverIcon = require("../../assets/images/profile.jpg");
-
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.006339428281933124;
@@ -32,6 +31,7 @@ let mapheight = (height * 4) / 5;
 let maplow = (height * 1) / 5;
 let maphalf = height / 2;
 //let mapheight = height;
+
 const mapviewheight = parseInt(mapheight);
 const status_bar_height = Platform.OS == "ios" ? 20 : 0;
 let watchID;
@@ -45,29 +45,6 @@ const tripissues = [
   { label: "Trip Declined by Rider", value: "decline" },
 ];
 
-let dataforDriverRequest = {
-  isrequesting: false,
-  FetchingisTripValid: false,
-  checkingInternet: false,
-  isFetching: false,
-  rider_name: "sam",
-  drivertrip: {
-    isReady: false,
-    isStarted: false,
-    isFirstTrip: false,
-    isEnded: false,
-    cost: 100,
-  },
-
-  rider: {
-    rider_name: "",
-    rider_id: 1,
-    accept: false,
-    rider_image: null,
-    company_name: "Fistbank",
-  },
-};
-
 const Driver = () => {
   const dispatch = useDispatch();
 
@@ -80,32 +57,56 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
+  const { rider } = useSelector((state) => state.GetLastAssignTripSlice);
+
   const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
   };
-  const { rider } = useSelector((state) => state.GetlastassigntripSlice);
 
-  console.log(rider);
   const Test = () => {
     console.log("clic me");
-    // dispatch(
-    //   Getlastassigntrip({
-    //     user_id: 1,
-    //   })
-    // );
+    dispatch(
+      GetLastAssignTrip({
+        user_id: 1,
+      })
+    );
   };
 
-  let call = false;
+  console.log(rider);
+
   useEffect(() => {
-    // dispatch(
-    //   Getlastassigntrip({
-    //     user_id: 1,
-    //   })
-    // );
+    dispatch(
+      GetLastAssignTrip({
+        user_id: 1,
+      })
+    );
     return () => {};
   }, []);
+
+  let dataforDriverRequest = {
+    isrequesting: false,
+    FetchingisTripValid: false,
+    checkingInternet: false,
+    isFetching: false,
+    rider_name: "sam",
+    drivertrip: {
+      isReady: false,
+      isStarted: false,
+      isFirstTrip: false,
+      isEnded: false,
+      cost: 100,
+    },
+
+    rider: {
+      rider_name: "",
+      rider_id: 1,
+      accept: false,
+      rider_image: null,
+      company_name: "Fistbank",
+    },
+  };
 
   return (
     <PTRView classname="flex-1 border-2 border-red-600">
@@ -583,7 +584,7 @@ const Driver = () => {
                       fontSize: 13,
                       padding: 12,
                       marginRight: 5,
-                      fontFamily: "Roboto-Regular",
+                      // fontFamily: "Roboto-Regular",
                     }}
                   >
                     No
@@ -800,20 +801,19 @@ const Driver = () => {
          } */}
             {/* this component is for driver moving  */}
 
-            {dataforDriverRequest.rider_name == "" &&
-              dataforDriverRequest.isFetching == false && (
-                <View style={{ padding: 10, height: maplow }}>
-                  <Text
-                    style={{
-                      color: "#877A80",
-                      alignSelf: "center",
-                      fontSize: 16,
-                    }}
-                  >
-                    No Ride Request Assigned Yet
-                  </Text>
-                </View>
-              )}
+            {rider.data == null && (
+              <View style={{ padding: 10, height: maplow }}>
+                <Text
+                  style={{
+                    color: "#877A80",
+                    alignSelf: "center",
+                    fontSize: 16,
+                  }}
+                >
+                  No Ride Request Assigned Yet
+                </Text>
+              </View>
+            )}
 
             {dataforDriverRequest.drivertrip.isReady == false &&
               dataforDriverRequest.drivertrip.isStarted == true && (
@@ -845,7 +845,7 @@ const Driver = () => {
                               color: "#007cc2",
                             }}
                           >
-                            Hi, {data.user?.name}
+                            Hi, {data?.user?.name}
                           </Text>
                           <Text
                             style={{
@@ -1309,7 +1309,7 @@ const Driver = () => {
                                 fontSize: 16,
                                 fontWeight: "800",
                                 color: "#007cc2",
-                                fontFamily: "Roboto-Regular",
+                                // fontFamily: "Roboto-Regular",
                               }}
                             >
                               {" "}
@@ -1368,7 +1368,7 @@ const Driver = () => {
                                 alignSelf: "center",
                                 color: "#a31225",
                                 fontSize: 13,
-                                fontFamily: "Roboto-Regular",
+                                // fontFamily: "Roboto-Regular",
                               }}
                             >
                               Reject
@@ -1411,7 +1411,7 @@ const Driver = () => {
                               alignSelf: "center",
                               color: "#fff",
                               fontSize: 13,
-                              fontFamily: "Roboto-Regular",
+                              // fontFamily: "Roboto-Regular",
                               borderRadius: 5,
                             }}
                           >
