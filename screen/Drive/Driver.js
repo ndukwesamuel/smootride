@@ -12,16 +12,16 @@ import {
   View,
 } from "react-native";
 import { Card } from "react-native-shadow-cards";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProgressDialog } from "react-native-simple-dialogs";
 import PTRView from "react-native-pull-to-refresh";
 // import CardView from "react-native-cardview";
 import GlobalStyles from "../../GlobalStyles";
 // import CardView from "react-native-cardview";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ChangeDriveStatus from "../../components/Driver/ChangeDriveStatus";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
+import { Getlastassigntrip } from "../../Slice/Driver/GetlastassigntripSlice";
 let driverIcon = require("../../assets/images/profile.jpg");
 
 const { width, height } = Dimensions.get("window");
@@ -69,12 +69,14 @@ let dataforDriverRequest = {
 };
 
 const Driver = () => {
+  const dispatch = useDispatch();
+
   const [modalVisible, setModalVisible] = useState(false);
   const [driver_mode, setDriver_mode] = useState("Online");
   const [driverrequest, setDriverrequest] = useState(false);
   const [driver_request_Status, setDriver_request_Status] = useState(false);
 
-  const { user, data, isError, isSuccess, message, isLoading } = useSelector(
+  const { user, data, isError, isSuccess, isLoading } = useSelector(
     (state) => state.LoginSlice
   );
 
@@ -83,6 +85,28 @@ const Driver = () => {
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
   };
+  const { rider } = useSelector((state) => state.GetlastassigntripSlice);
+
+  console.log(rider);
+  const Test = () => {
+    console.log("clic me");
+    // dispatch(
+    //   Getlastassigntrip({
+    //     user_id: 1,
+    //   })
+    // );
+  };
+
+  let call = false;
+  useEffect(() => {
+    // dispatch(
+    //   Getlastassigntrip({
+    //     user_id: 1,
+    //   })
+    // );
+    return () => {};
+  }, []);
+
   return (
     <PTRView classname="flex-1 border-2 border-red-600">
       <View classname="flex-1 bg-red-600 ">
@@ -119,6 +143,20 @@ const Driver = () => {
               Status
             </Text>
           </View>
+
+          <Text
+            onPress={Test}
+            style={{
+              fontSize: 12,
+              alignSelf: "flex-end",
+              borderRadius: 5,
+              color: "#fff",
+              backgroundColor: "#a31225",
+              padding: 3,
+            }}
+          >
+            test
+          </Text>
 
           <ChangeDriveStatus
             data1={driver_request_Status}
@@ -807,7 +845,7 @@ const Driver = () => {
                               color: "#007cc2",
                             }}
                           >
-                            Hi, {data.user.name}
+                            Hi, {data.user?.name}
                           </Text>
                           <Text
                             style={{
@@ -1195,7 +1233,7 @@ const Driver = () => {
                           color: "#007cc2",
                         }}
                       >
-                        Hi, {data.user.name}
+                        Hi, {data.user?.name}
                       </Text>
                       <Text
                         style={{
