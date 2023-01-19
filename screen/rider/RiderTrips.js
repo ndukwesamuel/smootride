@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GetTrips } from '../../Slice/auth/Getrider';
 // import moment from "moment";
 
-const RiderTrips = () => {
+const RiderTrips = ({navigation}) => {
 
   const dispatch= useDispatch()
   const [loading, setLoading]= useState(false)
@@ -54,6 +54,7 @@ const RiderTrips = () => {
                                     <View style={{width:'60%',backgroundColor:'#007cc2',alignSelf:'flex-end',borderRadius:5}}>
                                        <Text 
                                       //  onPress = {()=>this.savedetails(d)} 
+                                      onPress={()=>{navigation.navigate("RiderPaths", {tripPoints: item?.tripPoints})} }
                                        style={{borderRadius:2,color:'#fff',padding:2,alignSelf:'center'}}>ROUTE</Text>
                                     </View>
                                     

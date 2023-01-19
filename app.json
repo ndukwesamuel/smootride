@@ -35,6 +35,9 @@
       },
       "package": "com.samheart.Smoothride"
     },
+    "plugins": [
+      "@react-native-firebase/app"
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
     },

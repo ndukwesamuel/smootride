@@ -18,6 +18,7 @@ import {
   ScrollView,
   Image,
   FlatList,
+  Linking,
 } from "react-native";
 // import CardView from "react-native-cardview";
 import { GOOGLE_MAPS_APIKEYS } from "@env";
@@ -26,10 +27,11 @@ import Modal from "react-native-modal";
 import requestfile from "../../assets/images/requestfile.png";
 import { useDispatch, useSelector } from "react-redux";
 import { GetRider } from "../../Slice/auth/Getrider";
-import { RequestRide } from "../../Slice/auth/Requestride";
+import { AssignedDriver, CancelRequest, RequestRide } from "../../Slice/auth/Requestride";
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import RideRequestSuccess from "../../components/rider/RideRequestSuccess";
+import CancelModalTrip from "../../components/rider/CancelModalTrip";
 
 
 
@@ -46,6 +48,11 @@ const RiderRequest = () => {
   const [location, setLocation] = useState(null);
   const [maplocation, setMaplocation] = useState(false);
   const [userLocation, setUerLocation] = useState(null);
+  const [closedTrip, setClosedTrip] = useState(false)
+
+  const user_id = useSelector((state)=> state.LoginSlice?.data?.user?.id)
+
+
   useEffect(() => {
     const getPermissions = async()=>{
       setMaplocation(true)
@@ -79,6 +86,16 @@ const RiderRequest = () => {
   const handleAccept= ()=>{
     setAccepted(false)
   }
+
+  const cancelRequest =async ()=>{
+    await dispatch(CancelRequest())
+    setClosedTrip(!closedTrip)
+  }
+
+  const handleCloseModeTrip= ()=>{
+    setClosedTrip(!closedTrip)
+  }
+
   const handlePurpose = async () => {
     if(purpose == 0){
       Alert.alert("Please fill the field")
@@ -87,9 +104,16 @@ const RiderRequest = () => {
       purpose: purpose,
     };
     
+    const userdet = {
+      "user_id": user_id
+    }
+    
     setIsModalVisible(false);
     setLoading(true);
     await dispatch(RequestRide(userdata));
+    if(requeststat == true){
+    await dispatch(AssignedDriver(userdet))
+    }
     setLoading(false);
     setPurpose("")
 
@@ -99,13 +123,25 @@ const RiderRequest = () => {
   }
   }
   };
+
+  const onCall = () => {
+    let phoneNumber = '';
+    if (Platform.OS === 'android') {
+        phoneNumber = `tel:${assignedDet?.driverdetails?.phone}`;
+      }
+      else {
+        phoneNumber = `telprompt:${assignedDet?.driverdetails?.phone}`;
+      }
+      Linking.openURL(phoneNumber);
+}
   const handleModal = () => setIsModalVisible(!isModalVisible);
   useEffect(() => {
     dispatch(GetRider());
   }, []);
   const knowdata = useSelector((state) => state.GetRiderSlice?.data?.drivers);
   const requeststat = useSelector((state) => state.RequestRideSlice?.isRequest);
-  console.log("requested status ", requeststat)
+  const assignedDet = useSelector((state) => state.RequestRideSlice?.assignedDriver);
+  // console.log("assignedDet status ", assignedDet)
   const username= useSelector((state)=> state.LoginSlice?.data?.user?.name)
   const number = knowdata?.length;
 
@@ -155,7 +191,7 @@ const RiderRequest = () => {
           }}
         /> */}
       </View>
-      {false == true ? 
+      {requeststat == true ? 
 
       <View
       style={{
@@ -200,7 +236,8 @@ const RiderRequest = () => {
                                         />
                                     </View>
                                     <View style = {{width:'60%',marginLeft:5}}>
-                                        <Text style={{fontSize:14,marginTop:1,color:'#877A80',fontWeight:'500'}}> tunde unknown</Text>
+                                        <Text style={{fontSize:14,marginTop:1,color:'#877A80',fontWeight:'500'}}>{assignedDet?.driverdetails?.driverName}</Text>
+                                        <Text style={{fontSize:16,fontWeight:'200',color:'#877A80',fontWeight:'500'}}> Unknown </Text>
                                         {/* {
                                             this.props.driver.company_name == null &&
                                             <Text style={{fontSize:16,fontWeight:'200',color:'#877A80',fontFamily: "Roboto-Regular"}}> Unknown </Text>
@@ -214,7 +251,7 @@ const RiderRequest = () => {
                                     <View>
                                         <View style={{borderColor:'#007cc2',borderWidth:2,borderRadius:17,width:35,height:35,marginTop:10}}>
                                             <Ionicons 
-                                            // onPress={this.call} 
+                                            onPress={onCall} 
                                             name='md-call' size={20} style={{color:'#007cc2',alignSelf:'center',marginTop:5}}/>
                                         </View>
                                         
@@ -230,7 +267,8 @@ const RiderRequest = () => {
                                    </View>
                                    <View style ={{width:'40%'}}>
                                            <TouchableOpacity
-                                            // onPress={this.oncompleted}  
+                                            // onPress={this.oncompleted} 
+                                            onPress={handleCloseModeTrip} 
                                             style={{marginTop:7, backgroundColor:'#005091',padding:10,width:'100%',borderRadius:10,alignSelf:'center', marginBottom: 15}}>
                                             <Text style={{alignSelf:'center',color:'#fff',fontSize:13}}>CANCEL REQUEST</Text> 
                                            </TouchableOpacity>
@@ -484,6 +522,7 @@ const RiderRequest = () => {
         </View>
       </Modal>
       <RideRequestSuccess accepted={accepted} handleAccept={handleAccept} />
+      <CancelModalTrip closedTrip={closedTrip} handleCloseModeTrip={handleCloseModeTrip} cancelRequest={cancelRequest} />
     </View>
   );
 };
