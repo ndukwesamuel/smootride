@@ -21,7 +21,8 @@ import GlobalStyles from "../../GlobalStyles";
 import { useDispatch, useSelector } from "react-redux";
 import ChangeDriveStatus from "../../components/Driver/ChangeDriveStatus";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { GetLastAssignTrip } from "../../Slice/Driver/GetLastAssignTripSlice";
+import { GetLastAssignTrip } from "../../Slice/Driver/GetlastassigntripSlice";
+
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
@@ -57,7 +58,7 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
-  const { rider } = useSelector((state) => state.GetLastAssignTripSlice);
+  const riderdataiii = useSelector((state) => state.GetLastAssignTripSlice);
 
   const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
 
@@ -74,7 +75,10 @@ const Driver = () => {
     );
   };
 
-  console.log(rider);
+  let riderdata = null;
+
+  console.log(riderdataiii);
+  // console.log(riderdata);
 
   useEffect(() => {
     dispatch(
@@ -801,8 +805,8 @@ const Driver = () => {
          } */}
             {/* this component is for driver moving  */}
 
-            {rider.data == null && (
-              <View style={{ padding: 10, height: maplow }}>
+            {riderdata == null && (
+              <Card style={{ padding: 10, margin: 10 }}>
                 <Text
                   style={{
                     color: "#877A80",
@@ -810,8 +814,28 @@ const Driver = () => {
                     fontSize: 16,
                   }}
                 >
-                  No Ride Request Assigned Yet
+                  you are having network issuses
                 </Text>
+              </Card>
+            )}
+
+            {riderdata && (
+              <View>
+                {riderdata.data == null && (
+                  <Card style={{ padding: 10, margin: 10 }}>
+                    <View style={{ padding: 10 }}>
+                      <Text
+                        style={{
+                          color: "#877A80",
+                          alignSelf: "center",
+                          fontSize: 16,
+                        }}
+                      >
+                        No Ride Request Assigned Yet
+                      </Text>
+                    </View>
+                  </Card>
+                )}
               </View>
             )}
 
