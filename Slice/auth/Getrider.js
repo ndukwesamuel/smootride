@@ -79,7 +79,9 @@ const initialState = {
   export const GetRiderSlice = createSlice({
     name: "getRiderreducer",
     initialState,
-    reducers: {},
+    reducers: {
+      reset: (state) => initialState,
+    },
     extraReducers: (builder) => {
       builder
         .addCase(GetRider.pending, (state) => {
@@ -116,4 +118,5 @@ const initialState = {
     },
   });
 
+  export const { reset } = GetRiderSlice.actions;
   export default GetRiderSlice.reducer;

@@ -14,8 +14,11 @@ import GlobalStyles from "../../GlobalStyles";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
 
 const RiderProfile = ({ navigation }) => {
+
+  const dispatch = useDispatch()
   const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
     navigation.navigate("Login");
@@ -23,6 +26,11 @@ const RiderProfile = ({ navigation }) => {
 
   const [social, setSocial] = useState(false);
   const [support, setSupport] = useState(false);
+
+  
+  const username= useSelector((state)=> state.LoginSlice?.data?.user)
+  console.log("user status ", username)
+
   const handleSocial = () => {
     setSocial(!social);
   };
@@ -50,7 +58,7 @@ const RiderProfile = ({ navigation }) => {
           />
         </View>
         <View style={{ width: "75%" }}>
-          <Text style={{ color: "#fff", marginTop: 10 }}>username</Text>
+          <Text style={{ color: "#fff", marginTop: 10 }}>{username?.name}</Text>
           <View style={{ flexDirection: "row" }}>
             <View style={{ width: "50%" }}>
               <Text style={{ color: "#fff", marginTop: 4, fontSize: 13 }}>
@@ -64,7 +72,7 @@ const RiderProfile = ({ navigation }) => {
                   fontSize: 13,
                 }}
               >
-                Rider
+                {username?.userType}
               </Text>
             </View>
             <View style={{ width: "50%" }}>
