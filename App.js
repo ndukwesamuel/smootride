@@ -200,6 +200,14 @@ export default function App() {
                 headerShown: false,
               }}
             />
+
+            <Stack.Screen
+              name="tripmap"
+              component={Tripmap}
+              options={{
+                headerShown: false,
+              }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </PersistGate>

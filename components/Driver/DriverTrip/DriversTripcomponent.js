@@ -1,4 +1,5 @@
 import {
+  Alert,
   Modal,
   ScrollView,
   StyleSheet,
@@ -10,11 +11,13 @@ import {
 import React from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import uuid from "uuid-random";
+import { useNavigation } from "@react-navigation/native";
 
 const status_bar_height = Platform.OS == "ios" ? 20 : 0;
 const DriversTripcomponent = ({ driverTripData }) => {
+  const navigation = useNavigation();
   const startTimeAgain = (d) => {
-    //console.error(d);
+    // console.log(d);
     // if(this.props.rider.rider_id != '') return false;
     Alert.alert(
       "Alert",
@@ -29,7 +32,12 @@ const DriversTripcomponent = ({ driverTripData }) => {
       { cancelable: false }
     );
   };
-  const savedetails = () => {};
+  const savedetails = (d) => {
+    // console.log(d);
+    navigation.navigate("tripmap", {
+      data: d,
+    });
+  };
 
   if (driverTripData.length == 0) {
     return (
