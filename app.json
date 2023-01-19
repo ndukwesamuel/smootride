@@ -21,13 +21,11 @@
       "supportsTablet": true
     },
     "android": {
-      "googleServicesFile": "./google-services.json",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyAnpzxQjedU_nLRYyX5pIthS2BcSA6VAbk"
         }
       },
-
       "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
@@ -40,7 +38,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "0dc25e0d-9f26-439c-8935-5bf8eea0625f"
+        "projectId": "47fde97b-b680-41e8-a132-aa9ba981ab2c"
       }
     }
   }
