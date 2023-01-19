@@ -30,7 +30,7 @@ import {
 } from "redux-persist";
 import navReducer from "./Slice/navSlice";
 import PassowrdReset from "./Slice/auth/PassowrdReset";
-import GetLastAssignTripSlice from "./Slice/Driver/GetLastAssignTripSlice";
+import GetLastAssignTripSlice from "./Slice/Driver/GetlastassigntripSlice";
 import UpdateDriverStatusSlice from "./Slice/Driver/UpdateDriverStatusSlice";
 import { combineReducers } from "redux";
 
