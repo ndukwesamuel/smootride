@@ -21,7 +21,7 @@ import GlobalStyles from "../../GlobalStyles";
 import { useDispatch, useSelector } from "react-redux";
 import ChangeDriveStatus from "../../components/Driver/ChangeDriveStatus";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { GetLastAssignTrip } from "../../Slice/Driver/GetlastassigntripSlice";
+import { GetLastAssignTrip } from "../../Slice/Driver/GetLastAssignTripSlice";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -58,7 +58,7 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
-  const riderdataiii = useSelector((state) => state.GetLastAssignTripSlice);
+  const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
   const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
 
@@ -75,9 +75,9 @@ const Driver = () => {
     );
   };
 
-  let riderdata = null;
+  // let riderdata = null;
 
-  console.log(riderdataiii);
+  console.log(riderdata);
   // console.log(riderdata);
 
   useEffect(() => {

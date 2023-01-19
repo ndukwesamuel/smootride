@@ -24,6 +24,8 @@ const GetLastAssignTripService = async (riderData, token) => {
   };
 
   const response = await axios.post(url, riderData, config);
+
+  console.log(response);
   return response.data;
 };
 
@@ -61,7 +63,7 @@ export const GetLastAssignTripSlice = createSlice({
       .addCase(GetLastAssignTrip.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.rider = action.payload;
+        state.riderdata = action.payload;
       })
       .addCase(GetLastAssignTrip.rejected, (state, action) => {
         state.isLoading = false;

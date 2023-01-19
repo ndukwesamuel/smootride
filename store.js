@@ -30,12 +30,11 @@ import {
 } from "redux-persist";
 import navReducer from "./Slice/navSlice";
 import PassowrdReset from "./Slice/auth/PassowrdReset";
-// import GetLastAssignTripSlice from "./Slice/Driver/GetLastAssignTripSlice";
+import GetLastAssignTripSlice from "./Slice/Driver/GetLastAssignTripSlice";
 import UpdateDriverStatusSlice from "./Slice/Driver/UpdateDriverStatusSlice";
 import { combineReducers } from "redux";
 
 import GetAllDriverTripsSlice from "./Slice/Driver/GetAllDriverTripsSlice";
-import GetLastAssignTripSlice from "./Slice/Driver/GetlastassigntripSlice";
 
 const reducers = combineReducers({
   nav: navReducer,
@@ -44,7 +43,7 @@ const reducers = combineReducers({
   GetRiderSlice: GetRiderSlice,
   UpdateDriverStatusSlice: UpdateDriverStatusSlice,
   GetAllDriverTripsSlice: GetAllDriverTripsSlice,
-  // GetLastAssignTripSlice: GetLastAssignTripSlice,
+  GetLastAssignTripSlice: GetLastAssignTripSlice,
 });
 
 const persistConfig = {
