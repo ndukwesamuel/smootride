@@ -7,82 +7,71 @@ import { SMOOTHRIDE_NEWAPI } from "@env";
 import { Alert } from "react-native";
 
 const initialState = {
-  rider: null,
+  riderdata: null,
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: "",
 };
 
-const GetlastassigntripService = async (rider_data, token) => {
-  let url = SMOOTHRIDE_NEWAPI + "getlastassigntrip";
+const GetLastAssignTripService = async (riderData, token) => {
+  let url = SMOOTHRIDE_NEWAPI + "getassigneddriver";
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   };
-  // console.log(token);
 
-  // console.log(rider_data);
+  const response = await axios.post(url, riderData, config);
 
-  // console.log("jsjs");
-
-  const response = await axios.post(url, rider_data, config);
+  console.log(response);
   return response.data;
 };
 
-export const Getlastassigntrip = createAsyncThunk(
-  "Getlastassigntrip/rider",
-  async (rider_data, thunkAPI) => {
+// Get user goals
+export const GetLastAssignTrip = createAsyncThunk(
+  "GetLastAssignTrip/data",
+  async (riderData, thunkAPI) => {
     try {
       const token = thunkAPI.getState().LoginSlice.data?.access_token;
-      return await GetlastassigntripService(rider_data, token);
+      return await GetLastAssignTripService(riderData, token);
     } catch (error) {
+      console.log(error);
       const message =
         (error.response &&
           error.response.data &&
           error.response.data.message) ||
         error.message ||
         error.toString();
-
-      console.log(message);
-
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
-export const GetlastassigntripSlice = createSlice({
-  name: "Getlastassigntrip",
+export const GetLastAssignTripSlice = createSlice({
+  name: "GetLastAssignTrip",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.message = "";
-      state.rider = null;
-    },
+    reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(Getlastassigntrip.pending, (state) => {
+      .addCase(GetLastAssignTrip.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(Getlastassigntrip.fulfilled, (state, action) => {
+      .addCase(GetLastAssignTrip.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.rider = action.payload;
+        state.riderdata = action.payload;
       })
-      .addCase(Getlastassigntrip.rejected, (state, action) => {
+      .addCase(GetLastAssignTrip.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.isSuccess = false;
       });
   },
 });
 
-export const { reset } = GetlastassigntripSlice.actions;
-
-export default GetlastassigntripSlice.reducer;
+export const { reset } = GetLastAssignTripSlice.actions;
+export default GetLastAssignTripSlice.reducer;
