@@ -66,6 +66,37 @@ export const GetTrips= createAsyncThunk(
   }
 )
 
+export const GetAddress= createAsyncThunk(
+  "getaddress/Addressesgotten", async({latitude, longitude}, {rejectWithValue})=>{
+    
+      const tokengot = await  AsyncStorage.getItem("token")
+      const infoneeded= `Bearer ${tokengot}`
+      const instance = axios.create({
+          baseURL: `https://maps.googleapis.com/maps/api/geocode/json?address=${latitude},${longitude}&key=${process.env.GOOGLE_ADDRESS_APIKEY}`,
+          timeout: 30000,
+    
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": infoneeded
+          },
+        });
+        return await instance
+          .get("")
+          .then( async (response) => {
+            // console.warn("Addresses info ", response.data?.results[0]?.formatted_address);
+            return response.data?.results[0]?.formatted_address;
+          })
+           
+    .catch((err) =>{ 
+      let errdata = err.response.data;
+      // console.warn("trip error ", err.response.data);
+      return rejectWithValue(errdata)
+    })
+      
+  }
+)
+
 const initialState = {
     user: false,
     isError: false,
@@ -73,7 +104,8 @@ const initialState = {
     isLoading: false,
     message: null,
     data: null,
-    trips: null
+    trips: null,
+    address: null
   };
 
   export const GetRiderSlice = createSlice({
@@ -95,6 +127,22 @@ const initialState = {
           state.data= action.payload;
         })
         .addCase(GetRider.rejected, (state, action) => {
+          state.isLoading = false;
+          state.isError = true;
+          state.message = action.payload;
+          state.user = false;
+        })
+        .addCase(GetAddress.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(GetAddress.fulfilled, (state, action) => {
+          
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.user = true;
+          state.address= action.payload;
+        })
+        .addCase(GetAddress.rejected, (state, action) => {
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;

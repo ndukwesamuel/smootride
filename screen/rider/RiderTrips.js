@@ -54,7 +54,7 @@ const RiderTrips = ({navigation}) => {
                                     <View style={{width:'60%',backgroundColor:'#007cc2',alignSelf:'flex-end',borderRadius:5}}>
                                        <Text 
                                       //  onPress = {()=>this.savedetails(d)} 
-                                      onPress={()=>{navigation.navigate("RiderPaths", {tripPoints: item?.tripPoints})} }
+                                      onPress={()=>{navigation.navigate("RiderPaths", {tripPoints: item?.tripPoints, pickupPoint: item?.pickUpAddress, destPoint: item?.destAddress})} }
                                        style={{borderRadius:2,color:'#fff',padding:2,alignSelf:'center'}}>ROUTE</Text>
                                     </View>
                                     

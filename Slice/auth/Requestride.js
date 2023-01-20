@@ -94,7 +94,8 @@ export const RequestRide= createAsyncThunk(
           return await instance
             .post("canceltrip")
             .then( async (response) => {
-              // console.log("requested response ",response.data)
+              console.log("cancelled response ",response.data)
+              Alert.alert("Trip cancelled")
               return response.data;
             })
              
@@ -165,8 +166,8 @@ export const RequestRide= createAsyncThunk(
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
-          state.user = false;
           state.isRequest= false;
+          state.user = false;
         })
         .addCase(AssignedDriver.pending, (state) => {
           state.isLoading = true;
