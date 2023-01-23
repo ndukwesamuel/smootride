@@ -30,6 +30,7 @@ import {
 import { RejectTrip } from "../../Slice/Driver/RejectTripSlice";
 import { AcceptTripFun } from "../../Slice/Driver/DriverAcceptTripSlice";
 import DriverMap from "../../components/Driver/DriverTrip/DriverMap";
+import StartTrip from "../../components/Driver/DriverTrip/StartTrip";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -377,7 +378,6 @@ const Driver = () => {
 
           <Modal
             // isVisible={this.state.decline}
-
             visible={modalVisible}
           >
             <View
@@ -799,6 +799,8 @@ const Driver = () => {
                 <Text> the trip have started {AcceptTrip?.message}</Text>
               </Card>
 
+              <StartTrip />
+
               <DriverMap />
             </View>
           )}
@@ -1048,6 +1050,7 @@ const Driver = () => {
                                       size="large"
                                     />
                                   )}
+
                                   {dataforDriverRequest.drivertrip.isStarted ==
                                     false && (
                                     <TouchableOpacity
