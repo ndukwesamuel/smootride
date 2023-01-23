@@ -1,4 +1,11 @@
-import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import Timeline from "react-native-timeline-flatlist";
@@ -8,20 +15,27 @@ import { useNavigation } from "@react-navigation/native";
 const Tripmap = ({ route }) => {
   const navigation = useNavigation();
 
-  const [address, setAddress] = useState(null);
-  const [waypoints, setWaypoints] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [wayPoints, setPoints] = useState(null);
+  let { tripPoints, pickUpAddress, destAddress } = route.params.data;
+  const [position, setPosition] = useState(0);
 
-  let propsData = route;
+  const getaddress = (tripPoints, pickUpAddress, destAddress) => {
+    const jsontripPoints = JSON.parse(tripPoints);
 
-  console.log(waypoints);
+    const Address = [];
+    setLoading(true);
 
-  const getaddress = (propsData) => {
-    if (route.params.data.tripPoints) {
-      let waypoints = JSON.parse(route.params.data.tripPoints);
+    Address.push({
+      time: "Start",
+      title: "Initial",
+      description: `${pickUpAddress}`,
+    });
 
-      setWaypoints(waypoints);
-    }
-
+    // if (route.params.data.tripPoints) {
+    //   let waypoints = JSON.parse(route.params.data.tripPoints);
+    //   setWaypoints(waypoints);
+    // }
     // console.log(propsData);
     // let waypoints = [];
     // if (data.tripPoints !== null) waypoints = JSON.parse(data.tripPoints);
@@ -43,7 +57,7 @@ const Tripmap = ({ route }) => {
   };
 
   useEffect(() => {
-    getaddress();
+    getaddress(tripPoints, pickUpAddress, destAddress);
 
     return () => {};
   }, []);
@@ -76,8 +90,42 @@ const Tripmap = ({ route }) => {
           </Text>
         </View>
       </View>
-      <Text>tripmap</Text>
 
+      {loading ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View style={{ marginTop: "45%" }}>
+            <Text style={{ alignSelf: "center", fontSize: 15 }}>
+              Getting address of PointRiderPaths {position} / 8{" "}
+            </Text>
+            <ActivityIndicator color="#007cc2" size="large" />
+          </View>
+        </View>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <Timeline
+            innerCircle={"dot"}
+            lineColor="#005091"
+            circleColor="#007cc2"
+            timeContainerStyle={{ minWidth: 52, marginTop: 0 }}
+            descriptionStyle={{ color: "gray" }}
+            data={wayPoints}
+            titleStyle={{ color: "gray", fontSize: 14 }}
+            timeStyle={{
+              textAlign: "center",
+              backgroundColor: "#005091",
+              color: "white",
+              padding: 2,
+              borderRadius: 13,
+            }}
+            options={{
+              style: { marginTop: 5 },
+            }}
+          />
+        </View>
+      )}
+      {/* 
       {propsData && (
         <Timeline
           innerCircle={"dot"}
@@ -100,7 +148,7 @@ const Tripmap = ({ route }) => {
             style: { marginTop: 15 },
           }}
         />
-      )}
+      )} */}
 
       <Button
         onPress={() => {
