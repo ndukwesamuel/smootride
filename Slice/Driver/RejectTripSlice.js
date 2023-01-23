@@ -7,15 +7,17 @@ import { SMOOTHRIDE_NEWAPI } from "@env";
 import { Alert } from "react-native";
 
 const initialState = {
-  drivestatus: null,
+  rejectData: null,
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: "",
 };
 
-const ResetpasswordService = async (userData, tokengot) => {
-  let url = SMOOTHRIDE_NEWAPI + "updatedriverstatus";
+const RejectTripService = async (rejectdatainfo, tokengot) => {
+  let url = SMOOTHRIDE_NEWAPI + "driverdeclinetrip";
+
+  console.log(rejectdatainfo);
 
   const config = {
     headers: {
@@ -23,21 +25,18 @@ const ResetpasswordService = async (userData, tokengot) => {
     },
   };
 
-  const response = await axios.post(url, userData, config);
-
+  const response = await axios.post(url, rejectdatainfo, config);
   console.log(response.data);
-
   return response.data;
 };
 
-// Get user goals
-export const UpdateDriverStatus = createAsyncThunk(
-  "updateStatus/data",
-  async (statusData, thunkAPI) => {
+export const RejectTrip = createAsyncThunk(
+  "RejectTrip/data",
+  async (rejectdatainfo, thunkAPI) => {
     try {
       const tokengot = await AsyncStorage.getItem("token");
 
-      return await ResetpasswordService(statusData, tokengot);
+      return await RejectTripService(rejectdatainfo, tokengot);
     } catch (error) {
       console.log(error);
       const message =
@@ -51,23 +50,23 @@ export const UpdateDriverStatus = createAsyncThunk(
   }
 );
 
-export const UpdateDriverStatusSlice = createSlice({
-  name: "updateStatus",
+export const RejectTripSlice = createSlice({
+  name: "RejectTrip",
   initialState,
   reducers: {
     reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(UpdateDriverStatus.pending, (state) => {
+      .addCase(RejectTrip.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(UpdateDriverStatus.fulfilled, (state, action) => {
+      .addCase(RejectTrip.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.drivestatus = action.payload;
+        state.rejectData = action.payload;
       })
-      .addCase(UpdateDriverStatus.rejected, (state, action) => {
+      .addCase(RejectTrip.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -75,5 +74,5 @@ export const UpdateDriverStatusSlice = createSlice({
   },
 });
 
-export const { reset } = UpdateDriverStatusSlice.actions;
-export default UpdateDriverStatusSlice.reducer;
+export const { reset } = RejectTripSlice.actions;
+export default RejectTripSlice.reducer;

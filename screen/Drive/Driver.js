@@ -21,7 +21,12 @@ import GlobalStyles from "../../GlobalStyles";
 import { useDispatch, useSelector } from "react-redux";
 import ChangeDriveStatus from "../../components/Driver/ChangeDriveStatus";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { GetLastAssignTrip } from "../../Slice/Driver/GetlastassigntripSlice";
+import {
+  GetLastAssignTrip,
+  reset,
+} from "../../Slice/Driver/GetLastAssignTripSlice";
+import { RejectTrip } from "../../Slice/Driver/RejectTripSlice";
+import { AcceptTrip } from "../../Slice/Driver/AcceptTripSlice";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -62,23 +67,27 @@ const Driver = () => {
 
   const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
 
+  const { accepttripData } = useSelector((state) => state.AcceptTripSlice);
+
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
   };
 
-  const Test = () => {
-    console.log("clic me");
-    dispatch(
-      GetLastAssignTrip({
-        user_id: 1,
-      })
-    );
-  };
+  // (async () => {
+  //   try {
+  //     // const response = await fetch("https://my-api.com/data");
 
-  // let riderdata = null;
-
-  console.log(riderdata);
-  // console.log(riderdata);
+  //     dispatch(
+  //       GetLastAssignTrip({
+  //         user_id: 1,
+  //       })
+  //     );
+  //     // const data = await response.json();
+  //     // setData(data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // })();
 
   useEffect(() => {
     dispatch(
@@ -86,7 +95,9 @@ const Driver = () => {
         user_id: 1,
       })
     );
-    return () => {};
+    return () => {
+      // dispatch(reset());
+    };
   }, []);
 
   let dataforDriverRequest = {
@@ -110,6 +121,30 @@ const Driver = () => {
       rider_image: null,
       company_name: "Fistbank",
     },
+  };
+
+  const call = () => {
+    console.log("this is f");
+  };
+
+  const rejectTrip = (tripdata) => {
+    console.log("this is rejectTrip");
+
+    let data = {
+      reason: "reassign", // the two expected values are "reassign or decline"
+      trip_id: tripdata,
+    };
+
+    dispatch(RejectTrip(data));
+  };
+
+  const acceptTrip = (tripdata) => {
+    let dataID = tripdata.id;
+    dispatch(
+      AcceptTrip({
+        trip_id: dataID,
+      })
+    );
   };
 
   return (
@@ -148,20 +183,6 @@ const Driver = () => {
               Status
             </Text>
           </View>
-
-          <Text
-            onPress={Test}
-            style={{
-              fontSize: 12,
-              alignSelf: "flex-end",
-              borderRadius: 5,
-              color: "#fff",
-              backgroundColor: "#a31225",
-              padding: 3,
-            }}
-          >
-            test
-          </Text>
 
           <ChangeDriveStatus
             data1={driver_request_Status}
@@ -807,15 +828,7 @@ const Driver = () => {
 
             {riderdata == null && (
               <Card style={{ padding: 10, margin: 10 }}>
-                <Text
-                  style={{
-                    color: "#877A80",
-                    alignSelf: "center",
-                    fontSize: 16,
-                  }}
-                >
-                  you are having network issuses
-                </Text>
+                <ActivityIndicator size="large" color="#005091" />
               </Card>
             )}
 
@@ -1243,10 +1256,9 @@ const Driver = () => {
               </View>
             )}
 
-            {dataforDriverRequest.drivertrip.isStarted == false &&
-              dataforDriverRequest.rider.rider_id !== "" &&
-              dataforDriverRequest.rider.accept == false && (
-                <Card style={styles.viewcard}>
+            {riderdata?.config && (
+              <View style={{ alignItems: "center" }}>
+                <Card style={styles.viewcard} classname="">
                   <View>
                     <View style={{ padding: 10 }}>
                       <Text
@@ -1257,7 +1269,7 @@ const Driver = () => {
                           color: "#007cc2",
                         }}
                       >
-                        Hi, {data.user?.name}
+                        Hi, {riderdata?.driverdetails.name}
                       </Text>
                       <Text
                         style={{
@@ -1271,9 +1283,9 @@ const Driver = () => {
                       </Text>
                     </View>
 
-                    <Card style={{ marginTop: 7 }}>
+                    <Card className=" w-full">
                       <View style={{ flexDirection: "row" }}>
-                        <View style={{ width: "22%", marginStart: 10 }}>
+                        <View style={{ width: "22%" }}>
                           {dataforDriverRequest.rider.rider_image != null && (
                             <Image
                               source={{
@@ -1302,7 +1314,7 @@ const Driver = () => {
                           )}
                         </View>
 
-                        <View style={{ width: "60%", marginLeft: 5 }}>
+                        <View style={{ width: "60%" }} className="">
                           <Text
                             style={{
                               fontSize: 17,
@@ -1311,10 +1323,9 @@ const Driver = () => {
                               fontWeight: "bold",
                             }}
                           >
-                            {" "}
-                            this.props.rider.rider_name
+                            {riderdata?.data.staffName}
                           </Text>
-                          {dataforDriverRequest.rider.company_name == null && (
+                          {riderdata?.data.company == null && (
                             <Text
                               style={{
                                 fontSize: 16,
@@ -1323,11 +1334,10 @@ const Driver = () => {
                                 // fontFamily: "Roboto-Regular",
                               }}
                             >
-                              {" "}
-                              Unknown{" "}
+                              Unknown
                             </Text>
                           )}
-                          {dataforDriverRequest.rider.company_name != null && (
+                          {riderdata?.data.company != null && (
                             <Text
                               style={{
                                 fontSize: 16,
@@ -1336,13 +1346,12 @@ const Driver = () => {
                                 // fontFamily: "Roboto-Regular",
                               }}
                             >
-                              {" "}
-                              this.props.rider.company_name
+                              {riderdata?.data.company}
                             </Text>
                           )}
                         </View>
 
-                        <View>
+                        <View style={{ width: "18%" }}>
                           <View
                             style={{
                               borderColor: "#007cc2",
@@ -1354,8 +1363,7 @@ const Driver = () => {
                             }}
                           >
                             <Ionicons
-                              // onPress={this.call}
-
+                              onPress={call}
                               name="md-call"
                               size={20}
                               style={{
@@ -1373,32 +1381,29 @@ const Driver = () => {
                   <View>
                     <View style={{ flexDirection: "row" }}>
                       <View style={{ width: "30%", justifyContent: "center" }}>
-                        {dataforDriverRequest.isrequesting == false && (
-                          <TouchableOpacity
-                            // onPress={this.rejectTrip}
-
+                        <TouchableOpacity
+                          onPress={() => rejectTrip(riderdata.data.id)}
+                          style={{
+                            marginTop: 7,
+                            borderColor: "#a31225",
+                            borderWidth: 2,
+                            padding: 7,
+                            width: "100%",
+                            alignSelf: "center",
+                            borderRadius: 5,
+                          }}
+                        >
+                          <Text
                             style={{
-                              marginTop: 7,
-                              borderColor: "#a31225",
-                              borderWidth: 2,
-                              padding: 7,
-                              width: "100%",
                               alignSelf: "center",
-                              borderRadius: 5,
+                              color: "#a31225",
+                              fontSize: 13,
+                              // fontFamily: "Roboto-Regular",
                             }}
                           >
-                            <Text
-                              style={{
-                                alignSelf: "center",
-                                color: "#a31225",
-                                fontSize: 13,
-                                // fontFamily: "Roboto-Regular",
-                              }}
-                            >
-                              Reject
-                            </Text>
-                          </TouchableOpacity>
-                        )}
+                            Reject
+                          </Text>
+                        </TouchableOpacity>
 
                         {dataforDriverRequest.isrequesting == true && (
                           <TouchableOpacity
@@ -1419,8 +1424,7 @@ const Driver = () => {
                       ></View>
                       <View style={{ width: "30%" }}>
                         <TouchableOpacity
-                          //  onPress={this.acceptTrip}
-
+                          onPress={() => acceptTrip(riderdata.data)}
                           style={{
                             marginTop: 7,
                             backgroundColor: "#005091",
@@ -1446,7 +1450,8 @@ const Driver = () => {
                     </View>
                   </View>
                 </Card>
-              )}
+              </View>
+            )}
           </View>
         </ScrollView>
       </View>
