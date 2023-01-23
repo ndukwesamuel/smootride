@@ -43,7 +43,7 @@ const reducers = combineReducers({
   PassowrdReset: PassowrdReset,
   GetRiderSlice: GetRiderSlice,
   RequestRideSlice: RequestRideSlice,
-  UpdateDriverStatusSlice: UpdateDriverStatusSlice,
+     UpdateDriverStatusSlice: UpdateDriverStatusSlice,
   GetAllDriverTripsSlice: GetAllDriverTripsSlice,
   GetLastAssignTripSlice: GetLastAssignTripSlice,
 });
