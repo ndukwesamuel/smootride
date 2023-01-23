@@ -46,6 +46,8 @@ export const AcceptTripFun = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
+
+      console.log(message);
       return thunkAPI.rejectWithValue(message);
     }
   }
@@ -72,6 +74,7 @@ export const DriverAcceptTripSlice = createSlice({
         state.IsLoading = false;
         state.IsError = true;
         state.message = action.payload;
+        state.AcceptTrip = null;
       });
   },
 });

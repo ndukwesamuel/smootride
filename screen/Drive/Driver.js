@@ -12,6 +12,8 @@ import {
   View,
 } from "react-native";
 import { Card } from "react-native-shadow-cards";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+
 import React, { useEffect, useState } from "react";
 import { ProgressDialog } from "react-native-simple-dialogs";
 import PTRView from "react-native-pull-to-refresh";
@@ -27,6 +29,7 @@ import {
 } from "../../Slice/Driver/GetLastAssignTripSlice";
 import { RejectTrip } from "../../Slice/Driver/RejectTripSlice";
 import { AcceptTripFun } from "../../Slice/Driver/DriverAcceptTripSlice";
+import DriverMap from "../../components/Driver/DriverTrip/DriverMap";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -70,6 +73,8 @@ const Driver = () => {
   const { IsError, AcceptTrip, IsSucess, message, IsLoading } = useSelector(
     (state) => state.DriverAcceptTripSlice
   );
+
+  const yaya = useSelector((state) => state.DriverAcceptTripSlice);
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
@@ -128,13 +133,7 @@ const Driver = () => {
 
   const acceptTrip = (tripdata) => {
     let dataID = tripdata.id;
-
-    dispatch(AcceptTripFun(dataID));
-    // dispatch(
-    //   AcceptTrip({
-    //     trip_id: dataID,
-    //   })
-    // );
+    dispatch(AcceptTripFun({ trip_id: dataID }));
   };
 
   return (
@@ -794,7 +793,17 @@ const Driver = () => {
             </View>
           </Modal>
 
+          {AcceptTrip?.success == true && (
+            <View className="flex-1">
+              <Card>
+                <Text> the trip have started {AcceptTrip?.message}</Text>
+              </Card>
+
+              <DriverMap />
+            </View>
+          )}
           <View>
+            {AcceptTrip?.success == true && <Text> Map have started</Text>}
             {/* {
              (Object.keys(this.props.drivertrip.position).length > 0 || Object.keys(this.state.initialLocation).length > 0) &&
              <MapView
@@ -1243,6 +1252,14 @@ const Driver = () => {
                     </TouchableOpacity>
                   </View>
                 </View>
+              </View>
+            )}
+
+            {AcceptTrip == null && (
+              <View>
+                <Card>
+                  <Text> EMEKa</Text>
+                </Card>
               </View>
             )}
 
