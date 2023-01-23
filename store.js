@@ -38,7 +38,8 @@ import RejectTripSlice from "./Slice/Driver/RejectTripSlice";
 
 import GetAllDriverTripsSlice from "./Slice/Driver/GetAllDriverTripsSlice";
 import RequestRideSlice from "./Slice/auth/Requestride";
-import AcceptTripSlice from "./Slice/Driver/AcceptTripSlice";
+
+import DriverAcceptTripSlice from "./Slice/Driver/DriverAcceptTripSlice";
 
 const reducers = combineReducers({
   nav: navReducer,
@@ -50,7 +51,7 @@ const reducers = combineReducers({
   GetAllDriverTripsSlice: GetAllDriverTripsSlice,
   GetLastAssignTripSlice: GetLastAssignTripSlice,
   RejectTripSlice: RejectTripSlice,
-  AcceptTripSlice: AcceptTripSlice,
+  DriverAcceptTripSlice: DriverAcceptTripSlice,
 });
 
 const persistConfig = {

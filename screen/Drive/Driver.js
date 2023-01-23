@@ -26,7 +26,7 @@ import {
   reset,
 } from "../../Slice/Driver/GetLastAssignTripSlice";
 import { RejectTrip } from "../../Slice/Driver/RejectTripSlice";
-import { AcceptTrip } from "../../Slice/Driver/AcceptTripSlice";
+import { AcceptTripFun } from "../../Slice/Driver/DriverAcceptTripSlice";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -67,27 +67,15 @@ const Driver = () => {
 
   const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
 
-  const { accepttripData } = useSelector((state) => state.AcceptTripSlice);
+  const { IsError, AcceptTrip, IsSucess, message, IsLoading } = useSelector(
+    (state) => state.DriverAcceptTripSlice
+  );
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
   };
 
-  // (async () => {
-  //   try {
-  //     // const response = await fetch("https://my-api.com/data");
-
-  //     dispatch(
-  //       GetLastAssignTrip({
-  //         user_id: 1,
-  //       })
-  //     );
-  //     // const data = await response.json();
-  //     // setData(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // })();
+  console.log(AcceptTrip);
 
   useEffect(() => {
     dispatch(
@@ -140,11 +128,13 @@ const Driver = () => {
 
   const acceptTrip = (tripdata) => {
     let dataID = tripdata.id;
-    dispatch(
-      AcceptTrip({
-        trip_id: dataID,
-      })
-    );
+
+    dispatch(AcceptTripFun(dataID));
+    // dispatch(
+    //   AcceptTrip({
+    //     trip_id: dataID,
+    //   })
+    // );
   };
 
   return (
@@ -1256,7 +1246,7 @@ const Driver = () => {
               </View>
             )}
 
-            {riderdata?.config && (
+            {riderdata?.config && AcceptTrip == null && (
               <View style={{ alignItems: "center" }}>
                 <Card style={styles.viewcard} classname="">
                   <View>
