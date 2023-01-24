@@ -27,7 +27,6 @@ const GetLastAssignTripService = async (riderData, token) => {
 
   const response = await axios.post(url, config);
 
-  // console.log(response);
   return response.data;
 };
 

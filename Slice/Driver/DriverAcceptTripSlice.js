@@ -7,11 +7,11 @@ import { SMOOTHRIDE_NEWAPI } from "@env";
 import { Alert } from "react-native";
 
 const initialState = {
-  isError: false,
-  isSuccess: false,
-  isLoading: false,
+  IsError: false,
+  AcceptTrip: null,
+  IsSucess: false,
   message: "",
-  accepttripData: null,
+  IsLoading: "",
 };
 
 const AcceptTripScrvice = async (AcceptData, tokengot) => {
@@ -23,14 +23,14 @@ const AcceptTripScrvice = async (AcceptData, tokengot) => {
     },
   };
 
+  console.log(AcceptData);
+  console.log(tokengot);
+
   const response = await axios.post(url, AcceptData, config);
-
-  console.log(response.data);
-
-  //   return response.data;
+  return response.data;
 };
 
-export const AcceptTrip = createAsyncThunk(
+export const AcceptTripFun = createAsyncThunk(
   "accepttrip/data",
   async (AcceptData, thunkAPI) => {
     try {
@@ -46,34 +46,40 @@ export const AcceptTrip = createAsyncThunk(
           error.response.data.message) ||
         error.message ||
         error.toString();
+
+      console.log(message);
       return thunkAPI.rejectWithValue(message);
     }
   }
 );
 
-export const AcceptTripSlice = createSlice({
-  name: "accepttrip",
+export const DriverAcceptTripSlice = createSlice({
+  name: "acceptdriverTrip",
   initialState,
   reducers: {
     reset: (state) => initialState,
   },
+
   extraReducers: (builder) => {
     builder
-      .addCase(AcceptTrip.pending, (state) => {
-        state.isLoading = true;
+      .addCase(AcceptTripFun.pending, (state) => {
+        state.IsLoading = true;
       })
-      .addCase(AcceptTrip.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.accepttripData = action.payload;
+      .addCase(AcceptTripFun.fulfilled, (state, action) => {
+        state.IsLoading = false;
+        state.IsSucess = true;
+        state.AcceptTrip = action.payload;
       })
-      .addCase(AcceptTrip.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
+      .addCase(AcceptTripFun.rejected, (state, action) => {
+        state.IsLoading = false;
+        state.IsError = true;
         state.message = action.payload;
+        state.AcceptTrip = null;
       });
   },
 });
 
-export const { reset } = AcceptTripSlice.actions;
-export default AcceptTripSlice.reducer;
+// Action creators are generated for each case reducer function
+export const { reset } = DriverAcceptTripSlice.actions;
+
+export default DriverAcceptTripSlice.reducer;
