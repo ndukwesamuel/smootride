@@ -21,7 +21,7 @@ import GlobalStyles from "../../GlobalStyles";
 import { useDispatch, useSelector } from "react-redux";
 import ChangeDriveStatus from "../../components/Driver/ChangeDriveStatus";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { GetLastAssignTrip } from "../../Slice/Driver/GetlastassigntripSlice";
+import { GetLastAssignTrip } from "../../Slice/Driver/GetLastAssignTripSlice";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");

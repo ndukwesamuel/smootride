@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import {View, Text,Dimensions,StatusBar,TouchableHighlight,Alert, ImageBackground,SafeAreaView,ActivityIndicator,StyleSheet,TextInput, TouchableOpacity, ScrollView, FlatList} from 'react-native';
+import {View, Text,Dimensions,StatusBar,TouchableHighlight,Alert, ImageBackground,SafeAreaView,ActivityIndicator,StyleSheet,TextInput, TouchableOpacity, ScrollView, FlatList, Platform, RefreshControl} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { GetTrips } from '../../Slice/auth/Getrider';
+import PTRView from 'react-native-pull-to-refresh';
 // import moment from "moment";
 
 const RiderTrips = ({navigation}) => {
 
   const dispatch= useDispatch()
   const [loading, setLoading]= useState(false)
+  const [loader, setLoader]= useState(false)
   
   useEffect(()=>{
 
@@ -21,12 +23,20 @@ const RiderTrips = ({navigation}) => {
     trial()
   }, [])
 
+  const onRefresh = async () =>{
+    setLoader(true)
+    await dispatch(GetTrips())
+    setLoader(false)
+  }
+
 
   const trips = useSelector((state)=> state?.GetRiderSlice?.trips)
   const tripslength = trips?.length
   // console.warn("trips length tips ", tripslength)
 
-  return (<SafeAreaView style={styles.container}>
+  return (
+  // <PTRView onRefresh={onRefresh} style={{paddingTop: Platform.OS === 'ios'? 30: 0}}>
+    <SafeAreaView style={styles.container}>
          {loading? <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
           <ActivityIndicator animating={true} color="black"/>
           </View>
@@ -37,7 +47,13 @@ const RiderTrips = ({navigation}) => {
       <Text style={{ fontSize: 20}}>No trips available</Text>
       </View>
       :
-      <FlatList data={trips} keyExtractor={item=> item.id} 
+      // <PTRView onRefresh={onRefresh}>
+      <FlatList data={trips} 
+      
+      refreshControl={
+        <RefreshControl refreshing={loader} onRefresh={onRefresh}/>
+      }
+      keyExtractor={item=> item.id} 
     renderItem={({item})=>{
       return <>
      
@@ -73,8 +89,12 @@ const RiderTrips = ({navigation}) => {
                             
                             </View>
                         </View>
-                    </View></> }} />}</>}
+                    </View></> }} />
+                    // </PTRView>
+                    }</>}
                     </SafeAreaView>
+                    // </PTRView>
+                    
 );
 }
 

@@ -52,7 +52,7 @@ const RiderPaths = ({navigation, route}) => {
  
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
                     <View style={{backgroundColor:'#005091',padding:35}}>
                          <View style={{flexDirection:'row',padding:10,marginBottom:20}}>
                           <Ionicons onPress={() => navigation.navigate("TabNavigation", { screen: "RiderTrips" })} name="ios-arrow-back" size={26} color="#fff" style={{width:'6%'}}></Ionicons>
@@ -83,7 +83,7 @@ const RiderPaths = ({navigation, route}) => {
                         />
                     } */}
                     {loading? <View style={{flex: 1, justifyContent:"center", alignItems:"center"}}> 
-                    <View style ={{marginTop:'45%'}}>
+                    <View>
                             <Text style={{alignSelf:'center',fontSize:15}}>Getting address of PointRiderPaths {position} / 8 </Text>
                            <ActivityIndicator color="#007cc2" size='large' />
                         </View>
@@ -104,7 +104,7 @@ const RiderPaths = ({navigation, route}) => {
                           }}
                         />
                         </View>}
-            </ScrollView>
+            </View>
 );
 }
 

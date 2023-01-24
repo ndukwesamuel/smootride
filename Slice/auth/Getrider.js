@@ -52,13 +52,13 @@ export const GetTrips= createAsyncThunk(
         return await instance
           .get("getridertrip")
           .then( async (response) => {
-            // console.warn("trip info ", response.data);
+            console.warn("trip info ", response.data);
             return response.data;
           })
            
     .catch((err) =>{ 
       let errdata = err.response.data;
-      // console.warn("trip error ", err.response.data);
+      console.warn("trip error ", err.response.data);
       return rejectWithValue(errdata)
       // console.log(err)
     })

@@ -29,7 +29,7 @@ const RiderProfile = ({ navigation }) => {
 
   
   const username= useSelector((state)=> state.LoginSlice?.data?.user)
-  console.log("user status ", username)
+  // console.log("user status ", username)
 
   const handleSocial = () => {
     setSocial(!social);
