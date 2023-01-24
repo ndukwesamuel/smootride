@@ -2,13 +2,16 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { Card } from "react-native-shadow-cards";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { ActivateStartTrip } from "../../../Slice/Driver/StartTripSlice";
 let driverIcon = require("../../../assets/images/profile.jpg");
 
 const StartTrip = () => {
+  const dispatch = useDispatch();
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
+  const { startTripdata } = useSelector((state) => state.StartTripSlice);
 
-  console.log(riderdata);
+  console.log(startTripdata);
 
   let dataforDriverRequest = {
     isrequesting: false,
@@ -31,6 +34,10 @@ const StartTrip = () => {
       rider_image: null,
       company_name: "Fistbank",
     },
+  };
+
+  const startTrip = () => {
+    dispatch(ActivateStartTrip());
   };
   return (
     <View className="items-center mt-5">
@@ -161,8 +168,7 @@ const StartTrip = () => {
 
                 <View style={{ width: "50%" }}>
                   <TouchableOpacity
-                    //  onPress={this.startTrip}
-
+                    onPress={startTrip}
                     style={{
                       backgroundColor: "#005091",
                       borderRadius: 5,

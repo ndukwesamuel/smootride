@@ -18,6 +18,8 @@ import MapView, { Marker } from "react-native-maps";
 const DriverMap = () => {
   const { width, height } = Dimensions.get("window");
 
+  const mapHeight = height * 0.78;
+
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [accepted, setAccepted] = useState(false);
   const dispatch = useDispatch();
@@ -41,6 +43,7 @@ const DriverMap = () => {
     setMaplocation(false);
   };
 
+  // console.log(location);
   useEffect(() => {
     getPermissions();
   }, []);
@@ -57,7 +60,7 @@ const DriverMap = () => {
     longitudeDelta: LONGITUDE_DELTA,
   };
   return (
-    <View style={{ height: 800 }} className="r">
+    <View style={{ height: mapHeight }} className="">
       {maplocation ? (
         <View className="pt-10 ">
           <View className="  items-center">
@@ -68,7 +71,11 @@ const DriverMap = () => {
           </View>
         </View>
       ) : (
-        <MapView style={{ flex: 1 }} initialRegion={INITIAL_POSITION}>
+        <MapView
+          className="border-2 border-red-200"
+          style={{ flex: 1 }}
+          initialRegion={INITIAL_POSITION}
+        >
           <Marker coordinate={INITIAL_POSITION} identifier="origin" />
         </MapView>
       )}

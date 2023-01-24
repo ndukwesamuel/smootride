@@ -31,6 +31,7 @@ import { RejectTrip } from "../../Slice/Driver/RejectTripSlice";
 import { AcceptTripFun } from "../../Slice/Driver/DriverAcceptTripSlice";
 import DriverMap from "../../components/Driver/DriverTrip/DriverMap";
 import StartTrip from "../../components/Driver/DriverTrip/StartTrip";
+import EndTripButtton from "../../components/Driver/DriverTrip/EndTripButtton";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -66,6 +67,8 @@ const Driver = () => {
   const { user, data, isError, isSuccess, isLoading } = useSelector(
     (state) => state.LoginSlice
   );
+
+  const { startTripdata } = useSelector((state) => state.StartTripSlice);
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
@@ -795,17 +798,18 @@ const Driver = () => {
 
           {AcceptTrip?.success == true && (
             <View className="flex-1">
-              <Card>
-                <Text> the trip have started {AcceptTrip?.message}</Text>
-              </Card>
+              {!startTripdata && <StartTrip />}
 
-              <StartTrip />
+              {startTripdata && (
+                <>
+                  <DriverMap />
 
-              <DriverMap />
+                  <EndTripButtton />
+                </>
+              )}
             </View>
           )}
           <View>
-            {AcceptTrip?.success == true && <Text> Map have started</Text>}
             {/* {
              (Object.keys(this.props.drivertrip.position).length > 0 || Object.keys(this.state.initialLocation).length > 0) &&
              <MapView
