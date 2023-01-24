@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   startTripdata: false,
+  maplocationdata: true,
 };
 
 export const StartTripSlice = createSlice({
@@ -11,6 +12,12 @@ export const StartTripSlice = createSlice({
     ActivateStartTrip: (state) => {
       console.log("kaka");
       state.startTripdata = !state.startTripdata;
+    },
+
+    MapLocationActivated: (state, action) => {
+      state.maplocationdata = action.payload;
+
+      console.log(state.maplocationdata);
     },
 
     increment: (state) => {
@@ -29,7 +36,12 @@ export const StartTripSlice = createSlice({
   },
 });
 
-export const { ActivateStartTrip, increment, decrement, incrementByAmount } =
-  StartTripSlice.actions;
+export const {
+  ActivateStartTrip,
+  MapLocationActivated,
+  increment,
+  decrement,
+  incrementByAmount,
+} = StartTripSlice.actions;
 
 export default StartTripSlice.reducer;

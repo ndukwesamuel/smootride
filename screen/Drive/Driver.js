@@ -78,7 +78,7 @@ const Driver = () => {
     (state) => state.DriverAcceptTripSlice
   );
 
-  const yaya = useSelector((state) => state.DriverAcceptTripSlice);
+  const { maplocationdata } = useSelector((state) => state.StartTripSlice);
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
@@ -803,8 +803,6 @@ const Driver = () => {
               {startTripdata && (
                 <>
                   <DriverMap />
-
-                  <EndTripButtton />
                 </>
               )}
             </View>

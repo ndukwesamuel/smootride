@@ -4,6 +4,7 @@ import { Card } from "react-native-shadow-cards";
 
 import NetInfo from "@react-native-community/netinfo";
 import Geolocation from "react-native-geolocation-service";
+import { useSelector } from "react-redux";
 
 // const NetworkState = NetInfo.addEventListener((state) => {
 //   console.log("Connection type", state.type);
@@ -57,6 +58,7 @@ import Geolocation from "react-native-geolocation-service";
 // }
 
 const EndTripButtton = () => {
+  const { maplocationdata } = useSelector((state) => state.StartTripSlice);
   const [isConnected, setIsConnected] = useState(true);
   const [isInternetReachable, setIsInternetReachable] = useState(true);
 
@@ -65,7 +67,6 @@ const EndTripButtton = () => {
       setIsConnected(state.isConnected);
       setIsInternetReachable(state.isInternetReachable);
     });
-
     return () => unsubscribe();
   }, []);
 
@@ -89,7 +90,6 @@ const EndTripButtton = () => {
 
   const stopTrip = () => {
     NetworkState();
-    if ((isConnected = false)) return false;
   };
 
   return (

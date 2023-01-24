@@ -14,11 +14,13 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import * as Location from "expo-location";
 
 import MapView, { Marker } from "react-native-maps";
+import { MapLocationActivated } from "../../../Slice/Driver/StartTripSlice";
+import EndTripButtton from "./EndTripButtton";
 
 const DriverMap = () => {
   const { width, height } = Dimensions.get("window");
 
-  const mapHeight = height * 0.78;
+  const mapHeight = height * 0.89;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [accepted, setAccepted] = useState(false);
@@ -41,6 +43,7 @@ const DriverMap = () => {
     setLocation(currentLocation);
     // console.log("location gotten ",currentLocation)
     setMaplocation(false);
+    dispatch(MapLocationActivated(maplocation));
   };
 
   // console.log(location);
@@ -71,13 +74,17 @@ const DriverMap = () => {
           </View>
         </View>
       ) : (
-        <MapView
-          className="border-2 border-red-200"
-          style={{ flex: 1 }}
-          initialRegion={INITIAL_POSITION}
-        >
-          <Marker coordinate={INITIAL_POSITION} identifier="origin" />
-        </MapView>
+        <>
+          <MapView
+            className="border-2 border-red-200"
+            style={{ flex: 1 }}
+            initialRegion={INITIAL_POSITION}
+          >
+            <Marker coordinate={INITIAL_POSITION} identifier="origin" />
+          </MapView>
+
+          <EndTripButtton />
+        </>
       )}
     </View>
   );
