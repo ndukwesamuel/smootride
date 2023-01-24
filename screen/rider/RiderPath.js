@@ -20,6 +20,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { GetAddress, GetTrips } from "../../Slice/auth/Getrider";
 import Timeline from "react-native-timeline-flatlist";
+import Triptimeline from "../../components/rider/TripTimeline";
 // import moment from "moment";
 
 const RiderPaths = ({ navigation, route }) => {
@@ -32,6 +33,7 @@ const RiderPaths = ({ navigation, route }) => {
   const trips = useSelector((state) => state?.GetRiderSlice?.address);
   // const tripslength = trips?.length
   // console.warn("destPoint length tips ", destPoint)
+  const num = JSON.parse(tripPoints);
 
   const trial = async ({ tripPoints }) => {
     const arr = JSON.parse(tripPoints);
@@ -69,8 +71,8 @@ const RiderPaths = ({ navigation, route }) => {
   }, [route]);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={{ backgroundColor: "#005091", padding: 35 }}>
+    <View style={styles.container}>
+      <View style={{ backgroundColor: "#005091", paddingTop: 35 }}>
         <View style={{ flexDirection: "row", padding: 10, marginBottom: 20 }}>
           <Ionicons
             onPress={() =>
@@ -121,16 +123,16 @@ const RiderPaths = ({ navigation, route }) => {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <View style={{ marginTop: "45%" }}>
+          <View>
             <Text style={{ alignSelf: "center", fontSize: 15 }}>
-              Getting address of PointRiderPaths {position} / 8{" "}
+              Getting address of PointRiderPaths {position} / {num?.length}
             </Text>
             <ActivityIndicator color="#007cc2" size="large" />
           </View>
         </View>
       ) : (
         <View style={{ flex: 1 }}>
-          <Timeline
+          {/* <Timeline
             innerCircle={"dot"}
             lineColor="#005091"
             circleColor="#007cc2"
@@ -148,10 +150,11 @@ const RiderPaths = ({ navigation, route }) => {
             options={{
               style: { marginTop: 5 },
             }}
-          />
+          /> */}
+          <Triptimeline wayPoints={wayPoints} />
         </View>
       )}
-    </ScrollView>
+    </View>
   );
 };
 

@@ -11,6 +11,9 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import Timeline from "react-native-timeline-flatlist";
 
 import { useNavigation } from "@react-navigation/native";
+import { GetAddress } from "../Slice/auth/Getrider";
+import { useDispatch, useSelector } from "react-redux";
+import Triptimeline from "../components/rider/TripTimeline";
 
 const Tripmap = ({ route }) => {
   const navigation = useNavigation();
@@ -19,8 +22,11 @@ const Tripmap = ({ route }) => {
   const [wayPoints, setPoints] = useState(null);
   let { tripPoints, pickUpAddress, destAddress } = route.params.data;
   const [position, setPosition] = useState(0);
+  const dispatch = useDispatch();
+  const num = JSON.parse(tripPoints);
+  const trips = useSelector((state) => state?.GetRiderSlice?.address);
 
-  const getaddress = (tripPoints, pickUpAddress, destAddress) => {
+  const getaddress = async (tripPoints, pickUpAddress, destAddress) => {
     const jsontripPoints = JSON.parse(tripPoints);
 
     const Address = [];
@@ -31,29 +37,25 @@ const Tripmap = ({ route }) => {
       title: "Initial",
       description: `${pickUpAddress}`,
     });
-
-    // if (route.params.data.tripPoints) {
-    //   let waypoints = JSON.parse(route.params.data.tripPoints);
-    //   setWaypoints(waypoints);
-    // }
-    // console.log(propsData);
-    // let waypoints = [];
-    // if (data.tripPoints !== null) waypoints = JSON.parse(data.tripPoints);
-    // console.log(waypoints);
-    // this.setState({waypoints:waypoints});
-    // Address = [];
-    // Address.push({time: 'Start', title: 'Initial', description:`${data.pickUpAddress}`});
-    // for(let r = 0; r < waypoints.length; r++){
-    //     await this.props.dispatch(startAddress(waypoints[r].latitude,waypoints[r].longitude));
-    //     let res = {time: `${r+1}`, title: `Point ${r+1}`, description:`${this.props.rider.startAddress}`};
-    //     this.setState({position:(r+1)});
-    //     Address.push(res);
-    //     //Alert.alert(this.props.rider.startAddress);
-    // }
-    // Address.push({time: 'End', title: 'Final', description:`${data.destAddress}`});
-    // this.setState({Address:Address});
-    // this.setState({isFetching:false});
-    // //console.error(Address);
+    for (let r = 0; r < jsontripPoints.length; r++) {
+      const latitude = jsontripPoints[r].latitude;
+      const longitude = jsontripPoints[r].longitude;
+      await dispatch(GetAddress({ latitude, longitude }));
+      let res = {
+        time: `${r + 1}`,
+        title: `Point ${r + 1}`,
+        description: `${trips}`,
+      };
+      // this.setState({position:(r+1)});
+      setPosition(r + 1);
+      Address.push(res);
+      //Alert.alert(this.props.rider.startAddress);
+    }
+    Address.push({ time: "End", title: "Final", description: `${destAddress}` });
+    // console.log("Address ", Address)
+    setPoints(Address);
+    setLoading(false);
+    
   };
 
   useEffect(() => {
@@ -97,67 +99,19 @@ const Tripmap = ({ route }) => {
         >
           <View style={{ marginTop: "45%" }}>
             <Text style={{ alignSelf: "center", fontSize: 15 }}>
-              Getting address of PointRiderPaths {position} / 8{" "}
+              Getting address of PointRiderPaths {position} / {num?.length}
             </Text>
             <ActivityIndicator color="#007cc2" size="large" />
           </View>
         </View>
       ) : (
         <View style={{ flex: 1 }}>
-          <Timeline
-            innerCircle={"dot"}
-            lineColor="#005091"
-            circleColor="#007cc2"
-            timeContainerStyle={{ minWidth: 52, marginTop: 0 }}
-            descriptionStyle={{ color: "gray" }}
-            data={wayPoints}
-            titleStyle={{ color: "gray", fontSize: 14 }}
-            timeStyle={{
-              textAlign: "center",
-              backgroundColor: "#005091",
-              color: "white",
-              padding: 2,
-              borderRadius: 13,
-            }}
-            options={{
-              style: { marginTop: 5 },
-            }}
-          />
+          <Triptimeline wayPoints={wayPoints} />
         </View>
       )}
-      {/* 
-      {propsData && (
-        <Timeline
-          innerCircle={"dot"}
-          lineColor="#005091"
-          circleColor="#007cc2"
-          timeContainerStyle={{ minWidth: 52, marginTop: 0 }}
-          descriptionStyle={{ color: "gray" }}
-          data={propsData}
-          // data={this.state.Address}
+      
 
-          titleStyle={{ color: "gray", fontSize: 14 }}
-          timeStyle={{
-            textAlign: "center",
-            backgroundColor: "#005091",
-            color: "white",
-            padding: 2,
-            borderRadius: 13,
-          }}
-          options={{
-            style: { marginTop: 15 },
-          }}
-        />
-      )} */}
-
-      <Button
-        onPress={() => {
-          navigation.navigate("Login");
-        }}
-        title="Learn More"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
+      
     </View>
   );
 };
