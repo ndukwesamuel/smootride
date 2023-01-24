@@ -12,6 +12,8 @@ import {
   View,
 } from "react-native";
 import { Card } from "react-native-shadow-cards";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+
 import React, { useEffect, useState } from "react";
 import { ProgressDialog } from "react-native-simple-dialogs";
 import PTRView from "react-native-pull-to-refresh";
@@ -26,7 +28,10 @@ import {
   reset,
 } from "../../Slice/Driver/GetLastAssignTripSlice";
 import { RejectTrip } from "../../Slice/Driver/RejectTripSlice";
-import { AcceptTrip } from "../../Slice/Driver/AcceptTripSlice";
+import { AcceptTripFun } from "../../Slice/Driver/DriverAcceptTripSlice";
+import DriverMap from "../../components/Driver/DriverTrip/DriverMap";
+import StartTrip from "../../components/Driver/DriverTrip/StartTrip";
+import EndTripButtton from "../../components/Driver/DriverTrip/EndTripButtton";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -63,31 +68,23 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
+  const { startTripdata } = useSelector((state) => state.StartTripSlice);
+
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
   const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
 
-  const { accepttripData } = useSelector((state) => state.AcceptTripSlice);
+  const { IsError, AcceptTrip, IsSucess, message, IsLoading } = useSelector(
+    (state) => state.DriverAcceptTripSlice
+  );
+
+  const { maplocationdata } = useSelector((state) => state.StartTripSlice);
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
   };
 
-  // (async () => {
-  //   try {
-  //     // const response = await fetch("https://my-api.com/data");
-
-  //     dispatch(
-  //       GetLastAssignTrip({
-  //         user_id: 1,
-  //       })
-  //     );
-  //     // const data = await response.json();
-  //     // setData(data);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // })();
+  console.log(AcceptTrip);
 
   useEffect(() => {
     dispatch(
@@ -140,11 +137,7 @@ const Driver = () => {
 
   const acceptTrip = (tripdata) => {
     let dataID = tripdata.id;
-    dispatch(
-      AcceptTrip({
-        trip_id: dataID,
-      })
-    );
+    dispatch(AcceptTripFun({ trip_id: dataID }));
   };
 
   return (
@@ -388,7 +381,6 @@ const Driver = () => {
 
           <Modal
             // isVisible={this.state.decline}
-
             visible={modalVisible}
           >
             <View
@@ -804,6 +796,17 @@ const Driver = () => {
             </View>
           </Modal>
 
+          {AcceptTrip?.success == true && (
+            <View className="flex-1">
+              {!startTripdata && <StartTrip />}
+
+              {startTripdata && (
+                <>
+                  <DriverMap />
+                </>
+              )}
+            </View>
+          )}
           <View>
             {/* {
              (Object.keys(this.props.drivertrip.position).length > 0 || Object.keys(this.state.initialLocation).length > 0) &&
@@ -1049,6 +1052,7 @@ const Driver = () => {
                                       size="large"
                                     />
                                   )}
+
                                   {dataforDriverRequest.drivertrip.isStarted ==
                                     false && (
                                     <TouchableOpacity
@@ -1256,7 +1260,15 @@ const Driver = () => {
               </View>
             )}
 
-            {riderdata?.config && (
+            {AcceptTrip == null && (
+              <View>
+                <Card>
+                  <Text> EMEKa</Text>
+                </Card>
+              </View>
+            )}
+
+            {riderdata?.config && AcceptTrip == null && (
               <View style={{ alignItems: "center" }}>
                 <Card style={styles.viewcard} classname="">
                   <View>
