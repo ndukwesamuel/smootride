@@ -90,10 +90,8 @@ const RiderTrips = ({navigation}) => {
                             </View>
                         </View>
                     </View></> }} />
-                    // </PTRView>
                     }</>}
                     </SafeAreaView>
-                    // </PTRView>
                     
 );
 }

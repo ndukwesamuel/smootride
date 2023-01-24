@@ -1,49 +1,65 @@
-import { Button, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Button,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import Timeline from "react-native-timeline-flatlist";
 
 import { useNavigation } from "@react-navigation/native";
+import { GetAddress } from "../Slice/auth/Getrider";
+import { useDispatch, useSelector } from "react-redux";
+import Triptimeline from "../components/rider/TripTimeline";
 
 const Tripmap = ({ route }) => {
   const navigation = useNavigation();
 
-  const [address, setAddress] = useState(null);
-  const [waypoints, setWaypoints] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [wayPoints, setPoints] = useState(null);
+  let { tripPoints, pickUpAddress, destAddress } = route.params.data;
+  const [position, setPosition] = useState(0);
+  const dispatch = useDispatch();
+  const num = JSON.parse(tripPoints);
+  const trips = useSelector((state) => state?.GetRiderSlice?.address);
 
-  let propsData = route;
+  const getaddress = async (tripPoints, pickUpAddress, destAddress) => {
+    const jsontripPoints = JSON.parse(tripPoints);
 
-  console.log(waypoints);
+    const Address = [];
+    setLoading(true);
 
-  const getaddress = (propsData) => {
-    if (route.params.data.tripPoints) {
-      let waypoints = JSON.parse(route.params.data.tripPoints);
-
-      setWaypoints(waypoints);
+    Address.push({
+      time: "Start",
+      title: "Initial",
+      description: `${pickUpAddress}`,
+    });
+    for (let r = 0; r < jsontripPoints.length; r++) {
+      const latitude = jsontripPoints[r].latitude;
+      const longitude = jsontripPoints[r].longitude;
+      await dispatch(GetAddress({ latitude, longitude }));
+      let res = {
+        time: `${r + 1}`,
+        title: `Point ${r + 1}`,
+        description: `${trips}`,
+      };
+      // this.setState({position:(r+1)});
+      setPosition(r + 1);
+      Address.push(res);
+      //Alert.alert(this.props.rider.startAddress);
     }
-
-    // console.log(propsData);
-    // let waypoints = [];
-    // if (data.tripPoints !== null) waypoints = JSON.parse(data.tripPoints);
-    // console.log(waypoints);
-    // this.setState({waypoints:waypoints});
-    // Address = [];
-    // Address.push({time: 'Start', title: 'Initial', description:`${data.pickUpAddress}`});
-    // for(let r = 0; r < waypoints.length; r++){
-    //     await this.props.dispatch(startAddress(waypoints[r].latitude,waypoints[r].longitude));
-    //     let res = {time: `${r+1}`, title: `Point ${r+1}`, description:`${this.props.rider.startAddress}`};
-    //     this.setState({position:(r+1)});
-    //     Address.push(res);
-    //     //Alert.alert(this.props.rider.startAddress);
-    // }
-    // Address.push({time: 'End', title: 'Final', description:`${data.destAddress}`});
-    // this.setState({Address:Address});
-    // this.setState({isFetching:false});
-    // //console.error(Address);
+    Address.push({ time: "End", title: "Final", description: `${destAddress}` });
+    // console.log("Address ", Address)
+    setPoints(Address);
+    setLoading(false);
+    
   };
 
   useEffect(() => {
-    getaddress();
+    getaddress(tripPoints, pickUpAddress, destAddress);
 
     return () => {};
   }, []);
@@ -76,8 +92,24 @@ const Tripmap = ({ route }) => {
           </Text>
         </View>
       </View>
-      <Text>tripmap</Text>
 
+      {loading ? (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <View style={{ marginTop: "45%" }}>
+            <Text style={{ alignSelf: "center", fontSize: 15 }}>
+              Getting address of PointRiderPaths {position} / {num?.length}
+            </Text>
+            <ActivityIndicator color="#007cc2" size="large" />
+          </View>
+        </View>
+      ) : (
+        <View style={{ flex: 1 }}>
+          <Triptimeline wayPoints={wayPoints} />
+        </View>
+      )}
+      {/* 
       {propsData && (
         <Timeline
           innerCircle={"dot"}
@@ -100,16 +132,9 @@ const Tripmap = ({ route }) => {
             style: { marginTop: 15 },
           }}
         />
-      )}
+      )} */}
 
-      <Button
-        onPress={() => {
-          navigation.navigate("Login");
-        }}
-        title="Learn More"
-        color="#841584"
-        accessibilityLabel="Learn more about this purple button"
-      />
+      
     </View>
   );
 };
