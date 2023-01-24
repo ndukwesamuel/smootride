@@ -72,7 +72,7 @@ const RiderPaths = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={{ backgroundColor: "#005091", padding: 35 }}>
+      <View style={{ backgroundColor: "#005091", paddingTop: 35 }}>
         <View style={{ flexDirection: "row", padding: 10, marginBottom: 20 }}>
           <Ionicons
             onPress={() =>
@@ -123,7 +123,7 @@ const RiderPaths = ({ navigation, route }) => {
         <View
           style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
         >
-          <View style={{ marginTop: "45%" }}>
+          <View>
             <Text style={{ alignSelf: "center", fontSize: 15 }}>
               Getting address of PointRiderPaths {position} / {num?.length}
             </Text>

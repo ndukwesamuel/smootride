@@ -109,30 +109,7 @@ const Tripmap = ({ route }) => {
           <Triptimeline wayPoints={wayPoints} />
         </View>
       )}
-      {/* 
-      {propsData && (
-        <Timeline
-          innerCircle={"dot"}
-          lineColor="#005091"
-          circleColor="#007cc2"
-          timeContainerStyle={{ minWidth: 52, marginTop: 0 }}
-          descriptionStyle={{ color: "gray" }}
-          data={propsData}
-          // data={this.state.Address}
-
-          titleStyle={{ color: "gray", fontSize: 14 }}
-          timeStyle={{
-            textAlign: "center",
-            backgroundColor: "#005091",
-            color: "white",
-            padding: 2,
-            borderRadius: 13,
-          }}
-          options={{
-            style: { marginTop: 15 },
-          }}
-        />
-      )} */}
+      
 
       
     </View>

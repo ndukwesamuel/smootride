@@ -15,12 +15,14 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
+import { persistor } from "../../store";
 
 const RiderProfile = ({ navigation }) => {
 
   const dispatch = useDispatch()
   const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
+    persistor.purge();
     navigation.navigate("Login");
   };
 
