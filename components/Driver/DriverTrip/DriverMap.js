@@ -14,11 +14,19 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import * as Location from "expo-location";
 
 import MapView, { Marker } from "react-native-maps";
-import { MapLocationActivated } from "../../../Slice/Driver/StartTripSlice";
+import {
+  CurrentLocationActivated,
+  MapLocationActivated,
+  StartTimeCurrentLocationActivated,
+} from "../../../Slice/Driver/StartTripSlice";
 import EndTripButtton from "./EndTripButtton";
 
 const DriverMap = () => {
   const { width, height } = Dimensions.get("window");
+
+  const { currentLocationData, startTripdata } = useSelector(
+    (state) => state.StartTripSlice
+  );
 
   const mapHeight = height * 0.89;
 
@@ -31,6 +39,7 @@ const DriverMap = () => {
   const [maplocation, setMaplocation] = useState(false);
   const [userLocation, setUerLocation] = useState(null);
   const [closedTrip, setClosedTrip] = useState(false);
+  // const [startTime, setStartTime] = useState(null);
 
   const getPermissions = async () => {
     setMaplocation(true);
@@ -40,13 +49,18 @@ const DriverMap = () => {
       return;
     }
     let currentLocation = await Location.getCurrentPositionAsync({});
+    let startTime = await new Date().toISOString();
+
+    console.log(startTime);
     setLocation(currentLocation);
     // console.log("location gotten ",currentLocation)
     setMaplocation(false);
     dispatch(MapLocationActivated(maplocation));
+    dispatch(CurrentLocationActivated(currentLocation));
+
+    dispatch(StartTimeCurrentLocationActivated(startTime));
   };
 
-  // console.log(location);
   useEffect(() => {
     getPermissions();
   }, []);
@@ -62,6 +76,7 @@ const DriverMap = () => {
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   };
+
   return (
     <View style={{ height: mapHeight }} className="">
       {maplocation ? (

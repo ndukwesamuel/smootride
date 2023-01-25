@@ -3,6 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   startTripdata: false,
   maplocationdata: true,
+  currentLocationData: null,
+  startTimecurrentLocationData: "",
+  LastDestinationLocationData: null,
+  EndTimeLastDestinationLocationData: "",
+  completedTripdata: null,
 };
 
 export const StartTripSlice = createSlice({
@@ -16,22 +21,26 @@ export const StartTripSlice = createSlice({
 
     MapLocationActivated: (state, action) => {
       state.maplocationdata = action.payload;
-
-      console.log(state.maplocationdata);
     },
 
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
+    CurrentLocationActivated: (state, action) => {
+      state.currentLocationData = action.payload;
     },
-    decrement: (state) => {
-      state.value -= 1;
+
+    LastDestinationLocationActivated: (state, action) => {
+      state.LastDestinationLocationData = action.payload;
     },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
+
+    StartTimeCurrentLocationActivated: (state, action) => {
+      state.startTimecurrentLocationData = action.payload;
+    },
+
+    EndTimeLastDestinationLocationActivated: (state, action) => {
+      state.EndTimeLastDestinationLocationData = action.payload;
+    },
+
+    CompletedTripActivated: (state, action) => {
+      state.completedTripdata = action.payload;
     },
   },
 });
@@ -39,9 +48,11 @@ export const StartTripSlice = createSlice({
 export const {
   ActivateStartTrip,
   MapLocationActivated,
-  increment,
-  decrement,
-  incrementByAmount,
+  CurrentLocationActivated,
+  LastDestinationLocationActivated,
+  StartTimeCurrentLocationActivated,
+  EndTimeLastDestinationLocationActivated,
+  CompletedTripActivated,
 } = StartTripSlice.actions;
 
 export default StartTripSlice.reducer;

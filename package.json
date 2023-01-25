@@ -29,6 +29,7 @@
     "expo-dev-client": "~2.0.1",
     "expo-location": "~15.0.1",
     "expo-status-bar": "~1.4.2",
+    "haversine": "^1.1.1",
     "moment": "^2.29.4",
     "nativewind": "^2.0.11",
     "postcss": "8.0.9",

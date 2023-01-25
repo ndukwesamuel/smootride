@@ -32,6 +32,7 @@ import { AcceptTripFun } from "../../Slice/Driver/DriverAcceptTripSlice";
 import DriverMap from "../../components/Driver/DriverTrip/DriverMap";
 import StartTrip from "../../components/Driver/DriverTrip/StartTrip";
 import EndTripButtton from "../../components/Driver/DriverTrip/EndTripButtton";
+import ExitDriverTrip from "../../components/Driver/DriverTrip/ExitDriverTrip";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -68,7 +69,9 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
-  const { startTripdata } = useSelector((state) => state.StartTripSlice);
+  const { startTripdata, completedTripdata } = useSelector(
+    (state) => state.StartTripSlice
+  );
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
@@ -805,6 +808,7 @@ const Driver = () => {
                   <DriverMap />
                 </>
               )}
+              {!startTripdata && completedTripdata && <ExitDriverTrip />}
             </View>
           )}
           <View>
