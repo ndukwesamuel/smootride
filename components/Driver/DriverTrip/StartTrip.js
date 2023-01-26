@@ -3,7 +3,10 @@ import React from "react";
 import { Card } from "react-native-shadow-cards";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
-import { ActivateStartTrip } from "../../../Slice/Driver/StartTripSlice";
+import {
+  ActivateStartTrip,
+  resetAll_Excerpt_startTripdata,
+} from "../../../Slice/Driver/StartTripSlice";
 let driverIcon = require("../../../assets/images/profile.jpg");
 
 const StartTrip = () => {
@@ -38,6 +41,7 @@ const StartTrip = () => {
 
   const startTrip = () => {
     dispatch(ActivateStartTrip());
+    dispatch(resetAll_Excerpt_startTripdata());
   };
   return (
     <View className="items-center mt-5">

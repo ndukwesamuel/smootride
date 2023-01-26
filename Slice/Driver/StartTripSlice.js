@@ -14,6 +14,17 @@ export const StartTripSlice = createSlice({
   name: "counter",
   initialState,
   reducers: {
+    resetALLStartTrip: (state) => initialState,
+
+    resetAll_Excerpt_startTripdata: (state) => {
+      state.maplocationdata = true;
+      state.currentLocationData = null;
+      state.startTimecurrentLocationData = "";
+      state.LastDestinationLocationData = null;
+      state.EndTimeLastDestinationLocationData = "";
+      state.completedTripdata = null;
+    },
+
     ActivateStartTrip: (state) => {
       state.startTripdata = !state.startTripdata;
     },
@@ -52,6 +63,9 @@ export const {
   StartTimeCurrentLocationActivated,
   EndTimeLastDestinationLocationActivated,
   CompletedTripActivated,
+  resetAll_Excerpt_startTripdata,
+
+  resetALLStartTrip,
 } = StartTripSlice.actions;
 
 export default StartTripSlice.reducer;

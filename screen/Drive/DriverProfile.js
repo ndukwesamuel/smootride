@@ -15,16 +15,20 @@ import { useNavigation } from "@react-navigation/native";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
+import { persistStore } from "redux-persist";
+import { store } from "../../store";
+
 const DriverProfile = () => {
   const navigation = useNavigation();
 
   const { user, data, isError, isSuccess, message, isLoading } = useSelector(
     (state) => state.LoginSlice
   );
+  console.log(data);
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem("token");
-    navigation.navigate("Login");
+    console.log("sdsd");
+    persistStore(store).purge();
   };
   const [social, setSocial] = useState(false);
   const [support, setSupport] = useState(false);
