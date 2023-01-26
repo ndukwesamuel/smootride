@@ -165,12 +165,12 @@ export default function App() {
             />
 
             <Stack.Screen
-            name="TabNavigation"
-            component={TabNavigation}
-            options={{
-              headerShown: false,
-            }}
-          />
+              name="TabNavigation"
+              component={TabNavigation}
+              options={{
+                headerShown: false,
+              }}
+            />
 
             <Stack.Screen
               name="DriverTabNavigation"
@@ -181,12 +181,12 @@ export default function App() {
             />
 
             <Stack.Screen
-            name="RiderPaths"
-            component={RiderPaths}
-            options={{
-              headerShown: false,
-            }} 
-          />
+              name="RiderPaths"
+              component={RiderPaths}
+              options={{
+                headerShown: false,
+              }}
+            />
             {/* <Stack.Screen
             name="riderprofile"
             component={RiderProfile}

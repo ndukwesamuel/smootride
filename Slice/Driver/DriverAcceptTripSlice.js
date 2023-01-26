@@ -23,9 +23,6 @@ const AcceptTripScrvice = async (AcceptData, tokengot) => {
     },
   };
 
-  console.log(AcceptData);
-  console.log(tokengot);
-
   const response = await axios.post(url, AcceptData, config);
   return response.data;
 };

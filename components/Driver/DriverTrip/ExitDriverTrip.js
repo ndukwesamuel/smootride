@@ -7,10 +7,13 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Card } from "react-native-shadow-cards";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
+import { ExitTripFunc } from "../../../Slice/Driver/ExitTripSlice";
 
 const ExitDriverTrip = () => {
+  const dispatch = useDispatch();
+
   const {
     startTripdata,
     maplocationdata,
@@ -39,7 +42,20 @@ const ExitDriverTrip = () => {
 
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
 
-  const onopentoexit = () => {};
+  const onopentoexit = () => {
+    console.log("Working");
+
+    let data = {
+      destLat: 6.5491775,
+      destLong: 3.3661442,
+      srcLat: 6.5450711,
+      srcLong: 3.3664705,
+      tripAmt: "513.17",
+      trip_start_time: "2023-01-25T15:42:51.723Z",
+    };
+
+    dispatch(ExitTripFunc(data));
+  };
   return (
     // {
     //     this.props.drivertrip.isEnded == true &&

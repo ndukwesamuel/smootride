@@ -27,12 +27,19 @@ import {
   GetLastAssignTrip,
   reset,
 } from "../../Slice/Driver/GetLastAssignTripSlice";
+import NetInfo from "@react-native-community/netinfo";
+
 import { RejectTrip } from "../../Slice/Driver/RejectTripSlice";
-import { AcceptTripFun } from "../../Slice/Driver/DriverAcceptTripSlice";
+import {
+  AcceptTripFun,
+  reset as AcceptReset,
+} from "../../Slice/Driver/DriverAcceptTripSlice";
+
 import DriverMap from "../../components/Driver/DriverTrip/DriverMap";
 import StartTrip from "../../components/Driver/DriverTrip/StartTrip";
 import EndTripButtton from "../../components/Driver/DriverTrip/EndTripButtton";
 import ExitDriverTrip from "../../components/Driver/DriverTrip/ExitDriverTrip";
+import { ExitTripFunc } from "../../Slice/Driver/ExitTripSlice";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -59,6 +66,17 @@ const tripissues = [
 
 const Driver = () => {
   const dispatch = useDispatch();
+
+  const [isConnected, setIsConnected] = useState(true);
+  const [isInternetReachable, setIsInternetReachable] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected);
+      setIsInternetReachable(state.isInternetReachable);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [driver_mode, setDriver_mode] = useState("Online");
@@ -88,6 +106,7 @@ const Driver = () => {
   };
 
   console.log(AcceptTrip);
+  console.log(riderdata);
 
   useEffect(() => {
     dispatch(
@@ -143,15 +162,41 @@ const Driver = () => {
     dispatch(AcceptTripFun({ trip_id: dataID }));
   };
 
+  const Working = () => {
+    console.log("Working");
+
+    let data = {
+      destLat: 6.5491775,
+      destLong: 3.3661442,
+      srcLat: 6.5450711,
+      srcLong: 3.3664705,
+      tripAmt: "513.17",
+      trip_start_time: "2023-01-25T15:42:51.723Z",
+    };
+
+    dispatch(ExitTripFunc(data));
+  };
+
+  // useEffect(() => {
+  //   dispatch(AcceptReset());
+  //   return () => {};
+  // }, []);
+
+  // return (
+  //   <View>
+  //     <Text> Sam</Text>
+  //   </View>
+  // );
+
   return (
     <PTRView classname="flex-1 border-2 border-red-600">
       <View classname="flex-1 bg-red-600 ">
         {/* {
-                   this.props.drivertrip.IsjustSubmittedTrip == true && 
-                   <View>
-                    {this.ff()}
-                   </View>
-               }  */}
+                     this.props.drivertrip.IsjustSubmittedTrip == true &&
+                     <View>
+                      {this.ff()}
+                     </View>
+                 }  */}
 
         <ScrollView keyboardShouldPersistTaps="always">
           <ProgressDialog
@@ -179,6 +224,10 @@ const Driver = () => {
               Status
             </Text>
           </View>
+
+          <Card className=" mt-10">
+            <Text onPress={Working}>working</Text>
+          </Card>
 
           <ChangeDriveStatus
             data1={driver_request_Status}
@@ -321,61 +370,61 @@ const Driver = () => {
                   }}
                 >
                   {/* <CardView
-                    cardElevation={2}
-                    cardMaxElevation={2}
-                    cornerRadius={5}
-                    style={styles.cardview}
-                  >
-                    <TextInput
-                      // onChangeText={(text) => this.getaddressSpecified(text)}
-                      style={{ width: "100%", height: 40, borderColor: "gray" }}
-                      placeholder="Enter the pickup address"
-                    />
-                  </CardView> */}
-                  {/* 
-{
-                                    this.state.gettingInputLocation == true &&
-                                    <ActivityIndicator size="large" color="#005091"/>
-                                }  */}
+                      cardElevation={2}
+                      cardMaxElevation={2}
+                      cornerRadius={5}
+                      style={styles.cardview}
+                    >
+                      <TextInput
+                        // onChangeText={(text) => this.getaddressSpecified(text)}
+                        style={{ width: "100%", height: 40, borderColor: "gray" }}
+                        placeholder="Enter the pickup address"
+                      />
+                    </CardView> */}
+                  {/*
+  {
+                                      this.state.gettingInputLocation == true &&
+                                      <ActivityIndicator size="large" color="#005091"/>
+                                  }  */}
 
                   <View
                     style={{ marginTop: 10 }}
                     showsVerticalScrollIndicator={false}
                   >
                     {/* {this.state.locationFromGoogle.length > 0 && (
-                      <Text
-                        style={{
-                          textAlign: "center",
-                          marginBottom: 20,
-                          fontWeight: "bold",
-                        }}
-                      >
-                        Select the Start Location below;
-                      </Text>
-                    )}
-                    {this.state.locationFromGoogle.map((location) => (
-                      <TouchableOpacity
-                        value={location.description}
-                        key={location.description}
-                        onPress={() =>
-                          this.isDriverSureDestLocation(location.description)
-                        }
-                        style={{
-                          height: 40,
-                          width: "100%",
-                          borderWidth: 1,
-                          borderColor: "#c1c1c1",
-                          marginTop: 4,
-                          justifyContent: "center",
-                        }}
-                      >
                         <Text
-                          style={{ alignSelf: "flex-start", marginStart: 5 }}
+                          style={{
+                            textAlign: "center",
+                            marginBottom: 20,
+                            fontWeight: "bold",
+                          }}
                         >
-                          {location.description}
+                          Select the Start Location below;
                         </Text>
-                      </TouchableOpacity>
-                    ))} */}
+                      )}
+                      {this.state.locationFromGoogle.map((location) => (
+                        <TouchableOpacity
+                          value={location.description}
+                          key={location.description}
+                          onPress={() =>
+                            this.isDriverSureDestLocation(location.description)
+                          }
+                          style={{
+                            height: 40,
+                            width: "100%",
+                            borderWidth: 1,
+                            borderColor: "#c1c1c1",
+                            marginTop: 4,
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Text
+                            style={{ alignSelf: "flex-start", marginStart: 5 }}
+                          >
+                            {location.description}
+                          </Text>
+                        </TouchableOpacity>
+                      ))} */}
                   </View>
                 </View>
               </View>
@@ -427,36 +476,36 @@ const Driver = () => {
               ></Text>
 
               {/* {
-                          Platform.OS == 'ios' && this.props.drivertrip.isFirstTrip == true &&
-                            <View style={{borderWidth:1,borderColor:'#c1c1c1',width:'94%',alignSelf:'center',borderRadius:5,marginBottom:5}}>
-                            <RadioForm
-                            radio_props={tripissues}
-                            initial={-1}
-                            labelStyle={{marginRight: '20%'}}
-                            buttonColor={'#005091'}
-                            buttonInnerColor={'#005091'}
-                            buttonSize={10}
-                            animation={true}
-                            onPress={(value) => {this.setState({reasonfordecline:value})}}
-                          />
-                          </View>
-                        } */}
+                            Platform.OS == 'ios' && this.props.drivertrip.isFirstTrip == true &&
+                              <View style={{borderWidth:1,borderColor:'#c1c1c1',width:'94%',alignSelf:'center',borderRadius:5,marginBottom:5}}>
+                              <RadioForm
+                              radio_props={tripissues}
+                              initial={-1}
+                              labelStyle={{marginRight: '20%'}}
+                              buttonColor={'#005091'}
+                              buttonInnerColor={'#005091'}
+                              buttonSize={10}
+                              animation={true}
+                              onPress={(value) => {this.setState({reasonfordecline:value})}}
+                            />
+                            </View>
+                          } */}
 
               {/* {
-                            this.props.drivertrip.isFirstTrip == true && Platform.OS == 'android' &&
-                            <View style={{borderWidth:1,borderColor:'#c1c1c1',width:'94%',alignSelf:'center',borderRadius:5,marginBottom:5}}>
-                            <Picker
-                                selectedValue={this.state.reasonfordecline}
-                                style={{height: 40, width: '100%',borderWidth:1,borderColor:'#005091'}}
-                                onValueChange={(itemValue, itemIndex) =>
-                                    this.setState({reasonfordecline: itemValue})
-                                }>
-                                <Picker.Item label="Select Reason" value="" />
-                                <Picker.Item label="Unavailable for Trip" value="reassign" />
-                                <Picker.Item label="Client Decline Trip" value="decline" />
-                            </Picker> 
-                            </View>
-                        } */}
+                              this.props.drivertrip.isFirstTrip == true && Platform.OS == 'android' &&
+                              <View style={{borderWidth:1,borderColor:'#c1c1c1',width:'94%',alignSelf:'center',borderRadius:5,marginBottom:5}}>
+                              <Picker
+                                  selectedValue={this.state.reasonfordecline}
+                                  style={{height: 40, width: '100%',borderWidth:1,borderColor:'#005091'}}
+                                  onValueChange={(itemValue, itemIndex) =>
+                                      this.setState({reasonfordecline: itemValue})
+                                  }>
+                                  <Picker.Item label="Select Reason" value="" />
+                                  <Picker.Item label="Unavailable for Trip" value="reassign" />
+                                  <Picker.Item label="Client Decline Trip" value="decline" />
+                              </Picker>
+                              </View>
+                          } */}
 
               <View
                 style={{
@@ -467,18 +516,18 @@ const Driver = () => {
                 }}
               >
                 {/* {
-                                this.state.isrequesting == false &&
-                                <TouchableOpacity onPress = {this.declinenow} style={{width:'100%',backgroundColor:'#fff',borderWidth:1,borderColor:'#005091',backgroundColor:'#005091',marginTop:2,borderRadius:5}}>
-                                  <Text style={{color:'#fff',alignSelf:'center',fontSize:13,padding:12,marginRight:5,fontFamily:'Roboto-Regular'}}>Yes</Text>
-                                </TouchableOpacity>
-                            } */}
+                                  this.state.isrequesting == false &&
+                                  <TouchableOpacity onPress = {this.declinenow} style={{width:'100%',backgroundColor:'#fff',borderWidth:1,borderColor:'#005091',backgroundColor:'#005091',marginTop:2,borderRadius:5}}>
+                                    <Text style={{color:'#fff',alignSelf:'center',fontSize:13,padding:12,marginRight:5,fontFamily:'Roboto-Regular'}}>Yes</Text>
+                                  </TouchableOpacity>
+                              } */}
 
                 {/* {
-                                this.state.isrequesting == true &&
-                                <TouchableOpacity>
-                                    <ActivityIndicator size="small" color="#005091"/>
-                                </TouchableOpacity>
-                            } */}
+                                  this.state.isrequesting == true &&
+                                  <TouchableOpacity>
+                                      <ActivityIndicator size="small" color="#005091"/>
+                                  </TouchableOpacity>
+                              } */}
 
                 <TouchableOpacity
                   // onPress={this.dismissdeclinemodal}
@@ -662,61 +711,61 @@ const Driver = () => {
                 Request to Change State
               </Text>
               {/* {Platform.OS == "ios" && (
-                <View
-                  style={{
-                    borderWidth: 1,
-                    borderColor: "#c1c1c1",
-                    width: "94%",
-                    alignSelf: "center",
-                    borderRadius: 5,
-                    marginBottom: 5,
-                  }}
-                >
-                  <RadioForm
-                    radio_props={managestate}
-                    initial={-1}
-                    formHorizontal={true}
-                    labelStyle={{ marginRight: "20%" }}
-                    buttonColor={"#005091"}
-                    buttonInnerColor={"#005091"}
-                    buttonSize={10}
-                    animation={true}
-                    onPress={(value) => {
-                      this.setState({ request: value });
-                    }}
-                  />
-                </View>
-              )}
-
-              {Platform.OS == "android" && (
-                <View
-                  style={{
-                    borderWidth: 1,
-                    borderColor: "#c1c1c1",
-                    width: "94%",
-                    alignSelf: "center",
-                    borderRadius: 5,
-                    marginBottom: 5,
-                  }}
-                >
-                  <Picker
-                    selectedValue={this.state.request}
+                  <View
                     style={{
-                      height: 40,
-                      width: "100%",
                       borderWidth: 1,
-                      borderColor: "#005091",
+                      borderColor: "#c1c1c1",
+                      width: "94%",
+                      alignSelf: "center",
+                      borderRadius: 5,
+                      marginBottom: 5,
                     }}
-                    onValueChange={(itemValue, itemIndex) =>
-                      this.setState({ request: itemValue })
-                    }
                   >
-                    <Picker.Item label="Select State" value="" />
-                    <Picker.Item label="Offline" value="Offline" />
-                    <Picker.Item label="Online" value="Online" />
-                  </Picker>
-                </View>
-              )} */}
+                    <RadioForm
+                      radio_props={managestate}
+                      initial={-1}
+                      formHorizontal={true}
+                      labelStyle={{ marginRight: "20%" }}
+                      buttonColor={"#005091"}
+                      buttonInnerColor={"#005091"}
+                      buttonSize={10}
+                      animation={true}
+                      onPress={(value) => {
+                        this.setState({ request: value });
+                      }}
+                    />
+                  </View>
+                )}
+
+                {Platform.OS == "android" && (
+                  <View
+                    style={{
+                      borderWidth: 1,
+                      borderColor: "#c1c1c1",
+                      width: "94%",
+                      alignSelf: "center",
+                      borderRadius: 5,
+                      marginBottom: 5,
+                    }}
+                  >
+                    <Picker
+                      selectedValue={this.state.request}
+                      style={{
+                        height: 40,
+                        width: "100%",
+                        borderWidth: 1,
+                        borderColor: "#005091",
+                      }}
+                      onValueChange={(itemValue, itemIndex) =>
+                        this.setState({ request: itemValue })
+                      }
+                    >
+                      <Picker.Item label="Select State" value="" />
+                      <Picker.Item label="Offline" value="Offline" />
+                      <Picker.Item label="Online" value="Online" />
+                    </Picker>
+                  </View>
+                )} */}
 
               <TextInput
                 style={{
@@ -741,38 +790,38 @@ const Driver = () => {
                 }}
               >
                 {/* {this.state.isrequesting == false && (
-                  <TouchableOpacity
-                    onPress={this.sendrequest}
-                    style={{
-                      width: "100%",
-                      backgroundColor: "#fff",
-                      borderWidth: 1,
-                      borderColor: "#005091",
-                      backgroundColor: "#005091",
-                      marginTop: 2,
-                      borderRadius: 5,
-                    }}
-                  >
-                    <Text
+                    <TouchableOpacity
+                      onPress={this.sendrequest}
                       style={{
-                        color: "#fff",
-                        alignSelf: "center",
-                        fontSize: 13,
-                        padding: 12,
-                        marginRight: 5,
-                        fontFamily: "Roboto-Regular",
+                        width: "100%",
+                        backgroundColor: "#fff",
+                        borderWidth: 1,
+                        borderColor: "#005091",
+                        backgroundColor: "#005091",
+                        marginTop: 2,
+                        borderRadius: 5,
                       }}
                     >
-                      Submit
-                    </Text>
-                  </TouchableOpacity>
-                )} */}
-                {/* 
-                {this.state.isrequesting == true && (
-                  <TouchableOpacity>
-                    <ActivityIndicator size="small" color="#005091" />
-                  </TouchableOpacity>
-                )} */}
+                      <Text
+                        style={{
+                          color: "#fff",
+                          alignSelf: "center",
+                          fontSize: 13,
+                          padding: 12,
+                          marginRight: 5,
+                          fontFamily: "Roboto-Regular",
+                        }}
+                      >
+                        Submit
+                      </Text>
+                    </TouchableOpacity>
+                  )} */}
+                {/*
+                  {this.state.isrequesting == true && (
+                    <TouchableOpacity>
+                      <ActivityIndicator size="small" color="#005091" />
+                    </TouchableOpacity>
+                  )} */}
                 <TouchableOpacity
                   // onPress={this.dismissmodal}
                   style={{
@@ -799,7 +848,8 @@ const Driver = () => {
             </View>
           </Modal>
 
-          {AcceptTrip?.success == true && (
+          {/* {AcceptTrip?.success == true && riderdata?.data && ( */}
+          {AcceptTrip?.success == true && riderdata?.data && (
             <View className="flex-1">
               {!startTripdata && <StartTrip />}
 
@@ -813,24 +863,24 @@ const Driver = () => {
           )}
           <View>
             {/* {
-             (Object.keys(this.props.drivertrip.position).length > 0 || Object.keys(this.state.initialLocation).length > 0) &&
-             <MapView
-              provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-              style={{height:this.props.rider.rider_id == '' ? mapviewheight : maphalf}}
-              showUserLocation
-              followUserLocation
-              loadingEnabled
-              region={this.getMapRegion()}
-              >
-              <Polyline coordinates={this.props.drivertrip.routeCoordinates} strokeWidth={2} />
-              <Marker.Animated
-                  ref={marker => {
-                  this.marker = marker;
-                  }}
-                  coordinate={this.state.coordinate}
-              />    
-              </MapView>
-         } */}
+               (Object.keys(this.props.drivertrip.position).length > 0 || Object.keys(this.state.initialLocation).length > 0) &&
+               <MapView
+                provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                style={{height:this.props.rider.rider_id == '' ? mapviewheight : maphalf}}
+                showUserLocation
+                followUserLocation
+                loadingEnabled
+                region={this.getMapRegion()}
+                >
+                <Polyline coordinates={this.props.drivertrip.routeCoordinates} strokeWidth={2} />
+                <Marker.Animated
+                    ref={marker => {
+                    this.marker = marker;
+                    }}
+                    coordinate={this.state.coordinate}
+                />
+                </MapView>
+           } */}
             {/* this component is for driver moving  */}
 
             {riderdata == null && (
@@ -1264,14 +1314,6 @@ const Driver = () => {
               </View>
             )}
 
-            {AcceptTrip == null && (
-              <View>
-                <Card>
-                  <Text> EMEKa</Text>
-                </Card>
-              </View>
-            )}
-
             {riderdata?.config && AcceptTrip == null && (
               <View style={{ alignItems: "center" }}>
                 <Card style={styles.viewcard} classname="">
@@ -1395,7 +1437,10 @@ const Driver = () => {
                   </View>
 
                   <View>
-                    <View style={{ flexDirection: "row" }}>
+                    <View
+                      style={{ flexDirection: "row" }}
+                      className=" justify-between items-center"
+                    >
                       <View style={{ width: "30%", justifyContent: "center" }}>
                         <TouchableOpacity
                           onPress={() => rejectTrip(riderdata.data.id)}
@@ -1435,9 +1480,47 @@ const Driver = () => {
                           </TouchableOpacity>
                         )}
                       </View>
-                      <View
-                        style={{ width: "40%", justifyContent: "center" }}
-                      ></View>
+
+                      <View style={{ width: "30%", justifyContent: "center" }}>
+                        <TouchableOpacity
+                          onPress={() => rejectTrip(riderdata.data.id)}
+                          style={{
+                            marginTop: 7,
+                            borderColor: "green",
+                            borderWidth: 2,
+                            padding: 7,
+                            width: "100%",
+                            alignSelf: "center",
+                            borderRadius: 5,
+                          }}
+                        >
+                          <Text
+                            style={{
+                              alignSelf: "center",
+                              color: "green",
+                              fontSize: 13,
+                              // fontFamily: "Roboto-Regular",
+                            }}
+                          >
+                            Reassign
+                          </Text>
+                        </TouchableOpacity>
+
+                        {dataforDriverRequest.isrequesting == true && (
+                          <TouchableOpacity
+                            style={{
+                              marginTop: 7,
+                              backgroundColor: "#a31225",
+                              padding: 7,
+                              width: "100%",
+                              alignSelf: "center",
+                            }}
+                          >
+                            <ActivityIndicator color="#fff" size="small" />
+                          </TouchableOpacity>
+                        )}
+                      </View>
+
                       <View style={{ width: "30%" }}>
                         <TouchableOpacity
                           onPress={() => acceptTrip(riderdata.data)}

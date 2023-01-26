@@ -43,19 +43,23 @@ import DriverAcceptTripSlice from "./Slice/Driver/DriverAcceptTripSlice";
 
 import StartTripSlice from "./Slice/Driver/StartTripSlice";
 
+import ExitTripSlic from "./Slice/Driver/ExitTripSlice";
+
 const reducers = combineReducers({
   nav: navReducer,
   LoginSlice: LoginSlice,
   PassowrdReset: PassowrdReset,
   GetRiderSlice: GetRiderSlice,
   RequestRideSlice: RequestRideSlice,
-     UpdateDriverStatusSlice: UpdateDriverStatusSlice,
+  UpdateDriverStatusSlice: UpdateDriverStatusSlice,
   GetAllDriverTripsSlice: GetAllDriverTripsSlice,
   GetLastAssignTripSlice: GetLastAssignTripSlice,
   RejectTripSlice: RejectTripSlice,
   DriverAcceptTripSlice: DriverAcceptTripSlice,
 
   StartTripSlice: StartTripSlice,
+
+  ExitTripSlic: ExitTripSlic,
 });
 
 const persistConfig = {
