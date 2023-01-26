@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   Dimensions,
   Image,
   KeyboardAvoidingView,
@@ -40,6 +41,7 @@ import StartTrip from "../../components/Driver/DriverTrip/StartTrip";
 import EndTripButtton from "../../components/Driver/DriverTrip/EndTripButtton";
 import ExitDriverTrip from "../../components/Driver/DriverTrip/ExitDriverTrip";
 import { ExitTripFunc } from "../../Slice/Driver/ExitTripSlice";
+import { resetALLStartTrip } from "../../Slice/Driver/StartTripSlice";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -70,6 +72,8 @@ const Driver = () => {
   const [isConnected, setIsConnected] = useState(true);
   const [isInternetReachable, setIsInternetReachable] = useState(true);
 
+  const [reload, setReload] = useState(false);
+
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsConnected(state.isConnected);
@@ -91,6 +95,8 @@ const Driver = () => {
     (state) => state.StartTripSlice
   );
 
+  console.log(completedTripdata + "sdsd");
+
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
   const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
@@ -106,7 +112,7 @@ const Driver = () => {
   };
 
   console.log(AcceptTrip);
-  console.log(riderdata);
+  console.log(startTripdata);
 
   useEffect(() => {
     dispatch(
@@ -114,6 +120,7 @@ const Driver = () => {
         user_id: 1,
       })
     );
+    setReload(false);
     return () => {
       // dispatch(reset());
     };
@@ -146,15 +153,16 @@ const Driver = () => {
     console.log("this is f");
   };
 
-  const rejectTrip = (tripdata) => {
+  const rejectTrip = (tripID, TripReason) => {
     console.log("this is rejectTrip");
-
+    console.log(tripID);
+    console.log(TripReason);
     let data = {
-      reason: "reassign", // the two expected values are "reassign or decline"
-      trip_id: tripdata,
+      reason: TripReason, // the two expected values are "reassign or decline"
+      trip_id: tripID,
     };
-
     dispatch(RejectTrip(data));
+    setReload(true);
   };
 
   const acceptTrip = (tripdata) => {
@@ -178,7 +186,7 @@ const Driver = () => {
   };
 
   // useEffect(() => {
-  //   dispatch(AcceptReset());
+  //   dispatch(resetALLStartTrip());
   //   return () => {};
   // }, []);
 
@@ -224,10 +232,6 @@ const Driver = () => {
               Status
             </Text>
           </View>
-
-          <Card className=" mt-10">
-            <Text onPress={Working}>working</Text>
-          </Card>
 
           <ChangeDriveStatus
             data1={driver_request_Status}
@@ -849,15 +853,12 @@ const Driver = () => {
           </Modal>
 
           {/* {AcceptTrip?.success == true && riderdata?.data && ( */}
-          {AcceptTrip?.success == true && riderdata?.data && (
-            <View className="flex-1">
+          {AcceptTrip?.success == true && (
+            <View>
               {!startTripdata && <StartTrip />}
 
-              {startTripdata && (
-                <>
-                  <DriverMap />
-                </>
-              )}
+              {startTripdata && <DriverMap />}
+
               {!startTripdata && completedTripdata && <ExitDriverTrip />}
             </View>
           )}
@@ -1443,7 +1444,9 @@ const Driver = () => {
                     >
                       <View style={{ width: "30%", justifyContent: "center" }}>
                         <TouchableOpacity
-                          onPress={() => rejectTrip(riderdata.data.id)}
+                          onPress={() =>
+                            rejectTrip(riderdata.data.id, "decline")
+                          }
                           style={{
                             marginTop: 7,
                             borderColor: "#a31225",
@@ -1483,7 +1486,9 @@ const Driver = () => {
 
                       <View style={{ width: "30%", justifyContent: "center" }}>
                         <TouchableOpacity
-                          onPress={() => rejectTrip(riderdata.data.id)}
+                          onPress={() =>
+                            rejectTrip(riderdata.data.id, "reassign")
+                          }
                           style={{
                             marginTop: 7,
                             borderColor: "green",

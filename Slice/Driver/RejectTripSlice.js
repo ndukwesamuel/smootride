@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 
+Alert;
 import { SMOOTHRIDE_NEWAPI } from "@env";
 
 import { Alert } from "react-native";
@@ -27,15 +28,25 @@ const RejectTripService = async (rejectdatainfo, tokengot) => {
 
   const response = await axios.post(url, rejectdatainfo, config);
   console.log(response.data);
-  return response.data;
+  if (response.data.message == "No driver" && response.data.success == false) {
+    console.log("we need to do something");
+    Alert.alert(
+      "Alert",
+      `${response.data.message} available If you must cancel, click Reject.`,
+      [{ text: "OK" }],
+      { cancelable: false }
+    );
+  } else {
+    return response.data;
+  }
 };
 
 export const RejectTrip = createAsyncThunk(
   "RejectTrip/data",
   async (rejectdatainfo, thunkAPI) => {
     try {
+      console.log(rejectdatainfo);
       const tokengot = await AsyncStorage.getItem("token");
-
       return await RejectTripService(rejectdatainfo, tokengot);
     } catch (error) {
       console.log(error);

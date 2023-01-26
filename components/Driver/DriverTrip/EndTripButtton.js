@@ -22,8 +22,10 @@ import {
   EndTimeLastDestinationLocationActivated,
   LastDestinationLocationActivated,
   MapLocationActivated,
+  resetAll_Excerpt_startTripdata,
   StartTimeCurrentLocationActivated,
 } from "../../../Slice/Driver/StartTripSlice";
+import { CompleteDriverTripFunc } from "../../../Slice/Driver/CompleteDriverTripSlice";
 
 const EndTripButtton = () => {
   const dispatch = useDispatch();
@@ -109,8 +111,10 @@ const EndTripButtton = () => {
 
       // let totalwaitingcost = parseFloat(riderdata.config.waitingTime) / 60) * parseFloat(this.props.rider.price_config.waitpermin);
 
-      console.log(totlaCost);
-      console.log(unformattedcost);
+      // console.log(totlaCost);
+      // console.log(unformattedcost);
+
+      dispatch(resetAll_Excerpt_startTripdata());
 
       let data = {
         srcLat: start_lat,
@@ -121,9 +125,13 @@ const EndTripButtton = () => {
         tripAmt: totlaCost,
       };
 
-      dispatch(CompletedTripActivated(data));
-      dispatch(ActivateStartTrip());
-      setEndingTrip(false);
+      // console.log(data);
+
+      dispatch(CompleteDriverTripFunc(data));
+
+      // dispatch(CompletedTripActivated(data));
+      // dispatch(ActivateStartTrip());
+      // setEndingTrip(false);
     }
   };
 
