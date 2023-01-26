@@ -15,7 +15,6 @@ export const StartTripSlice = createSlice({
   initialState,
   reducers: {
     ActivateStartTrip: (state) => {
-      console.log("kaka");
       state.startTripdata = !state.startTripdata;
     },
 

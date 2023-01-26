@@ -17,8 +17,6 @@ const initialState = {
 const GetLastAssignTripService = async (riderData, token) => {
   let url = SMOOTHRIDE_NEWAPI + "getlastassigntrip";
 
-  getlastassigntrip;
-
   const config = {
     headers: {
       Authorization: `Bearer ${token}`,
@@ -29,26 +27,6 @@ const GetLastAssignTripService = async (riderData, token) => {
 
   return response.data;
 };
-
-// // Get user goals
-// export const GetLastAssignTrip = createAsyncThunk(
-//   "GetLastAssignTrip/data",
-//   async (riderData, thunkAPI) => {
-//     try {
-//       const token = await AsyncStorage.getItem("token");
-//       return await GetLastAssignTripService(token);
-//     } catch (error) {
-//       console.log(error);
-//       const message =
-//         (error.response &&
-//           error.response.data &&
-//           error.response.data.message) ||
-//         error.message ||
-//         error.toString();
-//       return thunkAPI.rejectWithValue(message);
-//     }
-//   }
-// );
 
 export const GetLastAssignTrip = createAsyncThunk(
   "GetLastAssignTrip/data",

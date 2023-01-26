@@ -44,7 +44,6 @@ const ExitDriverTrip = () => {
 
   const onopentoexit = () => {
     console.log("Working");
-
     let data = {
       destLat: 6.5491775,
       destLong: 3.3661442,
@@ -53,7 +52,6 @@ const ExitDriverTrip = () => {
       tripAmt: "513.17",
       trip_start_time: "2023-01-25T15:42:51.723Z",
     };
-
     dispatch(ExitTripFunc(data));
   };
   return (
