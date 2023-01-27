@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { Card } from "react-native-shadow-cards";
 const haversine = require("haversine");
 
-import NetInfo from "@react-native-community/netinfo";
+// import NetInfo from "@react-native-community/netinfo";
 import Geolocation from "react-native-geolocation-service";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -50,17 +50,19 @@ const EndTripButtton = () => {
   const [isConnected, setIsConnected] = useState(true);
   const [isInternetReachable, setIsInternetReachable] = useState(true);
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      setIsConnected(state.isConnected);
-      setIsInternetReachable(state.isInternetReachable);
-    });
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = NetInfo.addEventListener((state) => {
+  //     setIsConnected(state.isConnected);
+  //     setIsInternetReachable(state.isInternetReachable);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
+
+  console.log(completedTripdata);
 
   const stopTrip = async () => {
     setEndingTrip(true);
-    NetworkState();
+    // NetworkState();
 
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -114,7 +116,7 @@ const EndTripButtton = () => {
       // console.log(totlaCost);
       // console.log(unformattedcost);
 
-      dispatch(resetAll_Excerpt_startTripdata());
+      // dispatch(resetAll_Excerpt_startTripdata());
 
       let data = {
         srcLat: start_lat,
@@ -125,33 +127,31 @@ const EndTripButtton = () => {
         tripAmt: totlaCost,
       };
 
-      // console.log(data);
+      dispatch(CompletedTripActivated(data)); // this is just to hole the data
 
       dispatch(CompleteDriverTripFunc(data));
-
-      // dispatch(CompletedTripActivated(data));
-      // dispatch(ActivateStartTrip());
-      // setEndingTrip(false);
+      dispatch(ActivateStartTrip());
+      setEndingTrip(false);
     }
   };
 
-  const NetworkState = () => {
-    if (isConnected == false) {
-      Alert.alert("Alert", "No Internet Connection", [{ text: "OK" }], {
-        cancelable: false,
-      });
-      return false;
-    }
-    if (isInternetReachable == false) {
-      Alert.alert(
-        "Alert",
-        "Internet Connection not Accessible",
-        [{ text: "OK" }],
-        { cancelable: false }
-      );
-      return false;
-    }
-  };
+  // const NetworkState = () => {
+  //   if (isConnected == false) {
+  //     Alert.alert("Alert", "No Internet Connection", [{ text: "OK" }], {
+  //       cancelable: false,
+  //     });
+  //     return false;
+  //   }
+  //   if (isInternetReachable == false) {
+  //     Alert.alert(
+  //       "Alert",
+  //       "Internet Connection not Accessible",
+  //       [{ text: "OK" }],
+  //       { cancelable: false }
+  //     );
+  //     return false;
+  //   }
+  // };
 
   // const stopTrip = () => {
   //   NetworkState();

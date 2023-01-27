@@ -14,44 +14,20 @@ const StartTrip = () => {
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
   const { startTripdata } = useSelector((state) => state.StartTripSlice);
 
-  console.log(startTripdata);
-
-  let dataforDriverRequest = {
-    isrequesting: false,
-    FetchingisTripValid: false,
-    checkingInternet: false,
-    isFetching: false,
-    rider_name: "sam",
-    drivertrip: {
-      isReady: false,
-      isStarted: false,
-      isFirstTrip: false,
-      isEnded: false,
-      cost: 100,
-    },
-
-    rider: {
-      rider_name: "",
-      rider_id: 1,
-      accept: false,
-      rider_image: null,
-      company_name: "Fistbank",
-    },
-  };
-
   const startTrip = () => {
     dispatch(ActivateStartTrip());
     dispatch(resetAll_Excerpt_startTripdata());
   };
+
   return (
     <View className="items-center mt-5">
       <Card className="pt-5">
         <View style={{ flexDirection: "row" }}>
           <View style={{ width: "22%", marginStart: 10 }}>
-            {dataforDriverRequest.rider.rider_image != null && (
+            {riderdata.data?.rider_image != null && (
               <Image
                 source={{
-                  uri: `https://smoothride.ng/taxi/images/${this.props.rider.rider_image}`,
+                  uri: `https://smoothride.ng/taxi/images/${riderdata.data?.rider_image}`,
                 }}
                 style={{
                   width: 50,
@@ -63,7 +39,7 @@ const StartTrip = () => {
               />
             )}
 
-            {dataforDriverRequest.rider.rider_image == null && (
+            {riderdata.data?.rider_image == undefined && (
               <Image
                 source={driverIcon}
                 style={{
@@ -138,66 +114,61 @@ const StartTrip = () => {
         </View>
 
         <View style={{ flexDirection: "row" }}>
-          {dataforDriverRequest.isFetching == false && (
-            <View>
-              <View
-                style={{ flexDirection: "row", marginTop: 10 }}
-                className="pb-7 mx-5"
-              >
-                <View style={{ width: "50%" }}>
-                  <TouchableOpacity
-                    //  onPress={this.declineTrip}
-
+          <View>
+            <View
+              style={{ flexDirection: "row", marginTop: 10 }}
+              className="pb-7 mx-5"
+            >
+              <View style={{ width: "50%" }}>
+                <TouchableOpacity
+                  style={{
+                    borderColor: "#005091",
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    padding: 5,
+                    width: "50%",
+                    marginTop: 1,
+                  }}
+                >
+                  <Text
                     style={{
-                      borderColor: "#005091",
-                      borderWidth: 1,
-                      borderRadius: 5,
-                      padding: 5,
-                      width: "50%",
-                      marginTop: 1,
-                      // opacity: this.state.opacity,
+                      alignSelf: "center",
+                      color: "#005091",
+                      fontSize: 15,
                     }}
                   >
-                    <Text
-                      style={{
-                        alignSelf: "center",
-                        color: "#005091",
-                        fontSize: 15,
-                      }}
-                    >
-                      Option
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                    Option
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-                <View style={{ width: "50%" }}>
-                  <TouchableOpacity
-                    onPress={startTrip}
+              <View style={{ width: "50%" }}>
+                <TouchableOpacity
+                  onPress={startTrip}
+                  style={{
+                    backgroundColor: "#005091",
+                    borderRadius: 5,
+                    padding: 5,
+                    width: "100%",
+                    marginTop: 1,
+
+                    // opacity:this.state.opacity
+                  }}
+                >
+                  <Text
                     style={{
-                      backgroundColor: "#005091",
-                      borderRadius: 5,
-                      padding: 5,
-                      width: "100%",
-                      marginTop: 1,
-
-                      // opacity:this.state.opacity
+                      alignSelf: "center",
+                      color: "#fff",
+                      fontSize: 15,
+                      // fontFamily: "Roboto-Regular",
                     }}
                   >
-                    <Text
-                      style={{
-                        alignSelf: "center",
-                        color: "#fff",
-                        fontSize: 15,
-                        // fontFamily: "Roboto-Regular",
-                      }}
-                    >
-                      Start Trip
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                    Start Trip
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
-          )}
+          </View>
         </View>
       </Card>
     </View>

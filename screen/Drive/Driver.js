@@ -28,7 +28,7 @@ import {
   GetLastAssignTrip,
   reset,
 } from "../../Slice/Driver/GetLastAssignTripSlice";
-import NetInfo from "@react-native-community/netinfo";
+// import NetInfo from "@react-native-community/netinfo";
 
 import { RejectTrip } from "../../Slice/Driver/RejectTripSlice";
 import {
@@ -69,18 +69,18 @@ const tripissues = [
 const Driver = () => {
   const dispatch = useDispatch();
 
-  const [isConnected, setIsConnected] = useState(true);
-  const [isInternetReachable, setIsInternetReachable] = useState(true);
+  // const [isConnected, setIsConnected] = useState(true);
+  // const [isInternetReachable, setIsInternetReachable] = useState(true);
 
   const [reload, setReload] = useState(false);
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      setIsConnected(state.isConnected);
-      setIsInternetReachable(state.isInternetReachable);
-    });
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = NetInfo.addEventListener((state) => {
+  //     setIsConnected(state.isConnected);
+  //     setIsInternetReachable(state.isInternetReachable);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [driver_mode, setDriver_mode] = useState("Online");
