@@ -41,7 +41,7 @@ export const RequestRide= createAsyncThunk(
 
   export const AssignedDriver= createAsyncThunk(
     "assignedDriver/Driverassigned", async(requestdetails, {rejectWithValue})=>{
-      console.log(requestdetails)
+      // console.log(requestdetails)
         const tokengot = await  AsyncStorage.getItem("token")
         const infoneeded= `Bearer ${tokengot}`
         const instance = axios.create({
@@ -57,7 +57,7 @@ export const RequestRide= createAsyncThunk(
           return await instance
             .post("getassigneddriver", requestdetails)
             .then( async (response) => {
-              console.log("assigned response ",response.data)
+              // console.log("assigned response ",response.data)
               return response.data;
             })
              
@@ -94,7 +94,7 @@ export const RequestRide= createAsyncThunk(
           return await instance
             .post("canceltrip")
             .then( async (response) => {
-              console.log("cancelled response ",response.data)
+              // console.log("cancelled response ",response.data)
               Alert.alert("Trip cancelled")
               return response.data;
             })
@@ -159,6 +159,7 @@ export const RequestRide= createAsyncThunk(
           state.isLoading = false;
           state.isSuccess = true;
           state.user = true;
+          state.isRequest= false;
           state.data= action.payload;
         })
         .addCase(CancelRequest.rejected, (state, action) => {
@@ -166,7 +167,6 @@ export const RequestRide= createAsyncThunk(
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
-          state.isRequest= false;
           state.user = false;
         })
         .addCase(AssignedDriver.pending, (state) => {
