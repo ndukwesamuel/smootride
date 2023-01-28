@@ -1,5 +1,5 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Card } from "react-native-shadow-cards";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,6 +7,7 @@ import {
   ActivateStartTrip,
   resetAll_Excerpt_startTripdata,
 } from "../../../Slice/Driver/StartTripSlice";
+import { HoldRiderInfoActivated } from "../../../Slice/Driver/HoldTripDataSlice";
 let driverIcon = require("../../../assets/images/profile.jpg");
 
 const StartTrip = () => {
@@ -14,7 +15,12 @@ const StartTrip = () => {
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
   const { startTripdata } = useSelector((state) => state.StartTripSlice);
 
-  console.log(startTripdata);
+  const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
+
+  useEffect(() => {
+    dispatch(HoldRiderInfoActivated(riderdata));
+    return () => {};
+  }, [riderdata]);
 
   let dataforDriverRequest = {
     isrequesting: false,
@@ -41,8 +47,8 @@ const StartTrip = () => {
 
   const startTrip = () => {
     dispatch(ActivateStartTrip());
-    dispatch(resetAll_Excerpt_startTripdata());
   };
+
   return (
     <View className="items-center mt-5">
       <Card className="pt-5">
@@ -85,10 +91,10 @@ const StartTrip = () => {
                 color: "#877A80",
               }}
             >
-              {riderdata?.data.staffName}
+              {holdriderdata?.data.staffName}
             </Text>
 
-            {riderdata?.data.company ? (
+            {holdriderdata?.data.company ? (
               <Text
                 style={{
                   fontSize: 13,
@@ -97,7 +103,7 @@ const StartTrip = () => {
                   // fontFamily: "Roboto-Regular",
                 }}
               >
-                {riderdata?.data.company}
+                {holdriderdata?.data.company}
               </Text>
             ) : (
               <Text

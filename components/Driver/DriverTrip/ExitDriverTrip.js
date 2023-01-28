@@ -5,14 +5,32 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "react-native-shadow-cards";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
-import { ExitTripFunc } from "../../../Slice/Driver/ExitTripSlice";
+
+import {
+  ExitTripFunc,
+  reset as ExitReset,
+} from "../../../Slice/Driver/ExitTripSlice";
+import LogoutComponent from "./LogoutComponent";
+import { resetholdriderdata } from "../../../Slice/Driver/HoldTripDataSlice";
+
+import { reset as AcceptReset } from "../../../Slice/Driver/DriverAcceptTripSlice";
+import {
+  CompleteDriverTripFunc,
+  reset as CompleteDriverReset,
+} from "../../../Slice/Driver/CompleteDriverTripSlice";
+import { resetALLStartTrip } from "../../../Slice/Driver/StartTripSlice";
 
 const ExitDriverTrip = () => {
   const dispatch = useDispatch();
+
+  const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
+  const { ExittripData, IsError, IsSucess, message, IsLoading } = useSelector(
+    (state) => state.ExitTripSlice
+  );
 
   const {
     startTripdata,
@@ -25,11 +43,8 @@ const ExitDriverTrip = () => {
   } = useSelector((state) => state.StartTripSlice);
   const call = () => {};
 
-  console.log(completedTripdata);
-
   let date_start = moment(startTimecurrentLocationData);
   let date_End = moment(EndTimeLastDestinationLocationData);
-
   let The_year_start = date_start.year();
   let The_day_start = date_start.format("dddd");
   let The_time_start = date_start.format("HH:mm:ss");
@@ -43,17 +58,23 @@ const ExitDriverTrip = () => {
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
 
   const onopentoexit = () => {
-    console.log("Working");
-    let data = {
-      destLat: 6.5491775,
-      destLong: 3.3661442,
-      srcLat: 6.5450711,
-      srcLong: 3.3664705,
-      tripAmt: "513.17",
-      trip_start_time: "2023-01-25T15:42:51.723Z",
-    };
-    dispatch(ExitTripFunc(data));
+    dispatch(
+      ExitTripFunc({
+        rider_id: holdriderdata?.data.id,
+      })
+    );
   };
+
+  useEffect(() => {
+    dispatch(resetholdriderdata());
+    dispatch(AcceptReset());
+    dispatch(ExitReset());
+    dispatch(CompleteDriverReset());
+    dispatch(resetALLStartTrip());
+
+    return () => {};
+  }, [ExittripData]);
+
   return (
     // {
     //     this.props.drivertrip.isEnded == true &&
@@ -125,7 +146,7 @@ const ExitDriverTrip = () => {
           >
             {/* {this.props.data.isFetching == false && ( */}
 
-            {!ExitTripIsloading && (
+            {!IsLoading && (
               <Text
                 style={{
                   alignSelf: "center",
@@ -138,13 +159,7 @@ const ExitDriverTrip = () => {
               </Text>
             )}
 
-            {/* )} */}
-            {/* {this.props.data.isFetching == true && ( */}
-
-            {ExitTripIsloading && (
-              <ActivityIndicator color="#fff" size="small" />
-            )}
-            {/* )} */}
+            {IsLoading && <ActivityIndicator color="#fff" size="small" />}
           </TouchableOpacity>
         </View>
       </View>

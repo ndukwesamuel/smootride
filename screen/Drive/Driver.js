@@ -91,11 +91,21 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
+  const { CompleteDriverTripData } = useSelector(
+    (state) => state.CompleteDriverTripSlice
+  );
+
+  console.log("Driver");
+
   const { startTripdata, completedTripdata } = useSelector(
     (state) => state.StartTripSlice
   );
 
-  console.log(completedTripdata + "sdsd");
+  const kk = useSelector((state) => state);
+
+  console.log(kk);
+
+  const { ExittripData } = useSelector((state) => state.ExitTripSlice);
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
@@ -106,13 +116,19 @@ const Driver = () => {
   );
 
   const { maplocationdata } = useSelector((state) => state.StartTripSlice);
+  const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
   };
 
-  console.log(AcceptTrip);
-  console.log(startTripdata);
+  const refresh = () => {
+    dispatch(
+      GetLastAssignTrip({
+        user_id: 1,
+      })
+    );
+  };
 
   useEffect(() => {
     dispatch(
@@ -124,7 +140,7 @@ const Driver = () => {
     return () => {
       // dispatch(reset());
     };
-  }, []);
+  }, [reload]);
 
   let dataforDriverRequest = {
     isrequesting: false,
@@ -154,9 +170,6 @@ const Driver = () => {
   };
 
   const rejectTrip = (tripID, TripReason) => {
-    console.log("this is rejectTrip");
-    console.log(tripID);
-    console.log(TripReason);
     let data = {
       reason: TripReason, // the two expected values are "reassign or decline"
       trip_id: tripID,
@@ -168,21 +181,6 @@ const Driver = () => {
   const acceptTrip = (tripdata) => {
     let dataID = tripdata.id;
     dispatch(AcceptTripFun({ trip_id: dataID }));
-  };
-
-  const Working = () => {
-    console.log("Working");
-
-    let data = {
-      destLat: 6.5491775,
-      destLong: 3.3661442,
-      srcLat: 6.5450711,
-      srcLong: 3.3664705,
-      tripAmt: "513.17",
-      trip_start_time: "2023-01-25T15:42:51.723Z",
-    };
-
-    dispatch(ExitTripFunc(data));
   };
 
   // useEffect(() => {
@@ -197,7 +195,7 @@ const Driver = () => {
   // );
 
   return (
-    <PTRView classname="flex-1 border-2 border-red-600">
+    <PTRView classname="flex-1 border-2 border-red-600" onRefresh={refresh}>
       <View classname="flex-1 bg-red-600 ">
         {/* {
                      this.props.drivertrip.IsjustSubmittedTrip == true &&
@@ -855,13 +853,22 @@ const Driver = () => {
           {/* {AcceptTrip?.success == true && riderdata?.data && ( */}
           {AcceptTrip?.success == true && (
             <View>
-              {!startTripdata && <StartTrip />}
+              {!startTripdata && !completedTripdata && <StartTrip />}
 
               {startTripdata && <DriverMap />}
 
               {!startTripdata && completedTripdata && <ExitDriverTrip />}
             </View>
           )}
+
+          {completedTripdata && (
+            <View>
+              <Text>sdklsdlk</Text>
+            </View>
+          )}
+
+          <View>{completedTripdata && <ExitDriverTrip />}</View>
+
           <View>
             {/* {
                (Object.keys(this.props.drivertrip.position).length > 0 || Object.keys(this.state.initialLocation).length > 0) &&
@@ -1168,394 +1175,253 @@ const Driver = () => {
               {/* surposet to be end */}
             </View>
 
-            {dataforDriverRequest.drivertrip.isEnded == true && (
-              <View style={{ padding: 10 }}>
-                <View style={{ marginTop: 0, borderRadius: 5 }}>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: "#fff",
-                      padding: 10,
-                      marginTop: 3,
-                    }}
-                  >
-                    <Text
-                      // onPress={this.call}
-
-                      style={{
-                        alignSelf: "center",
-                        color: "black",
-                        fontSize: 18,
-                      }}
-                    >
-                      Trip Summary
-                    </Text>
-                  </TouchableOpacity>
-
-                  <View style={{ backgroundColor: "#fff" }}>
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Start Time:{" "}
-                        <Text style={styles.time}>
-                          this.props.drivertrip.startTime.toString()
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Distant Covered:{" "}
-                        <Text style={styles.time}>
-                          this.props.drivertrip.distance_covered Meters
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        End Time:{" "}
-                        <Text style={styles.time}>
-                          this.props.drivertrip.endTime.toString()
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Cost of Trip (NGN):{" "}
-                        <Text style={styles.time}>
-                          {dataforDriverRequest.drivertrip.cost}
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Waited Time:{" "}
-                        <Text style={styles.time}>
-                          this.toHHMMSS(this.props.drivertrip.waitingTime)
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Cost of Waiting (NGN):{" "}
-                        <Text style={styles.time}>
-                          this.props.drivertrip.totalwaitingcost.toFixed(2).replace(/\d(?=(\d
-                          {3})+\.)/g, '$&,')
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <TouchableOpacity
-                      // onPress={this.onopentoexit}
-
-                      style={{
-                        backgroundColor: "#a31225",
-                        padding: 10,
-                        borderRadius: 5,
-                        marginTop: 20,
-                        marginBottom: 40,
-                      }}
-                    >
-                      {dataforDriverRequest.isFetching == false && (
+            {riderdata?.config &&
+              AcceptTrip == null &&
+              completedTripdata == null && (
+                <View style={{ alignItems: "center" }}>
+                  <Card style={styles.viewcard} classname="">
+                    <View>
+                      <View style={{ padding: 10 }}>
                         <Text
                           style={{
                             alignSelf: "center",
-                            color: "#fff",
-                            fontSize: 14,
-                            // fontFamily: "Roboto-Regular",
+                            marginTop: 10,
+                            fontSize: 15,
+                            color: "#007cc2",
                           }}
                         >
-                          Exit Trip with Rider
+                          Hi, {riderdata?.driverdetails.name}
                         </Text>
-                      )}
-                      {dataforDriverRequest.isFetching == true && (
-                        <ActivityIndicator color="#fff" size="small" />
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            )}
+                        <Text
+                          style={{
+                            alignSelf: "center",
+                            marginTop: 10,
+                            fontSize: 15,
+                            color: "#877A80",
+                          }}
+                        >
+                          You have a new Trip Request.
+                        </Text>
+                      </View>
 
-            {riderdata?.config && AcceptTrip == null && (
-              <View style={{ alignItems: "center" }}>
-                <Card style={styles.viewcard} classname="">
-                  <View>
-                    <View style={{ padding: 10 }}>
-                      <Text
-                        style={{
-                          alignSelf: "center",
-                          marginTop: 10,
-                          fontSize: 15,
-                          color: "#007cc2",
-                        }}
-                      >
-                        Hi, {riderdata?.driverdetails.name}
-                      </Text>
-                      <Text
-                        style={{
-                          alignSelf: "center",
-                          marginTop: 10,
-                          fontSize: 15,
-                          color: "#877A80",
-                        }}
-                      >
-                        You have a new Trip Request.
-                      </Text>
-                    </View>
+                      <Card className=" w-full">
+                        <View style={{ flexDirection: "row" }}>
+                          <View style={{ width: "22%" }}>
+                            {dataforDriverRequest.rider.rider_image != null && (
+                              <Image
+                                source={{
+                                  uri: `https://smoothride.ng/taxi/images/${this.props.rider.rider_image}`,
+                                }}
+                                style={{
+                                  width: 50,
+                                  height: 50,
+                                  borderRadius: 25,
+                                  alignSelf: "center",
+                                  margin: 5,
+                                }}
+                              />
+                            )}
+                            {dataforDriverRequest.rider.rider_image == null && (
+                              <Image
+                                source={driverIcon}
+                                style={{
+                                  width: 50,
+                                  height: 50,
+                                  borderRadius: 25,
+                                  alignSelf: "center",
+                                  margin: 5,
+                                }}
+                              />
+                            )}
+                          </View>
 
-                    <Card className=" w-full">
-                      <View style={{ flexDirection: "row" }}>
-                        <View style={{ width: "22%" }}>
-                          {dataforDriverRequest.rider.rider_image != null && (
-                            <Image
-                              source={{
-                                uri: `https://smoothride.ng/taxi/images/${this.props.rider.rider_image}`,
-                              }}
-                              style={{
-                                width: 50,
-                                height: 50,
-                                borderRadius: 25,
-                                alignSelf: "center",
-                                margin: 5,
-                              }}
-                            />
-                          )}
-                          {dataforDriverRequest.rider.rider_image == null && (
-                            <Image
-                              source={driverIcon}
-                              style={{
-                                width: 50,
-                                height: 50,
-                                borderRadius: 25,
-                                alignSelf: "center",
-                                margin: 5,
-                              }}
-                            />
-                          )}
-                        </View>
-
-                        <View style={{ width: "60%" }} className="">
-                          <Text
-                            style={{
-                              fontSize: 17,
-                              marginTop: 1,
-                              color: "#877A80",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {riderdata?.data.staffName}
-                          </Text>
-                          {riderdata?.data.company == null && (
+                          <View style={{ width: "60%" }} className="">
                             <Text
                               style={{
-                                fontSize: 16,
-                                fontWeight: "200",
+                                fontSize: 17,
+                                marginTop: 1,
                                 color: "#877A80",
-                                // fontFamily: "Roboto-Regular",
+                                fontWeight: "bold",
                               }}
                             >
-                              Unknown
+                              {riderdata?.data.staffName}
                             </Text>
-                          )}
-                          {riderdata?.data.company != null && (
-                            <Text
-                              style={{
-                                fontSize: 16,
-                                fontWeight: "800",
-                                color: "#007cc2",
-                                // fontFamily: "Roboto-Regular",
-                              }}
-                            >
-                              {riderdata?.data.company}
-                            </Text>
-                          )}
-                        </View>
+                            {riderdata?.data.company == null && (
+                              <Text
+                                style={{
+                                  fontSize: 16,
+                                  fontWeight: "200",
+                                  color: "#877A80",
+                                  // fontFamily: "Roboto-Regular",
+                                }}
+                              >
+                                Unknown
+                              </Text>
+                            )}
+                            {riderdata?.data.company != null && (
+                              <Text
+                                style={{
+                                  fontSize: 16,
+                                  fontWeight: "800",
+                                  color: "#007cc2",
+                                  // fontFamily: "Roboto-Regular",
+                                }}
+                              >
+                                {riderdata?.data.company}
+                              </Text>
+                            )}
+                          </View>
 
-                        <View style={{ width: "18%" }}>
-                          <View
-                            style={{
-                              borderColor: "#007cc2",
-                              borderWidth: 2,
-                              borderRadius: 17,
-                              width: 35,
-                              height: 35,
-                              marginTop: 10,
-                            }}
-                          >
-                            <Ionicons
-                              onPress={call}
-                              name="md-call"
-                              size={20}
+                          <View style={{ width: "18%" }}>
+                            <View
                               style={{
-                                color: "#007cc2",
-                                alignSelf: "center",
-                                marginTop: 5,
+                                borderColor: "#007cc2",
+                                borderWidth: 2,
+                                borderRadius: 17,
+                                width: 35,
+                                height: 35,
+                                marginTop: 10,
                               }}
-                            />
+                            >
+                              <Ionicons
+                                onPress={call}
+                                name="md-call"
+                                size={20}
+                                style={{
+                                  color: "#007cc2",
+                                  alignSelf: "center",
+                                  marginTop: 5,
+                                }}
+                              />
+                            </View>
                           </View>
                         </View>
-                      </View>
-                    </Card>
-                  </View>
+                      </Card>
+                    </View>
 
-                  <View>
-                    <View
-                      style={{ flexDirection: "row" }}
-                      className=" justify-between items-center"
-                    >
-                      <View style={{ width: "30%", justifyContent: "center" }}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            rejectTrip(riderdata.data.id, "decline")
-                          }
-                          style={{
-                            marginTop: 7,
-                            borderColor: "#a31225",
-                            borderWidth: 2,
-                            padding: 7,
-                            width: "100%",
-                            alignSelf: "center",
-                            borderRadius: 5,
-                          }}
+                    <View>
+                      <View
+                        style={{ flexDirection: "row" }}
+                        className=" justify-between items-center"
+                      >
+                        <View
+                          style={{ width: "30%", justifyContent: "center" }}
                         >
-                          <Text
-                            style={{
-                              alignSelf: "center",
-                              color: "#a31225",
-                              fontSize: 13,
-                              // fontFamily: "Roboto-Regular",
-                            }}
-                          >
-                            Reject
-                          </Text>
-                        </TouchableOpacity>
-
-                        {dataforDriverRequest.isrequesting == true && (
                           <TouchableOpacity
+                            onPress={() =>
+                              rejectTrip(riderdata.data.id, "decline")
+                            }
                             style={{
                               marginTop: 7,
-                              backgroundColor: "#a31225",
+                              borderColor: "#a31225",
+                              borderWidth: 2,
                               padding: 7,
                               width: "100%",
                               alignSelf: "center",
-                            }}
-                          >
-                            <ActivityIndicator color="#fff" size="small" />
-                          </TouchableOpacity>
-                        )}
-                      </View>
-
-                      <View style={{ width: "30%", justifyContent: "center" }}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            rejectTrip(riderdata.data.id, "reassign")
-                          }
-                          style={{
-                            marginTop: 7,
-                            borderColor: "green",
-                            borderWidth: 2,
-                            padding: 7,
-                            width: "100%",
-                            alignSelf: "center",
-                            borderRadius: 5,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              alignSelf: "center",
-                              color: "green",
-                              fontSize: 13,
-                              // fontFamily: "Roboto-Regular",
-                            }}
-                          >
-                            Reassign
-                          </Text>
-                        </TouchableOpacity>
-
-                        {dataforDriverRequest.isrequesting == true && (
-                          <TouchableOpacity
-                            style={{
-                              marginTop: 7,
-                              backgroundColor: "#a31225",
-                              padding: 7,
-                              width: "100%",
-                              alignSelf: "center",
-                            }}
-                          >
-                            <ActivityIndicator color="#fff" size="small" />
-                          </TouchableOpacity>
-                        )}
-                      </View>
-
-                      <View style={{ width: "30%" }}>
-                        <TouchableOpacity
-                          onPress={() => acceptTrip(riderdata.data)}
-                          style={{
-                            marginTop: 7,
-                            backgroundColor: "#005091",
-                            padding: 7,
-                            width: "100%",
-                            alignSelf: "center",
-                            borderRadius: 5,
-                          }}
-                        >
-                          <Text
-                            style={{
-                              alignSelf: "center",
-                              color: "#fff",
-                              fontSize: 13,
-                              // fontFamily: "Roboto-Regular",
                               borderRadius: 5,
                             }}
                           >
-                            Accept
-                          </Text>
-                        </TouchableOpacity>
+                            <Text
+                              style={{
+                                alignSelf: "center",
+                                color: "#a31225",
+                                fontSize: 13,
+                                // fontFamily: "Roboto-Regular",
+                              }}
+                            >
+                              Reject
+                            </Text>
+                          </TouchableOpacity>
+
+                          {dataforDriverRequest.isrequesting == true && (
+                            <TouchableOpacity
+                              style={{
+                                marginTop: 7,
+                                backgroundColor: "#a31225",
+                                padding: 7,
+                                width: "100%",
+                                alignSelf: "center",
+                              }}
+                            >
+                              <ActivityIndicator color="#fff" size="small" />
+                            </TouchableOpacity>
+                          )}
+                        </View>
+
+                        <View
+                          style={{ width: "30%", justifyContent: "center" }}
+                        >
+                          <TouchableOpacity
+                            onPress={() =>
+                              rejectTrip(riderdata.data.id, "reassign")
+                            }
+                            style={{
+                              marginTop: 7,
+                              borderColor: "green",
+                              borderWidth: 2,
+                              padding: 7,
+                              width: "100%",
+                              alignSelf: "center",
+                              borderRadius: 5,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                alignSelf: "center",
+                                color: "green",
+                                fontSize: 13,
+                                // fontFamily: "Roboto-Regular",
+                              }}
+                            >
+                              Reassign
+                            </Text>
+                          </TouchableOpacity>
+
+                          {dataforDriverRequest.isrequesting == true && (
+                            <TouchableOpacity
+                              style={{
+                                marginTop: 7,
+                                backgroundColor: "#a31225",
+                                padding: 7,
+                                width: "100%",
+                                alignSelf: "center",
+                              }}
+                            >
+                              <ActivityIndicator color="#fff" size="small" />
+                            </TouchableOpacity>
+                          )}
+                        </View>
+
+                        <View style={{ width: "30%" }}>
+                          <TouchableOpacity
+                            onPress={() => acceptTrip(riderdata.data)}
+                            style={{
+                              marginTop: 7,
+                              backgroundColor: "#005091",
+                              padding: 7,
+                              width: "100%",
+                              alignSelf: "center",
+                              borderRadius: 5,
+                            }}
+                          >
+                            <Text
+                              style={{
+                                alignSelf: "center",
+                                color: "#fff",
+                                fontSize: 13,
+                                // fontFamily: "Roboto-Regular",
+                                borderRadius: 5,
+                              }}
+                            >
+                              Accept
+                            </Text>
+                          </TouchableOpacity>
+                        </View>
                       </View>
                     </View>
-                  </View>
-                </Card>
-              </View>
-            )}
+                  </Card>
+                </View>
+              )}
           </View>
         </ScrollView>
       </View>

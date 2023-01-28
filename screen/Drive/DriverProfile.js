@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 
 import { persistStore } from "redux-persist";
 import { store } from "../../store";
+import LogoutComponent from "../../components/Driver/DriverTrip/LogoutComponent";
 
 const DriverProfile = () => {
   const navigation = useNavigation();
@@ -304,7 +305,7 @@ const DriverProfile = () => {
             </View>
           </View>
         )}
-
+        {/* 
         <TouchableOpacity
           style={{ flexDirection: "row", marginTop: 50 }}
           onPress={handleLogout}
@@ -315,7 +316,9 @@ const DriverProfile = () => {
           <View style={{ flexDirection: "row", width: "90%", marginTop: 30 }}>
             <Text style={{ fontSize: 12, width: "90%" }}>Log Out</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <LogoutComponent />
       </View>
     </ScrollView>
   );

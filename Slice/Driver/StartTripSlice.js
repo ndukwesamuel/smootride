@@ -64,7 +64,6 @@ export const {
   EndTimeLastDestinationLocationActivated,
   CompletedTripActivated,
   resetAll_Excerpt_startTripdata,
-
   resetALLStartTrip,
 } = StartTripSlice.actions;
 
