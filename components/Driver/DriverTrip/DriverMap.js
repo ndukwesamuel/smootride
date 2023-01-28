@@ -60,7 +60,6 @@ const DriverMap = () => {
     setMaplocation(false);
     dispatch(MapLocationActivated(maplocation));
     dispatch(CurrentLocationActivated(currentLocation));
-
     dispatch(StartTimeCurrentLocationActivated(startTime));
   };
 

@@ -50,6 +50,12 @@ const EndTripButtton = () => {
   const [isConnected, setIsConnected] = useState(true);
   const [isInternetReachable, setIsInternetReachable] = useState(true);
 
+  const { CompleteDriverTripData } = useSelector(
+    (state) => state.CompleteDriverTripSlice
+  );
+
+  console.log("dsd");
+
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsConnected(state.isConnected);
@@ -59,7 +65,6 @@ const EndTripButtton = () => {
   }, []);
 
   const stopTrip = async () => {
-    setEndingTrip(true);
     NetworkState();
 
     let { status } = await Location.requestForegroundPermissionsAsync();
@@ -67,23 +72,22 @@ const EndTripButtton = () => {
       setErrorMsg("Permission to access location was denied");
     }
     let destination = await Location.getCurrentPositionAsync({});
-    let EndTime = await new Date().toISOString();
+    let EndTime = new Date().toISOString();
 
-    setDestination(destination);
-    dispatch(LastDestinationLocationActivated(destination));
-    dispatch(EndTimeLastDestinationLocationActivated(EndTime));
+    console.log("skjdskdj");
+    console.log(destination);
 
     if (
       currentLocationData &&
-      LastDestinationLocationData &&
+      destination &&
       startTimecurrentLocationData &&
-      EndTimeLastDestinationLocationData
+      EndTime
     ) {
       let start_lat = currentLocationData.coords.latitude;
       let start_log = currentLocationData.coords.longitude;
 
-      let end_lat = LastDestinationLocationData.coords.latitude;
-      let end_log = LastDestinationLocationData.coords.longitude;
+      let end_lat = destination.coords.latitude;
+      let end_log = destination.coords.longitude;
 
       const startCoords = { latitude: start_lat, longitude: start_log };
       const endCoords = { latitude: end_lat, longitude: end_log };
@@ -114,8 +118,6 @@ const EndTripButtton = () => {
       // console.log(totlaCost);
       // console.log(unformattedcost);
 
-      dispatch(resetAll_Excerpt_startTripdata());
-
       let data = {
         srcLat: start_lat,
         srcLong: start_log,
@@ -124,14 +126,10 @@ const EndTripButtton = () => {
         trip_start_time: startTimecurrentLocationData,
         tripAmt: totlaCost,
       };
-
-      // console.log(data);
-
+      console.log(data);
       dispatch(CompleteDriverTripFunc(data));
-
-      // dispatch(CompletedTripActivated(data));
-      // dispatch(ActivateStartTrip());
-      // setEndingTrip(false);
+      dispatch(CompletedTripActivated(data));
+      dispatch(ActivateStartTrip());
     }
   };
 
