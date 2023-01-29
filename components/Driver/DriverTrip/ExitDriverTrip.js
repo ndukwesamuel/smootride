@@ -1,5 +1,6 @@
 import {
   ActivityIndicator,
+  Alert,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -22,8 +23,22 @@ import {
   CompleteDriverTripFunc,
   reset as CompleteDriverReset,
 } from "../../../Slice/Driver/CompleteDriverTripSlice";
-import { resetALLStartTrip } from "../../../Slice/Driver/StartTripSlice";
 
+import { reset as resetGetLastAssignTripSlice } from "../../../Slice/Driver/GetLastAssignTripSlice";
+
+import { reset as resetGetAllDriverTripsSlice } from "../../../Slice/Driver/GetAllDriverTripsSlice";
+import { reset as resetUpdateDriverStatusSlice } from "../../../Slice/Driver/UpdateDriverStatusSlice";
+import {
+  resetALLStartTrip,
+  resetAll_Excerpt_startTripdata,
+} from "../../../Slice/Driver/StartTripSlice";
+
+import { reset as resetGetrider } from "../../../Slice/auth/Getrider";
+
+import { reset as resetExitTripSlice } from "../../../Slice/Driver/ExitTripSlice";
+
+import { reset as resetRejectTripSlice } from "../../../Slice/Driver/RejectTripSlice";
+import { reset as resetCompleteDriverTripSlice } from "../../../Slice/Driver/CompleteDriverTripSlice";
 const ExitDriverTrip = () => {
   const dispatch = useDispatch();
 
@@ -57,10 +72,8 @@ const ExitDriverTrip = () => {
 
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
 
-  console.log({ name: ExittripData });
-  const UUUU = useSelector((state) => state.StartTripSlice);
-
-  console.log(UUUU);
+  console.log({ name: completedTripdata });
+  // console.log({ name1: ExittripData.success });
 
   const onopentoexit = () => {
     dispatch(
@@ -70,35 +83,67 @@ const ExitDriverTrip = () => {
     );
   };
 
-  useEffect(() => {
-    console.log("table3");
+  if (ExittripData?.success) {
+    Alert.alert("Alert", `Congrat Trip Done and Exited`, [{ text: "OK" }], {
+      cancelable: false,
+    });
 
-    dispatch(CompleteDriverReset());
-    dispatch(AcceptReset());
-    dispatch(ExitReset());
-    dispatch(resetholdriderdata());
+    dispatch(resetGetLastAssignTripSlice());
+    dispatch(resetRejectTripSlice());
+    dispatch(resetCompleteDriverTripSlice());
+    dispatch(resetExitTripSlice());
+    dispatch(resetGetrider());
+    dispatch(resetAll_Excerpt_startTripdata());
     dispatch(resetALLStartTrip());
-
-    return () => {};
-  }, [ExittripData]);
-
+    dispatch(resetUpdateDriverStatusSlice());
+    dispatch(resetGetAllDriverTripsSlice());
+    dispatch(AcceptReset());
+    dispatch(resetholdriderdata());
+    dispatch(resetholdriderdata());
+    dispatch(resetUpdateDriverStatusSlice());
+    dispatch(resetAll_Excerpt_startTripdata());
+  } else {
+    Alert.alert("Alert", `Somthing went Wrong`, [{ text: "OK" }], {
+      cancelable: false,
+    });
+  }
   // useEffect(() => {
+  //   console.log("table3");
+
+  // dispatch(resetGetLastAssignTripSlice());
+  // dispatch(resetRejectTripSlice());
+  // dispatch(resetCompleteDriverTripSlice());
+  // dispatch(resetExitTripSlice());
+  // dispatch(resetGetrider());
+  // dispatch(resetPassowrdReset());
+  // dispatch(resetAll_Excerpt_startTripdata());
+  // dispatch(resetALLStartTrip());
+  // dispatch(resetUpdateDriverStatusSlice());
+  // dispatch(resetGetAllDriverTripsSlice());
+  // dispatch(AcceptReset());
+  // dispatch(resetholdriderdata());
+  //   dispatch(resetholdriderdata());
+  //   dispatch(resetUpdateDriverStatusSlice());
+  //   dispatch(resetAll_Excerpt_startTripdata());
+
+  // dispatch(resetGetAllDriverTripsSlice())
+
   //   dispatch(CompleteDriverReset());
   //   dispatch(AcceptReset());
   //   dispatch(ExitReset());
   //   dispatch(resetholdriderdata());
-  //   dispatch(resetALLStartTrip());
+  //   dispatch(resetAll_Excerpt_startTripdata());
 
   //   return () => {};
   // }, [ExittripData]);
 
-  return (
-    <View>
-      <Card>
-        <Text>The Trip is Completed</Text>
-      </Card>
-    </View>
-  );
+  // return (
+  //   <View>
+  //     <Card>
+  //       <Text>The Trip is Completed</Text>
+  //     </Card>
+  //   </View>
+  // );
 
   return (
     // {

@@ -69,9 +69,7 @@ const tripissues = [
 
 const Driver = () => {
   const dispatch = useDispatch();
-
   const navigation = useNavigation();
-
   const [isConnected, setIsConnected] = useState(true);
   const [isInternetReachable, setIsInternetReachable] = useState(true);
 
@@ -104,6 +102,8 @@ const Driver = () => {
 
   console.log("Driver");
 
+  console.log(CompleteDriverTripData);
+
   const { startTripdata, completedTripdata } = useSelector(
     (state) => state.StartTripSlice
   );
@@ -120,6 +120,8 @@ const Driver = () => {
 
   const { maplocationdata } = useSelector((state) => state.StartTripSlice);
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
+
+  console.log(completedTripdata);
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
@@ -764,7 +766,11 @@ const Driver = () => {
             </View>
           )}
 
-          {/* <View>{CompleteDriverTripData && <ExitDriverTrip />}</View> */}
+          {completedTripdata && (
+            <View>
+              <ExitDriverTrip />
+            </View>
+          )}
 
           <View>
             {/* {
@@ -788,7 +794,7 @@ const Driver = () => {
            } */}
             {/* this component is for driver moving  */}
 
-            {riderdata == null && (
+            {riderdata == null && !completedTripdata && (
               <Card style={{ padding: 10, margin: 10 }}>
                 <ActivityIndicator size="large" color="#005091" />
               </Card>

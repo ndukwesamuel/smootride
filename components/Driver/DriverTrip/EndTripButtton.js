@@ -168,14 +168,12 @@ const EndTripButtton = () => {
     );
 
     console.log("test2");
-    navigation.navigate("exitdriver");
   } else if (CompleteDriverTripData?.success == true) {
     Alert.alert("Alert", `This is Great`, [{ text: "OK" }], {
       cancelable: false,
     });
 
     console.log("test");
-    navigation.navigate("exitdriver");
   } else {
     console.log({ rrrh: CompleteDriverTripData });
     console.log({ hhhh: completedTripdata });
