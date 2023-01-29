@@ -4,6 +4,7 @@ import {
   Dimensions,
   Image,
   KeyboardAvoidingView,
+  Linking,
   Modal,
   ScrollView,
   StyleSheet,
@@ -102,7 +103,7 @@ const Driver = () => {
 
   console.log("Driver");
 
-  console.log(CompleteDriverTripData);
+  console.log({ complet: CompleteDriverTripData });
 
   const { startTripdata, completedTripdata } = useSelector(
     (state) => state.StartTripSlice
@@ -170,8 +171,16 @@ const Driver = () => {
     },
   };
 
-  const call = () => {
+  const call = (data) => {
     console.log("this is f");
+
+    let phoneNumber = "";
+    if (Platform.OS === "android") {
+      phoneNumber = `tel:${data}`;
+    } else {
+      phoneNumber = `telprompt:${data}`;
+    }
+    Linking.openURL(phoneNumber);
   };
 
   const rejectTrip = (tripID, TripReason) => {
@@ -1187,7 +1196,7 @@ const Driver = () => {
                             }}
                           >
                             <Ionicons
-                              onPress={call}
+                              onPress={() => call(riderdata?.data.phone)}
                               name="md-call"
                               size={20}
                               style={{
