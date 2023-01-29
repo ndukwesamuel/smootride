@@ -18,6 +18,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import DriverTabNavigation from "./screen/Drive/DriverTabNavigation";
 import { PersistGate } from "redux-persist/integration/react";
 import RiderPaths from "./screen/rider/RiderPath";
+import ExitDriverScreen from "./screen/Drive/ExitDriverScreen";
 // import messaging from '@react-native-firebase/messaging';
 // import messaging from "@react-native-firebase/messaging";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -149,6 +150,14 @@ export default function App() {
             <Stack.Screen
               name="tripmap"
               component={Tripmap}
+              options={{
+                headerShown: false,
+              }}
+            />
+
+            <Stack.Screen
+              name="exitdriver"
+              component={ExitDriverScreen}
               options={{
                 headerShown: false,
               }}
