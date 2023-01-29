@@ -68,6 +68,16 @@ const RiderRequest = () => {
     }
     getPermissions();
   }, []);
+
+  useEffect(()=>{
+    const init =async ()=>{
+      const userdet = {
+        "user_id": user_id
+      }
+    await dispatch(AssignedDriver(userdet))
+  }
+  init()
+  }, [])
   
   
   // console.log("username shown ", username)
@@ -82,6 +92,8 @@ const RiderRequest = () => {
     latitudeDelta: LATITUDE_DELTA,
     longitudeDelta: LONGITUDE_DELTA,
   };
+  
+  const requeststat = useSelector((state) => state.RequestRideSlice?.isRequest);
 
   const handleAccept= ()=>{
     setAccepted(false)
@@ -89,6 +101,7 @@ const RiderRequest = () => {
 
   const cancelRequest =async ()=>{
     await dispatch(CancelRequest())
+    await dispatch(GetRider())
     setClosedTrip(!closedTrip)
   }
 
@@ -112,6 +125,7 @@ const RiderRequest = () => {
     setLoading(true);
     await dispatch(RequestRide(userdata));
     if(requeststat == true){
+      console.log("it works")
     await dispatch(AssignedDriver(userdet))
     }
     setLoading(false);
@@ -124,6 +138,18 @@ const RiderRequest = () => {
   }
   };
 
+  useEffect(()=>{
+    const init =async ()=>{
+      const userdet = {
+        "user_id": user_id
+      }
+      if(requeststat == true){
+    await dispatch(AssignedDriver(userdet))
+    }
+  }
+  init()
+  }, [requeststat])
+
   const onCall = () => {
     let phoneNumber = '';
     if (Platform.OS === 'android') {
@@ -134,14 +160,25 @@ const RiderRequest = () => {
       }
       Linking.openURL(phoneNumber);
 }
+
+const onLogCall = () => {
+  let phoneNumber = '';
+  if (Platform.OS === 'android') {
+      phoneNumber = `tel:${onLoaddata?.driverdetails?.phone}`;
+    }
+    else {
+      phoneNumber = `telprompt:${onLoaddata?.driverdetails?.phone}`;
+    }
+    Linking.openURL(phoneNumber);
+}
   const handleModal = () => setIsModalVisible(!isModalVisible);
   useEffect(() => {
     dispatch(GetRider());
   }, []);
   const knowdata = useSelector((state) => state.GetRiderSlice?.data?.drivers);
-  const requeststat = useSelector((state) => state.RequestRideSlice?.isRequest);
   const assignedDet = useSelector((state) => state.RequestRideSlice?.assignedDriver);
-  // console.log("assignedDet status ", assignedDet)
+  const onLoaddata = useSelector((state) => state.RequestRideSlice?.assignedDriver);
+  // console.log("onLoaddata status ", requeststat)
   const username= useSelector((state)=> state.LoginSlice?.data?.user?.name)
   const number = knowdata?.length;
 
@@ -236,8 +273,8 @@ const RiderRequest = () => {
                                         />
                                     </View>
                                     <View style = {{width:'60%',marginLeft:5}}>
-                                        <Text style={{fontSize:14,marginTop:1,color:'#877A80',fontWeight:'500'}}>{assignedDet?.driverdetails?.driverName}</Text>
-                                        <Text style={{fontSize:16,fontWeight:'200',color:'#877A80',fontWeight:'500'}}> Unknown </Text>
+                                        <Text style={{fontSize:14,marginTop:1,color:'#877A80',fontWeight:'500'}}>{assignedDet?.driverdetails?.driverName} </Text>
+                                        <Text style={{fontSize:16,fontWeight:'200',color:'#877A80',fontWeight:'500'}}> Unknown  </Text>
                                         {/* {
                                             this.props.driver.company_name == null &&
                                             <Text style={{fontSize:16,fontWeight:'200',color:'#877A80',fontFamily: "Roboto-Regular"}}> Unknown </Text>
