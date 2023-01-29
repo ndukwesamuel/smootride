@@ -57,6 +57,11 @@ const ExitDriverTrip = () => {
 
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
 
+  console.log({ name: ExittripData });
+  const UUUU = useSelector((state) => state.StartTripSlice);
+
+  console.log(UUUU);
+
   const onopentoexit = () => {
     dispatch(
       ExitTripFunc({
@@ -66,14 +71,34 @@ const ExitDriverTrip = () => {
   };
 
   useEffect(() => {
-    dispatch(resetholdriderdata());
+    console.log("table3");
+
+    dispatch(CompleteDriverReset());
     dispatch(AcceptReset());
     dispatch(ExitReset());
-    dispatch(CompleteDriverReset());
+    dispatch(resetholdriderdata());
     dispatch(resetALLStartTrip());
 
     return () => {};
   }, [ExittripData]);
+
+  // useEffect(() => {
+  //   dispatch(CompleteDriverReset());
+  //   dispatch(AcceptReset());
+  //   dispatch(ExitReset());
+  //   dispatch(resetholdriderdata());
+  //   dispatch(resetALLStartTrip());
+
+  //   return () => {};
+  // }, [ExittripData]);
+
+  return (
+    <View>
+      <Card>
+        <Text>The Trip is Completed</Text>
+      </Card>
+    </View>
+  );
 
   return (
     // {

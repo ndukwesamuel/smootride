@@ -10,7 +10,7 @@ const initialState = {
   IsError: false,
   IsSucess: false,
   message: "",
-  IsLoading: "",
+  IsLoading: false,
 };
 
 const ExitTripService = async (ExitData, tokengot) => {
@@ -25,10 +25,10 @@ const ExitTripService = async (ExitData, tokengot) => {
 
     console.log(url);
     const response = await axios.post(url, ExitData, config);
-    console.log(response.data);
+    console.log({ goal: response.data });
     return response.data;
   } catch (error) {
-    console.log(error);
+    console.log({ error: error });
   }
 };
 
@@ -36,10 +36,7 @@ export const ExitTripFunc = createAsyncThunk(
   "ExitTrip/data",
   async (Exitid, thunkAPI) => {
     try {
-      console.log("sdsd");
-
       console.log(Exitid);
-
       const tokengot = await AsyncStorage.getItem("token");
       return await ExitTripService(Exitid, tokengot);
     } catch (error) {
