@@ -26,10 +26,13 @@ import {
   StartTimeCurrentLocationActivated,
 } from "../../../Slice/Driver/StartTripSlice";
 import { CompleteDriverTripFunc } from "../../../Slice/Driver/CompleteDriverTripSlice";
+import { useNavigation } from "@react-navigation/native";
+
+import { reset as resetGetLastAssignTripSlice } from "../../../Slice/Driver/GetLastAssignTripSlice";
 
 const EndTripButtton = () => {
   const dispatch = useDispatch();
-
+  const navigation = useNavigation();
   const [EndingTrip, setEndingTrip] = useState(false);
 
   const {
@@ -38,23 +41,25 @@ const EndTripButtton = () => {
     EndTimeLastDestinationLocationData,
     LastDestinationLocationData,
     startTripdata,
+    completedTripdata,
+    maplocationdata,
   } = useSelector((state) => state.StartTripSlice);
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
   const [startlocation, setStartlocation] = useState(null);
   const [destination, setDestination] = useState(null);
-  const { maplocationdata, completedTripdata } = useSelector(
-    (state) => state.StartTripSlice
-  );
+
   const [isConnected, setIsConnected] = useState(true);
   const [isInternetReachable, setIsInternetReachable] = useState(true);
 
-  const { CompleteDriverTripData } = useSelector(
+  const { CompleteDriverTripData, IsLoading } = useSelector(
     (state) => state.CompleteDriverTripSlice
   );
 
   console.log("dsd");
+  console.log({ hhhh: completedTripdata });
+  console.log({ hhhh: completedTripdata });
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -73,9 +78,6 @@ const EndTripButtton = () => {
     }
     let destination = await Location.getCurrentPositionAsync({});
     let EndTime = new Date().toISOString();
-
-    console.log("skjdskdj");
-    console.log(destination);
 
     if (
       currentLocationData &&
@@ -127,9 +129,10 @@ const EndTripButtton = () => {
         tripAmt: totlaCost,
       };
       console.log(data);
-      dispatch(CompleteDriverTripFunc(data));
       dispatch(CompletedTripActivated(data));
+      dispatch(CompleteDriverTripFunc(data));
       dispatch(ActivateStartTrip());
+      dispatch(resetGetLastAssignTripSlice());
     }
   };
 
@@ -151,9 +154,32 @@ const EndTripButtton = () => {
     }
   };
 
-  // const stopTrip = () => {
-  //   NetworkState();
-  // };
+  if (
+    CompleteDriverTripData?.message ==
+    "Trip could not be updated and is flagged"
+  ) {
+    Alert.alert(
+      "Alert",
+      `${CompleteDriverTripData?.message}`,
+      [{ text: "OK" }],
+      {
+        cancelable: false,
+      }
+    );
+
+    console.log("test2");
+    navigation.navigate("exitdriver");
+  } else if (CompleteDriverTripData?.success == true) {
+    Alert.alert("Alert", `This is Great`, [{ text: "OK" }], {
+      cancelable: false,
+    });
+
+    console.log("test");
+    navigation.navigate("exitdriver");
+  } else {
+    console.log({ rrrh: CompleteDriverTripData });
+    console.log({ hhhh: completedTripdata });
+  }
 
   return (
     <View className="">
@@ -162,7 +188,7 @@ const EndTripButtton = () => {
           onPress={stopTrip}
           style={{ backgroundColor: "#a31225", padding: 10 }}
         >
-          {EndingTrip && (
+          {IsLoading && (
             <TouchableOpacity
               style={{ backgroundColor: "#a31225", padding: 10 }}
             >
@@ -170,7 +196,9 @@ const EndTripButtton = () => {
             </TouchableOpacity>
           )}
 
-          {!EndingTrip && (
+          {/* CompleteDriverTripData */}
+
+          {!IsLoading && (
             <Text
               style={{
                 alignSelf: "center",

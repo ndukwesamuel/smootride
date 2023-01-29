@@ -11,7 +11,7 @@ const initialState = {
   AcceptTrip: null,
   IsSucess: false,
   message: "",
-  IsLoading: "",
+  IsLoading: false,
 };
 
 const AcceptTripScrvice = async (AcceptData, tokengot) => {
