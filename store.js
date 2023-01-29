@@ -43,9 +43,11 @@ import DriverAcceptTripSlice from "./Slice/Driver/DriverAcceptTripSlice";
 
 import StartTripSlice from "./Slice/Driver/StartTripSlice";
 
-import ExitTripSlic from "./Slice/Driver/ExitTripSlice";
+import ExitTripSlice from "./Slice/Driver/ExitTripSlice";
 
 import CompleteDriverTripSlice from "./Slice/Driver/CompleteDriverTripSlice";
+
+import HoldTripDataSlice from "./Slice/Driver/HoldTripDataSlice";
 
 const reducers = combineReducers({
   nav: navReducer,
@@ -58,21 +60,16 @@ const reducers = combineReducers({
   GetLastAssignTripSlice: GetLastAssignTripSlice,
   RejectTripSlice: RejectTripSlice,
   DriverAcceptTripSlice: DriverAcceptTripSlice,
-
   StartTripSlice: StartTripSlice,
-
-  ExitTripSlic: ExitTripSlic,
+  ExitTripSlice: ExitTripSlice,
   CompleteDriverTripSlice: CompleteDriverTripSlice,
+  HoldTripDataSlice: HoldTripDataSlice,
 });
 
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: [
-    "GetLastAssignTripSlice",
-    "RejectTripSlice",
-    "CompleteDriverTripSlice",
-  ],
+  blacklist: ["RejectTripSlice"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

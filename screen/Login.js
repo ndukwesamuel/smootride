@@ -67,98 +67,98 @@ const Login = () => {
   };
 
   return (
-      <KeyboardAvoidingView>
-        <ImageBackground
-          source={require("../assets/images/Smot.jpg")}
-          style={{ width: "100%", height: "100%" }}
+    <KeyboardAvoidingView>
+      <ImageBackground
+        source={require("../assets/images/Smot.jpg")}
+        style={{ width: "100%", height: "100%" }}
+      >
+        <KeyboardAvoidingView
+          behavior="padding"
+          style={{ flex: 1, justifyContent: "center" }}
         >
-          <KeyboardAvoidingView
-            behavior="padding"
-            style={{ flex: 1, justifyContent: "center" }}
-          >
-            <View style={styles.container}>
-              <View style={{ padding: 10 }}>
-                <Image
-                  style={{ width: 100, height: 80, alignSelf: "center" }}
-                  source={require("../assets/images/smoothride.png")}
-                />
-              </View>
+          <View style={styles.container}>
+            <View style={{ padding: 10 }}>
+              <Image
+                style={{ width: 100, height: 80, alignSelf: "center" }}
+                source={require("../assets/images/smoothride.png")}
+              />
+            </View>
 
-              <View>
-                <Text
-                  style={{
-                    fontSize: 20,
-                    alignSelf: "center",
-                    padding: 7,
-                    color: "#fff",
-                    fontWeight: "800",
-                  }}
-                >
-                  LOGIN
-                </Text>
-              </View>
+            <View>
+              <Text
+                style={{
+                  fontSize: 20,
+                  alignSelf: "center",
+                  padding: 7,
+                  color: "#fff",
+                  fontWeight: "800",
+                }}
+              >
+                LOGIN
+              </Text>
+            </View>
 
-              <View>
-                <TextInput
-                  onChangeText={(text) => setEmail(text)}
-                  value={email}
-                  placeholder="Email"
-                  placeholderTextColor="#fff"
-                  style={{
-                    paddingStart: 20,
-                    color: "#fff",
-                    borderColor: "#fff",
-                    borderWidth: 1,
-                    height: 45,
-                    borderRadius: 30,
-                    fontSize: 14,
-                    // fontFamily: "Roboto-Regular",
-                  }}
-                />
+            <View>
+              <TextInput
+                onChangeText={(text) => setEmail(text)}
+                value={email}
+                placeholder="Email"
+                placeholderTextColor="#fff"
+                style={{
+                  paddingStart: 20,
+                  color: "#fff",
+                  borderColor: "#fff",
+                  borderWidth: 1,
+                  height: 45,
+                  borderRadius: 30,
+                  fontSize: 14,
+                  // fontFamily: "Roboto-Regular",
+                }}
+              />
 
-                <TextInput
-                  value={password}
-                  onChangeText={(text) => setPassword(text)}
-                  placeholder="Password"
-                  secureTextEntry={true}
-                  placeholderTextColor="#fff"
-                  style={{
-                    paddingStart: 20,
-                    color: "#fff",
-                    height: 45,
-                    borderColor: "#fff",
-                    marginTop: 20,
-                    fontSize: 14,
-                    borderRadius: 30,
-                    borderWidth: 1,
-                    // fontFamily: "Roboto-Regular",
-                  }}
-                />
-              </View>
+              <TextInput
+                value={password}
+                onChangeText={(text) => setPassword(text)}
+                placeholder="Password"
+                secureTextEntry={true}
+                placeholderTextColor="#fff"
+                style={{
+                  paddingStart: 20,
+                  color: "#fff",
+                  height: 45,
+                  borderColor: "#fff",
+                  marginTop: 20,
+                  fontSize: 14,
+                  borderRadius: 30,
+                  borderWidth: 1,
+                  // fontFamily: "Roboto-Regular",
+                }}
+              />
+            </View>
 
-              <TouchableOpacity onPress={handleLogin}>
-                <View
-                  style={{
-                    marginTop: 40,
-                    backgroundColor: "#a31225",
-                    borderRadius: 30,
-                    padding: 7,
-                  }}
-                >
-                  {isLoading ? (
-                    <ActivityIndicator animating={true} color="white" />
-                  ) : (
-                    <Text
-                      style={{
-                        alignSelf: "center",
-                        color: "#fff",
-                        fontSize: 17,
-                      }}
-                    >
-                      LOGIN
-                    </Text>
-                  )}
-                  {/* <Button
+            <TouchableOpacity onPress={handleLogin}>
+              <View
+                style={{
+                  marginTop: 40,
+                  backgroundColor: "#a31225",
+                  borderRadius: 30,
+                  padding: 7,
+                }}
+              >
+                {isLoading ? (
+                  <ActivityIndicator animating={true} color="white" />
+                ) : (
+                  <Text
+                    style={{
+                      alignSelf: "center",
+                      color: "#fff",
+                      fontSize: 17,
+                    }}
+                  >
+                    LOGIN
+                  </Text>
+                )}
+                {/* <Button
                   onPress={() => {
                     navigation.navigate("Tripmap");
                   }}
@@ -166,30 +166,30 @@ const Login = () => {
                   color="#841584"
                   accessibilityLabel="Learn more about this purple button"
                 /> */}
-                </View>
-              </TouchableOpacity>
-
-              <View>
-                <Text
-                  onPress={() => {
-                    navigation.navigate("forgetpassword");
-                  }}
-                  style={{
-                    fontSize: 15,
-                    alignSelf: "center",
-                    padding: 7,
-                    color: "#fff",
-                    fontWeight: "800",
-                    marginTop: 15,
-                  }}
-                >
-                  Forget PASSWORD?
-                </Text>
               </View>
+            </TouchableOpacity>
+
+            <View>
+              <Text
+                onPress={() => {
+                  navigation.navigate("forgetpassword");
+                }}
+                style={{
+                  fontSize: 15,
+                  alignSelf: "center",
+                  padding: 7,
+                  color: "#fff",
+                  fontWeight: "800",
+                  marginTop: 15,
+                }}
+              >
+                Forget PASSWORD?
+              </Text>
             </View>
-          </KeyboardAvoidingView>
-        </ImageBackground>
-      </KeyboardAvoidingView>
+          </View>
+        </KeyboardAvoidingView>
+      </ImageBackground>
+    </KeyboardAvoidingView>
   );
 };
 

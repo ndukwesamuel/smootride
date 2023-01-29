@@ -42,6 +42,7 @@ import EndTripButtton from "../../components/Driver/DriverTrip/EndTripButtton";
 import ExitDriverTrip from "../../components/Driver/DriverTrip/ExitDriverTrip";
 import { ExitTripFunc } from "../../Slice/Driver/ExitTripSlice";
 import { resetALLStartTrip } from "../../Slice/Driver/StartTripSlice";
+import { useNavigation } from "@react-navigation/native";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -69,6 +70,8 @@ const tripissues = [
 const Driver = () => {
   const dispatch = useDispatch();
 
+  const navigation = useNavigation();
+
   const [isConnected, setIsConnected] = useState(true);
   const [isInternetReachable, setIsInternetReachable] = useState(true);
 
@@ -91,11 +94,21 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
+  const { rejectData, isLoading: rejectisLoading } = useSelector(
+    (state) => state.RejectTripSlice
+  );
+
+  const { CompleteDriverTripData } = useSelector(
+    (state) => state.CompleteDriverTripSlice
+  );
+
+  console.log("Driver");
+
   const { startTripdata, completedTripdata } = useSelector(
     (state) => state.StartTripSlice
   );
 
-  console.log(completedTripdata + "sdsd");
+  const { ExittripData } = useSelector((state) => state.ExitTripSlice);
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
@@ -106,13 +119,19 @@ const Driver = () => {
   );
 
   const { maplocationdata } = useSelector((state) => state.StartTripSlice);
+  const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
   };
 
-  console.log(AcceptTrip);
-  console.log(startTripdata);
+  const refresh = () => {
+    dispatch(
+      GetLastAssignTrip({
+        user_id: 1,
+      })
+    );
+  };
 
   useEffect(() => {
     dispatch(
@@ -124,7 +143,7 @@ const Driver = () => {
     return () => {
       // dispatch(reset());
     };
-  }, []);
+  }, [reload]);
 
   let dataforDriverRequest = {
     isrequesting: false,
@@ -154,9 +173,6 @@ const Driver = () => {
   };
 
   const rejectTrip = (tripID, TripReason) => {
-    console.log("this is rejectTrip");
-    console.log(tripID);
-    console.log(TripReason);
     let data = {
       reason: TripReason, // the two expected values are "reassign or decline"
       trip_id: tripID,
@@ -170,34 +186,8 @@ const Driver = () => {
     dispatch(AcceptTripFun({ trip_id: dataID }));
   };
 
-  const Working = () => {
-    console.log("Working");
-
-    let data = {
-      destLat: 6.5491775,
-      destLong: 3.3661442,
-      srcLat: 6.5450711,
-      srcLong: 3.3664705,
-      tripAmt: "513.17",
-      trip_start_time: "2023-01-25T15:42:51.723Z",
-    };
-
-    dispatch(ExitTripFunc(data));
-  };
-
-  // useEffect(() => {
-  //   dispatch(resetALLStartTrip());
-  //   return () => {};
-  // }, []);
-
-  // return (
-  //   <View>
-  //     <Text> Sam</Text>
-  //   </View>
-  // );
-
   return (
-    <PTRView classname="flex-1 border-2 border-red-600">
+    <PTRView classname="flex-1 border-2 border-red-600" onRefresh={refresh}>
       <View classname="flex-1 bg-red-600 ">
         {/* {
                      this.props.drivertrip.IsjustSubmittedTrip == true &&
@@ -237,95 +227,6 @@ const Driver = () => {
             data1={driver_request_Status}
             data2={setDriver_request_Status}
           />
-
-          <Modal
-            visible={false}
-            // isVisible={this.state.costAvailable  }
-          >
-            <View
-              style={{
-                backgroundColor: "#fff",
-                width: "98%",
-                height: "auto",
-                padding: 15,
-                paddingTop: 5,
-                marginRight: 0,
-                alignSelf: "center",
-                borderWidth: 3,
-                borderColor: "red",
-              }}
-            >
-              <Image
-                source={require("../../assets/images/request.png")}
-                style={{
-                  width: 40,
-                  height: 40,
-                  alignSelf: "center",
-                  marginTop: 20,
-                  marginBottom: 15,
-                }}
-              />
-
-              <Text
-                style={{
-                  color: "#000",
-                  fontSize: 15,
-                  // fontFamily: "Roboto-Bold",
-                  textAlign: "center",
-                }}
-              >
-                Trip Information
-              </Text>
-
-              <Text
-                style={{
-                  color: "#000",
-                  alignSelf: "center",
-                  fontSize: 13,
-                  padding: 12,
-                  marginRight: 5,
-                  // fontFamily: "Roboto-Regular",
-                }}
-              >
-                {/* {this.state.TripInfo} */}
-                TripInfo
-              </Text>
-
-              <View
-                style={{
-                  padding: 10,
-                  alignSelf: "center",
-                  marginTop: 5,
-                  width: "100%",
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    width: "100%",
-                    backgroundColor: "#fff",
-                    borderWidth: 1,
-                    borderColor: "#005091",
-                    backgroundColor: "#005091",
-                    marginTop: 2,
-                    borderRadius: 5,
-                  }}
-                >
-                  <Text
-                    style={{
-                      color: "#fff",
-                      alignSelf: "center",
-                      fontSize: 13,
-                      padding: 12,
-                      marginRight: 5,
-                      // fontFamily: "Roboto-Regular",
-                    }}
-                  >
-                    Okay
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </Modal>
 
           <Modal
             visible={modalVisible}
@@ -855,13 +756,16 @@ const Driver = () => {
           {/* {AcceptTrip?.success == true && riderdata?.data && ( */}
           {AcceptTrip?.success == true && (
             <View>
-              {!startTripdata && <StartTrip />}
+              {!startTripdata && !completedTripdata && <StartTrip />}
 
               {startTripdata && <DriverMap />}
 
-              {!startTripdata && completedTripdata && <ExitDriverTrip />}
+              {/* {!startTripdata && completedTripdata && <ExitDriverTrip />} */}
             </View>
           )}
+
+          {/* <View>{CompleteDriverTripData && <ExitDriverTrip />}</View> */}
+
           <View>
             {/* {
                (Object.keys(this.props.drivertrip.position).length > 0 || Object.keys(this.state.initialLocation).length > 0) &&
@@ -890,7 +794,7 @@ const Driver = () => {
               </Card>
             )}
 
-            {riderdata && (
+            {riderdata && !completedTripdata && (
               <View>
                 {riderdata.data == null && (
                   <Card style={{ padding: 10, margin: 10 }}>
@@ -902,7 +806,7 @@ const Driver = () => {
                           fontSize: 16,
                         }}
                       >
-                        No Ride Request Assigned Yet
+                        No Ride Request Assigned Yet craze
                       </Text>
                     </View>
                   </Card>
@@ -1168,152 +1072,7 @@ const Driver = () => {
               {/* surposet to be end */}
             </View>
 
-            {dataforDriverRequest.drivertrip.isEnded == true && (
-              <View style={{ padding: 10 }}>
-                <View style={{ marginTop: 0, borderRadius: 5 }}>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: "#fff",
-                      padding: 10,
-                      marginTop: 3,
-                    }}
-                  >
-                    <Text
-                      // onPress={this.call}
-
-                      style={{
-                        alignSelf: "center",
-                        color: "black",
-                        fontSize: 18,
-                      }}
-                    >
-                      Trip Summary
-                    </Text>
-                  </TouchableOpacity>
-
-                  <View style={{ backgroundColor: "#fff" }}>
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Start Time:{" "}
-                        <Text style={styles.time}>
-                          this.props.drivertrip.startTime.toString()
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Distant Covered:{" "}
-                        <Text style={styles.time}>
-                          this.props.drivertrip.distance_covered Meters
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        End Time:{" "}
-                        <Text style={styles.time}>
-                          this.props.drivertrip.endTime.toString()
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Cost of Trip (NGN):{" "}
-                        <Text style={styles.time}>
-                          {dataforDriverRequest.drivertrip.cost}
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Waited Time:{" "}
-                        <Text style={styles.time}>
-                          this.toHHMMSS(this.props.drivertrip.waitingTime)
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <Card
-                      style={{
-                        marginTop: 20,
-                        padding: 7,
-                        backgroundColor: "#fff",
-                      }}
-                    >
-                      <Text style={styles.details}>
-                        Cost of Waiting (NGN):{" "}
-                        <Text style={styles.time}>
-                          this.props.drivertrip.totalwaitingcost.toFixed(2).replace(/\d(?=(\d
-                          {3})+\.)/g, '$&,')
-                        </Text>
-                      </Text>
-                    </Card>
-
-                    <TouchableOpacity
-                      // onPress={this.onopentoexit}
-
-                      style={{
-                        backgroundColor: "#a31225",
-                        padding: 10,
-                        borderRadius: 5,
-                        marginTop: 20,
-                        marginBottom: 40,
-                      }}
-                    >
-                      {dataforDriverRequest.isFetching == false && (
-                        <Text
-                          style={{
-                            alignSelf: "center",
-                            color: "#fff",
-                            fontSize: 14,
-                            // fontFamily: "Roboto-Regular",
-                          }}
-                        >
-                          Exit Trip with Rider
-                        </Text>
-                      )}
-                      {dataforDriverRequest.isFetching == true && (
-                        <ActivityIndicator color="#fff" size="small" />
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              </View>
-            )}
+            {/* This components only show when trip is available */}
 
             {riderdata?.config && AcceptTrip == null && (
               <View style={{ alignItems: "center" }}>
@@ -1443,33 +1202,35 @@ const Driver = () => {
                       className=" justify-between items-center"
                     >
                       <View style={{ width: "30%", justifyContent: "center" }}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            rejectTrip(riderdata.data.id, "decline")
-                          }
-                          style={{
-                            marginTop: 7,
-                            borderColor: "#a31225",
-                            borderWidth: 2,
-                            padding: 7,
-                            width: "100%",
-                            alignSelf: "center",
-                            borderRadius: 5,
-                          }}
-                        >
-                          <Text
+                        {!rejectisLoading && (
+                          <TouchableOpacity
+                            onPress={() =>
+                              rejectTrip(riderdata.data.id, "decline")
+                            }
                             style={{
+                              marginTop: 7,
+                              borderColor: "#a31225",
+                              borderWidth: 2,
+                              padding: 7,
+                              width: "100%",
                               alignSelf: "center",
-                              color: "#a31225",
-                              fontSize: 13,
-                              // fontFamily: "Roboto-Regular",
+                              borderRadius: 5,
                             }}
                           >
-                            Reject
-                          </Text>
-                        </TouchableOpacity>
+                            <Text
+                              style={{
+                                alignSelf: "center",
+                                color: "#a31225",
+                                fontSize: 13,
+                                // fontFamily: "Roboto-Regular",
+                              }}
+                            >
+                              Reject
+                            </Text>
+                          </TouchableOpacity>
+                        )}
 
-                        {dataforDriverRequest.isrequesting == true && (
+                        {rejectisLoading && (
                           <TouchableOpacity
                             style={{
                               marginTop: 7,
@@ -1485,33 +1246,35 @@ const Driver = () => {
                       </View>
 
                       <View style={{ width: "30%", justifyContent: "center" }}>
-                        <TouchableOpacity
-                          onPress={() =>
-                            rejectTrip(riderdata.data.id, "reassign")
-                          }
-                          style={{
-                            marginTop: 7,
-                            borderColor: "green",
-                            borderWidth: 2,
-                            padding: 7,
-                            width: "100%",
-                            alignSelf: "center",
-                            borderRadius: 5,
-                          }}
-                        >
-                          <Text
+                        {!rejectisLoading && (
+                          <TouchableOpacity
+                            onPress={() =>
+                              rejectTrip(riderdata.data.id, "reassign")
+                            }
                             style={{
+                              marginTop: 7,
+                              borderColor: "green",
+                              borderWidth: 2,
+                              padding: 7,
+                              width: "100%",
                               alignSelf: "center",
-                              color: "green",
-                              fontSize: 13,
-                              // fontFamily: "Roboto-Regular",
+                              borderRadius: 5,
                             }}
                           >
-                            Reassign
-                          </Text>
-                        </TouchableOpacity>
+                            <Text
+                              style={{
+                                alignSelf: "center",
+                                color: "green",
+                                fontSize: 13,
+                                // fontFamily: "Roboto-Regular",
+                              }}
+                            >
+                              Reassign
+                            </Text>
+                          </TouchableOpacity>
+                        )}
 
-                        {dataforDriverRequest.isrequesting == true && (
+                        {rejectisLoading && (
                           <TouchableOpacity
                             style={{
                               marginTop: 7,

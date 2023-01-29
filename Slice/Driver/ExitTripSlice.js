@@ -10,28 +10,12 @@ const initialState = {
   IsError: false,
   IsSucess: false,
   message: "",
-  IsLoading: "",
+  IsLoading: false,
 };
 
-const ExitTripService = async (ExitData, Exitid, tokengot) => {
-  // let url = SMOOTHRIDE_NEWAPI + "getlastassigntrip";
-
-  // updatetripcompleted
-  //   let url = `${SMOOTHRIDE_NEWAPI}getlastassigntrip/${Exitid}`;
-
-  //   const config = {
-  //     headers: {
-  //       Authorization: `Bearer ${tokengot}`,
-  //     },
-  //   };
-
-  //   console.log("what happen");
-
-  //   const response = await axios.post(url, ExitData, config);
-  //   console.log(response.data);
-
+const ExitTripService = async (ExitData, tokengot) => {
   try {
-    let url = `${SMOOTHRIDE_NEWAPI}updatetripcompleted/${Exitid}`;
+    let url = `${SMOOTHRIDE_NEWAPI}exittripwithrider`;
 
     const config = {
       headers: {
@@ -41,24 +25,20 @@ const ExitTripService = async (ExitData, Exitid, tokengot) => {
 
     console.log(url);
     const response = await axios.post(url, ExitData, config);
-    console.log(response.data);
-    // return response.data;
+    console.log({ goal: response.data });
+    return response.data;
   } catch (error) {
-    console.log(error);
-
-    // console.log("we loss");
+    console.log({ error: error });
   }
-  //   return response.data;
 };
 
 export const ExitTripFunc = createAsyncThunk(
   "ExitTrip/data",
-  async (ExitData, thunkAPI) => {
+  async (Exitid, thunkAPI) => {
     try {
-      let Exitid = 17400;
-
+      console.log(Exitid);
       const tokengot = await AsyncStorage.getItem("token");
-      return await ExitTripService(ExitData, Exitid, tokengot);
+      return await ExitTripService(Exitid, tokengot);
     } catch (error) {
       console.log(error);
       const message =
@@ -89,13 +69,13 @@ export const ExitTripSlice = createSlice({
       .addCase(ExitTripFunc.fulfilled, (state, action) => {
         state.IsLoading = false;
         state.IsSucess = true;
-        state.AcceptTrip = action.payload;
+        state.ExittripData = action.payload;
       })
       .addCase(ExitTripFunc.rejected, (state, action) => {
         state.IsLoading = false;
         state.IsError = true;
         state.message = action.payload;
-        state.AcceptTrip = null;
+        state.ExittripData = null;
       });
   },
 });

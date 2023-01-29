@@ -11,7 +11,7 @@ const initialState = {
   IsError: false,
   IsSucess: false,
   message: "",
-  IsLoading: "",
+  IsLoading: false,
 };
 
 const CompleteDriverTripService = async (Completdata, Exitid, tokengot) => {
@@ -26,7 +26,7 @@ const CompleteDriverTripService = async (Completdata, Exitid, tokengot) => {
 
     console.log(url);
     const response = await axios.post(url, Completdata, config);
-    console.log(response.data);
+    console.log({ CompleteDriverTripService: response.data });
     return response.data;
   } catch (error) {
     console.log(error);
@@ -38,7 +38,7 @@ export const CompleteDriverTripFunc = createAsyncThunk(
   async (Completdata, thunkAPI) => {
     try {
       const Exitid =
-        thunkAPI.getState().GetLastAssignTripSlice.riderdata.data.id;
+        thunkAPI.getState().HoldTripDataSlice.holdriderdata.data.id;
 
       const tokengot = await AsyncStorage.getItem("token");
       return await CompleteDriverTripService(Completdata, Exitid, tokengot);
