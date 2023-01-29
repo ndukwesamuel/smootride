@@ -76,9 +76,13 @@ const ExitDriverScreen = () => {
     );
   };
 
-  useEffect(() => {
-    console.log("table3");
+  //   useEffect(() => {
 
+  //     return () => {};
+  //   }, [ExittripData]);
+
+  if (ExittripData) {
+    console.log("table3");
     dispatch(CompleteDriverReset());
     dispatch(AcceptReset());
     dispatch(ExitReset());
@@ -88,9 +92,7 @@ const ExitDriverScreen = () => {
     navigation.navigate("DriverTabNavigation", {
       screen: "Driver",
     });
-
-    return () => {};
-  }, [ExittripData]);
+  }
 
   //   return (
   //     <View>

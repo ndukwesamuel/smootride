@@ -16,10 +16,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { persistor } from "../../store";
+import LogoutComponent from "../../components/Driver/DriverTrip/LogoutComponent";
 
 const RiderProfile = ({ navigation }) => {
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const handleLogout = async () => {
     await AsyncStorage.removeItem("token");
     persistor.purge();
@@ -29,8 +29,7 @@ const RiderProfile = ({ navigation }) => {
   const [social, setSocial] = useState(false);
   const [support, setSupport] = useState(false);
 
-  
-  const username= useSelector((state)=> state.LoginSlice?.data?.user)
+  const username = useSelector((state) => state.LoginSlice?.data?.user);
   // console.log("user status ", username)
 
   const handleSocial = () => {
@@ -306,7 +305,7 @@ const RiderProfile = ({ navigation }) => {
           </View>
         )}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ flexDirection: "row", marginTop: 50 }}
           onPress={handleLogout}
         >
@@ -316,7 +315,9 @@ const RiderProfile = ({ navigation }) => {
           <View style={{ flexDirection: "row", width: "90%", marginTop: 30 }}>
             <Text style={{ fontSize: 12, width: "90%" }}>Log Out</Text>
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <LogoutComponent />
       </View>
     </ScrollView>
   );
