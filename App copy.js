@@ -105,9 +105,6 @@ export default function App() {
               component={Login}
               options={{
                 headerShown: false,
-                headerStyle: {
-                  backgroundColor: "white",
-                },
               }}
             />
 

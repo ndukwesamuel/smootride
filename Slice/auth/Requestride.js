@@ -197,7 +197,7 @@ export const RequestRide= createAsyncThunk(
           state.Lastassigned = null;
         })
         .addCase(CancelRequest.rejected, (state, action) => {
-          console.log("rejected values ",action.payload)
+          // console.log("rejected values ",action.payload)
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
@@ -212,7 +212,7 @@ export const RequestRide= createAsyncThunk(
           state.assignedDriver= action.payload;
         })
         .addCase(AssignedDriver.rejected, (state, action) => {
-          console.log("rejected values ",action.payload)
+          // console.log("rejected values ",action.payload)
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;

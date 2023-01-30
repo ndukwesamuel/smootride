@@ -7,25 +7,29 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useState } from "react";
-import GlobalStyles from "../../GlobalStyles";
+import React, { useEffect, useState } from "react";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { persistStore } from "redux-persist";
 import { store } from "../../store";
 import LogoutComponent from "../../components/Driver/DriverTrip/LogoutComponent";
+import { GetAllDriverTrips } from "../../Slice/Driver/GetAllDriverTripsSlice";
 
 const DriverProfile = () => {
   const navigation = useNavigation();
 
-  const { user, data, isError, isSuccess, message, isLoading } = useSelector(
+  const dispatch = useDispatch();
+
+  const { user, data } = useSelector((state) => state.LoginSlice);
+
+  const { drivertrip, isError, isSuccess, isLoading, message } = useSelector(
     (state) => state.LoginSlice
   );
-  console.log(data);
+  console.log({ name: drivertrip });
 
   const handleLogout = async () => {
     console.log("sdsd");
@@ -39,6 +43,12 @@ const DriverProfile = () => {
   const handleSupport = () => {
     setSupport(!support);
   };
+
+  useEffect(() => {
+    dispatch(GetAllDriverTrips());
+
+    return () => {};
+  }, []);
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
