@@ -37,6 +37,7 @@ import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import RideRequestSuccess from "../../components/rider/RideRequestSuccess";
 import CancelModalTrip from "../../components/rider/CancelModalTrip";
+import PTRView from "react-native-pull-to-refresh";
 
 const { width, height } = Dimensions.get("window");
 const RiderRequest = () => {
@@ -48,7 +49,14 @@ const RiderRequest = () => {
   const [location, setLocation] = useState(null);
   const [maplocation, setMaplocation] = useState(false);
   const [userLocation, setUerLocation] = useState(null);
+<<<<<<< HEAD
+  const [closedTrip, setClosedTrip] = useState(false)
+  const [reboot, setReboot] = useState(false)
+
+  const user_id = useSelector((state)=> state.LoginSlice?.data?.user?.id)
+=======
   const [closedTrip, setClosedTrip] = useState(false);
+>>>>>>> Best
 
   const user_id = useSelector((state) => state.LoginSlice?.data?.user?.id);
 
@@ -171,15 +179,38 @@ const RiderRequest = () => {
   useEffect(() => {
     const initial = async () => {
       const userdet = {
+<<<<<<< HEAD
+        "user_id": user_id
+      }
+      setReboot(true)
+      await dispatch(GetRider());
+      await dispatch(LastAssignedDriver(userdet))
+      setReboot(false)
+    }
+=======
         user_id: user_id,
       };
       await dispatch(GetRider());
       await dispatch(LastAssignedDriver(userdet));
     };
+>>>>>>> Best
 
     initial();
   }, []);
 
+<<<<<<< HEAD
+  const onRefresh = async ()=>{
+    const userdet = {
+        "user_id": user_id
+      }
+      setReboot(true)
+      await dispatch(LastAssignedDriver(userdet))
+      setReboot(false)
+  }
+
+
+=======
+>>>>>>> Best
   const knowdata = useSelector((state) => state.GetRiderSlice?.data?.drivers);
   const assignedDet = useSelector(
     (state) => state.RequestRideSlice?.assignedDriver
@@ -216,6 +247,53 @@ const RiderRequest = () => {
           // </View>
         )}
       </View>
+<<<<<<< HEAD
+      
+        <PTRView style={{flex: 1, minHeight: 100, backgroundColor:"white",
+                borderTopLeftRadius: 15,
+                borderTopRightRadius: 20,}} onRefresh={onRefresh} >
+          {
+            reboot? 
+            <View
+              style={{
+                backgroundColor: "white",
+                borderTopLeftRadius: 15,
+                borderTopRightRadius: 20,
+                }}
+              >
+            <View style = {styles.viewcard}>
+              <ActivityIndicator animating={true} color="black" />
+          </View>
+          </View>
+            : 
+            <View>
+      {onLoaddata?.data != null &&
+
+            <View
+style={{
+  backgroundColor: "white",
+  borderTopLeftRadius: 15,
+  borderTopRightRadius: 20,
+}}
+>
+<View style = {styles.viewcard}>
+                      <View>
+                      <View style={{padding:10}}>
+                          <Text style={{alignSelf:'center',marginTop:10,fontSize:15,color:'#007cc2'}}>Hi, {username}</Text>
+                      </View>    
+                      <View
+              style={{
+                flexDirection: "row",
+                borderBottomWidth: 1,
+                borderBottomColor: "#EDEDED",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+                              <View style={{flexDirection:'row'}}>
+                              <View style= {{width:'22%',marginStart:10}}>
+                              {/* {
+=======
       <View
         style={{
           position: "absolute",
@@ -276,6 +354,7 @@ const RiderRequest = () => {
                 <View style={{ flexDirection: "row" }}>
                   <View style={{ width: "22%", marginStart: 10 }}>
                     {/* {
+>>>>>>> Best
                                   this.props.driver.driver_image != null && 
                                   <Image
                                   source={{uri: `https://smoothride.ng/taxi/images/${this.props.driver.driver_image}`}}
@@ -611,12 +690,52 @@ const RiderRequest = () => {
             {number == 0 ? (
               <Text>No driver available</Text>
             ) : (
-              <FlatList
-                data={knowdata}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => {
-                  return (
-                    <View
+              // <FlatList
+              //   data={knowdata}
+              //   keyExtractor={(item) => item.id}
+              //   renderItem={({ item }) => {
+              //     return (
+              //       <View
+              //         style={{
+              //           flexDirection: "row",
+              //           borderBottomWidth: 1,
+              //           borderBottomColor: "#EDEDED",
+              //           flexDirection: "row",
+              //           alignItems: "center",
+              //         }}
+              //       >
+              //         <View style={{ width: "15%", marginStart: 10 }}>
+              //           <Image
+              //             source={clientimg}
+              //             style={{
+              //               width: 50,
+              //               height: 50,
+              //               borderRadius: 20,
+              //               alignSelf: "center",
+              //               margin: 5,
+              //             }}
+              //           />
+              //         </View>
+              //         <View style={{ width: "60%", marginLeft: 5 }}>
+              //           <Text
+              //             style={{
+              //               fontSize: 17,
+              //               marginTop: 10,
+              //               color: "#877A80",
+              //               fontWeight: "400",
+              //             }}
+              //           >
+              //             {" "}
+              //             {item?.name}{" "}
+              //           </Text>
+              //         </View>
+              //       </View>
+              //     );
+              //   }}
+              // />
+              <View style={{flexDirection:"column"}}>
+                {knowdata.map((each)=>(
+                <View
                       style={{
                         flexDirection: "row",
                         borderBottomWidth: 1,
@@ -647,13 +766,12 @@ const RiderRequest = () => {
                           }}
                         >
                           {" "}
-                          {item?.name}{" "}
+                          {each?.name}{" "}
                         </Text>
                       </View>
                     </View>
-                  );
-                }}
-              />
+                    ))}
+              </View>
             )}
           </View>
           <TouchableOpacity
@@ -681,7 +799,15 @@ const RiderRequest = () => {
             )}
           </TouchableOpacity>
         </View>
+<<<<<<< HEAD
+        
+      }
+      </View>
+      }
+      </PTRView>
+=======
       )}
+>>>>>>> Best
       <Modal isVisible={isModalVisible}>
         <View
           style={{
@@ -793,7 +919,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    flex: 1,
+    flex: 2,
   },
 });
 export default RiderRequest;
