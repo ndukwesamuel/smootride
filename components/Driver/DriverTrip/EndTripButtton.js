@@ -169,7 +169,7 @@ const EndTripButtton = () => {
 
     console.log("test2");
   } else if (CompleteDriverTripData?.success == true) {
-    Alert.alert("Alert", `This is Great`, [{ text: "OK" }], {
+    Alert.alert("Alert", `This is Trip is Successful`, [{ text: "OK" }], {
       cancelable: false,
     });
 

@@ -31,7 +31,7 @@ const DriverMap = () => {
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
-  const mapHeight = height * 0.89;
+  const mapHeight = height * 0.8;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [accepted, setAccepted] = useState(false);
@@ -107,7 +107,7 @@ const DriverMap = () => {
         <View className="pt-10 ">
           <View className="  items-center">
             <Card className=" items-center py-5">
-              <Text>Loaction is Loading </Text>
+              <Text>Location is Loading </Text>
               <ActivityIndicator animating={true} color="black" />
             </Card>
           </View>
@@ -120,7 +120,7 @@ const DriverMap = () => {
             <View className="pt-10 ">
               <View className="  items-center">
                 <Card className=" items-center py-5">
-                  <Text>Loaction is Loading </Text>
+                  <Text>Location is Loading </Text>
                   <ActivityIndicator animating={true} color="black" />
                 </Card>
               </View>
