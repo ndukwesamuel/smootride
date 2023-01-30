@@ -17,7 +17,6 @@ import React, { useEffect, useState } from "react";
 import { APP_NAME, APIBASEURL } from "@env";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import GlobalStyles from "../GlobalStyles";
 import { selectOrigin } from "../Slice/navSlice";
 import { login, reset } from "../Slice/auth/LoginSlice";
 

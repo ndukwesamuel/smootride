@@ -12,7 +12,6 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import GlobalStyles from "../GlobalStyles";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useNavigation } from "@react-navigation/native";

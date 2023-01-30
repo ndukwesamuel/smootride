@@ -10,7 +10,6 @@ import {
   ScrollView,
   StatusBar,
 } from "react-native";
-import GlobalStyles from "../../GlobalStyles";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";

@@ -11,6 +11,7 @@ import {
   ScrollView,
 } from "react-native";
 import PTRView from "react-native-pull-to-refresh";
+import { Card } from "react-native-shadow-cards";
 // import CardView from "react-native-rn-cardview";
 import { ProgressDialog } from "react-native-simple-dialogs";
 
@@ -36,6 +37,25 @@ const Pending = () => {
         <View style={styles.container}>
           <View style={styles.header} className="pt-10">
             <Text style={styles.headerText}>Pending Trip Information</Text>
+          </View>
+
+          <View style={{ padding: 10 }} className="  items-center">
+            <Card
+              cardElevation={2}
+              cardMaxElevation={2}
+              cornerRadius={5}
+              style={styles.cardview}
+            >
+              <Text
+                style={{
+                  color: "#877A80",
+                  alignSelf: "center",
+                  fontSize: 16,
+                }}
+              >
+                No Pending Information here
+              </Text>
+            </Card>
           </View>
 
           {/* <CardView cardElevation={2} cardMaxElevation={2} cornerRadius={5}>

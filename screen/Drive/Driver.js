@@ -20,7 +20,6 @@ import React, { useEffect, useState } from "react";
 import { ProgressDialog } from "react-native-simple-dialogs";
 import PTRView from "react-native-pull-to-refresh";
 // import CardView from "react-native-cardview";
-import GlobalStyles from "../../GlobalStyles";
 // import CardView from "react-native-cardview";
 import { useDispatch, useSelector } from "react-redux";
 import ChangeDriveStatus from "../../components/Driver/ChangeDriveStatus";
@@ -44,6 +43,7 @@ import ExitDriverTrip from "../../components/Driver/DriverTrip/ExitDriverTrip";
 import { ExitTripFunc } from "../../Slice/Driver/ExitTripSlice";
 import { resetALLStartTrip } from "../../Slice/Driver/StartTripSlice";
 import { useNavigation } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -198,7 +198,8 @@ const Driver = () => {
   };
 
   return (
-    <PTRView classname="flex-1 border-2 border-red-600" onRefresh={refresh}>
+    <PTRView onRefresh={refresh}>
+      <StatusBar style="light" backgroundColor="transparent" hidden />
       <View classname="flex-1 bg-red-600 ">
         {/* {
                      this.props.drivertrip.IsjustSubmittedTrip == true &&
@@ -810,7 +811,7 @@ const Driver = () => {
             )}
 
             {riderdata && !completedTripdata && (
-              <View>
+              <View className="items-center">
                 {riderdata.data == null && (
                   <Card style={{ padding: 10, margin: 10 }}>
                     <View style={{ padding: 10 }}>
@@ -821,7 +822,7 @@ const Driver = () => {
                           fontSize: 16,
                         }}
                       >
-                        No Ride Request Assigned Yet craze
+                        No Ride Request Assigned Yet
                       </Text>
                     </View>
                   </Card>
