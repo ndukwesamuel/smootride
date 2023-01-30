@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import { selectOrigin } from "../Slice/navSlice";
 import { login, reset } from "../Slice/auth/LoginSlice";
+import { StatusBar } from "expo-status-bar";
 
 const image = { uri: "https://reactjs.org/logo-og.png" };
 
@@ -67,6 +68,7 @@ const Login = () => {
 
   return (
     <KeyboardAvoidingView>
+      <StatusBar style="light" backgroundColor="#005091" visible={false} />
       <ImageBackground
         source={require("../assets/images/Smot.jpg")}
         style={{ width: "100%", height: "100%" }}

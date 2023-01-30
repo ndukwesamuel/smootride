@@ -46,6 +46,7 @@ const DriverMap = () => {
 
   const getPermissions = async () => {
     setMaplocation(true);
+
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       console.log("Please grant Location permissions");
