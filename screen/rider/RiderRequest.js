@@ -32,6 +32,7 @@ import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import RideRequestSuccess from "../../components/rider/RideRequestSuccess";
 import CancelModalTrip from "../../components/rider/CancelModalTrip";
+import PTRView from "react-native-pull-to-refresh";
 
 
 
@@ -49,6 +50,7 @@ const RiderRequest = () => {
   const [maplocation, setMaplocation] = useState(false);
   const [userLocation, setUerLocation] = useState(null);
   const [closedTrip, setClosedTrip] = useState(false)
+  const [reboot, setReboot] = useState(false)
 
   const user_id = useSelector((state)=> state.LoginSlice?.data?.user?.id)
 
@@ -179,12 +181,23 @@ const onLogCall = () => {
       const userdet = {
         "user_id": user_id
       }
+      setReboot(true)
       await dispatch(GetRider());
       await dispatch(LastAssignedDriver(userdet))
+      setReboot(false)
     }
 
     initial()
   }, []);
+
+  const onRefresh = async ()=>{
+    const userdet = {
+        "user_id": user_id
+      }
+      setReboot(true)
+      await dispatch(LastAssignedDriver(userdet))
+      setReboot(false)
+  }
 
 
   const knowdata = useSelector((state) => state.GetRiderSlice?.data?.drivers);
@@ -215,32 +228,25 @@ const onLogCall = () => {
           </MapView>
         )}
       </View>
-      <View
-        style={{
-          position: "absolute",
-          width: "90%",
-          backgroundColor: "white",
-          shadowColor: "black",
-          shadowOffset: { width: 2, height: 2 },
-          shadowOpacity: 0.5,
-          shadowRadius: 4,
-          marginLeft: "5%",
-          top: 60,
-        }}
-      >
-        {/* <GooglePlacesAutocomplete
-          placeholder="Search"
-          onPress={(data, details = null) => {
-            // 'details' is provided when fetchDetails = true
-            console.log(data, details);
-          }}
-          query={{
-            key: GOOGLE_MAPS_APIKEYS,
-            language: "en",
-          }}
-        /> */}
-      </View>
-
+      
+        <PTRView style={{flex: 1, minHeight: 100, backgroundColor:"white",
+                borderTopLeftRadius: 15,
+                borderTopRightRadius: 20,}} onRefresh={onRefresh} >
+          {
+            reboot? 
+            <View
+              style={{
+                backgroundColor: "white",
+                borderTopLeftRadius: 15,
+                borderTopRightRadius: 20,
+                }}
+              >
+            <View style = {styles.viewcard}>
+              <ActivityIndicator animating={true} color="black" />
+          </View>
+          </View>
+            : 
+            <View>
       {onLoaddata?.data != null &&
 
             <View
@@ -496,12 +502,52 @@ style={{
             {number == 0 ? (
               <Text>No driver available</Text>
             ) : (
-              <FlatList
-                data={knowdata}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => {
-                  return (
-                    <View
+              // <FlatList
+              //   data={knowdata}
+              //   keyExtractor={(item) => item.id}
+              //   renderItem={({ item }) => {
+              //     return (
+              //       <View
+              //         style={{
+              //           flexDirection: "row",
+              //           borderBottomWidth: 1,
+              //           borderBottomColor: "#EDEDED",
+              //           flexDirection: "row",
+              //           alignItems: "center",
+              //         }}
+              //       >
+              //         <View style={{ width: "15%", marginStart: 10 }}>
+              //           <Image
+              //             source={clientimg}
+              //             style={{
+              //               width: 50,
+              //               height: 50,
+              //               borderRadius: 20,
+              //               alignSelf: "center",
+              //               margin: 5,
+              //             }}
+              //           />
+              //         </View>
+              //         <View style={{ width: "60%", marginLeft: 5 }}>
+              //           <Text
+              //             style={{
+              //               fontSize: 17,
+              //               marginTop: 10,
+              //               color: "#877A80",
+              //               fontWeight: "400",
+              //             }}
+              //           >
+              //             {" "}
+              //             {item?.name}{" "}
+              //           </Text>
+              //         </View>
+              //       </View>
+              //     );
+              //   }}
+              // />
+              <View style={{flexDirection:"column"}}>
+                {knowdata.map((each)=>(
+                <View
                       style={{
                         flexDirection: "row",
                         borderBottomWidth: 1,
@@ -532,13 +578,12 @@ style={{
                           }}
                         >
                           {" "}
-                          {item?.name}{" "}
+                          {each?.name}{" "}
                         </Text>
                       </View>
                     </View>
-                  );
-                }}
-              />
+                    ))}
+              </View>
             )}
           </View>
           <TouchableOpacity
@@ -569,6 +614,9 @@ style={{
         </View>
         
       }
+      </View>
+      }
+      </PTRView>
       <Modal isVisible={isModalVisible}>
         <View
           style={{
@@ -676,7 +724,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    flex: 1,
+    flex: 2,
   },
 });
 export default RiderRequest;
