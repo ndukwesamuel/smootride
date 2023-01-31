@@ -52,6 +52,7 @@ const RiderRequest = () => {
   const [userLocation, setUerLocation] = useState(null);
   const [closedTrip, setClosedTrip] = useState(false)
   const [reboot, setReboot] = useState(false)
+  const [loader, setLoader] = useState(false);
 
   const user_id = useSelector((state)=> state.LoginSlice?.data?.user?.id)
 
@@ -196,9 +197,9 @@ const onLogCall = () => {
     const userdet = {
         "user_id": user_id
       }
-      setReboot(true)
+      setLoader(true)
       await dispatch(LastAssignedDriver(userdet))
-      setReboot(false)
+      setLoader(false)
   }
 
 
