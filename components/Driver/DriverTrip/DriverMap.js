@@ -89,7 +89,6 @@ const DriverMap = () => {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }}
-          apiKey="AIzaSyAnpzxQjedU_nLRYyX5pIthS2BcSA6VAbk"
         >
           <Marker
             coordinate={{
