@@ -19,6 +19,7 @@ import {
   Image,
   FlatList,
   Linking,
+  RefreshControl,
 } from "react-native";
 // import CardView from "react-native-cardview";
 import { GOOGLE_MAPS_APIKEYS } from "@env";
