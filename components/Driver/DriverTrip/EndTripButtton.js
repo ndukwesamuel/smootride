@@ -46,6 +46,7 @@ const EndTripButtton = () => {
   } = useSelector((state) => state.StartTripSlice);
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
+  const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
   const [startlocation, setStartlocation] = useState(null);
   const [destination, setDestination] = useState(null);
@@ -57,9 +58,9 @@ const EndTripButtton = () => {
     (state) => state.CompleteDriverTripSlice
   );
 
-  console.log("dsd");
-  console.log({ hhhh: completedTripdata });
-  console.log({ hhhh: completedTripdata });
+  // console.log("dsd");
+  // console.log({ hhhh: holdriderdata });
+  // console.log({ hhhh: completedTripdata });
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -100,18 +101,19 @@ const EndTripButtton = () => {
 
       let distance_In_KM = Result_Of_Meters_Corverd / 1000;
 
-      let fare_In_Km = distance_In_KM * riderdata.config.basefare;
+      let fare_In_Km = distance_In_KM * holdriderdata.config.basefare;
       let startSec = new Date(startTimecurrentLocationData).getTime();
       let date = new Date(Date.now());
       let endSec = date.getTime();
 
       let diff_In_sec = (endSec - startSec) / 1000;
-      let SecSpent = (diff_In_sec / 60) * parseFloat(riderdata.config.permin);
+      let SecSpent =
+        (diff_In_sec / 60) * parseFloat(holdriderdata.config.permin);
 
       let totlaCost =
-        fare_In_Km + SecSpent + parseFloat(riderdata.config.basefare);
+        fare_In_Km + SecSpent + parseFloat(holdriderdata.config.basefare);
       let unformattedcost =
-        fare_In_Km + SecSpent + parseFloat(riderdata.config.basefare);
+        fare_In_Km + SecSpent + parseFloat(holdriderdata.config.basefare);
       totlaCost = totlaCost.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
       let travelTime = diff_In_sec;
 
@@ -129,8 +131,22 @@ const EndTripButtton = () => {
         tripAmt: totlaCost,
       };
       console.log(data);
-      dispatch(CompletedTripActivated(data));
+
+      let TripSummaryData = {
+        srcLat: start_lat,
+        srcLong: start_log,
+        destLat: end_lat,
+        destLong: end_log,
+        trip_start_time: startTimecurrentLocationData,
+        tripAmt: totlaCost,
+        date_End: EndTime,
+        WaitedTime: "this is the time they waite",
+        Cost_of_waiting: "this iw the waiting period",
+        Distant_Covered: distance_In_KM,
+      };
+
       dispatch(CompleteDriverTripFunc(data));
+      dispatch(CompletedTripActivated(TripSummaryData));
       dispatch(ActivateStartTrip());
       dispatch(resetGetLastAssignTripSlice());
     }

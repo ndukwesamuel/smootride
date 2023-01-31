@@ -69,15 +69,15 @@ const RiderRequest = () => {
     getPermissions();
   }, []);
 
-  useEffect(() => {
-    const init = async () => {
-      const userdet = {
-        user_id: user_id,
-      };
-      await dispatch(AssignedDriver(userdet));
-    };
-    init();
-  }, []);
+  // useEffect(() => {
+  //   const init = async () => {
+  //     const userdet = {
+  //       user_id: user_id,
+  //     };
+  //     await dispatch(AssignedDriver(userdet));
+  //   };
+  //   init();
+  // }, []);
 
   // console.log("username shown ", username)
   const ASPECT_RATIO = width / height;
@@ -174,6 +174,7 @@ const RiderRequest = () => {
       const userdet = {
         user_id: user_id,
       };
+      await dispatch(AssignedDriver(userdet));
       await dispatch(GetRider());
       await dispatch(LastAssignedDriver(userdet));
     };

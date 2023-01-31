@@ -45,6 +45,8 @@ import { ExitTripFunc } from "../../Slice/Driver/ExitTripSlice";
 import { resetALLStartTrip } from "../../Slice/Driver/StartTripSlice";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
+import TakeAnotherStartTrip from "../../components/Driver/DriverTrip/TakeAnotherStartTrip";
+import TakeAnotherDriverMap from "../../components/Driver/DriverTrip/TakeAnotherDriverMap";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -772,17 +774,26 @@ const Driver = () => {
               <View>
                 {!startTripdata && !completedTripdata && <StartTrip />}
 
-                {startTripdata && <DriverMap />}
+                {startTripdata && !completedTripdata && <DriverMap />}
 
                 {/* {!startTripdata && completedTripdata && <ExitDriverTrip />} */}
               </View>
             )}
 
-            {completedTripdata && (
+            {completedTripdata && !startTripdata && (
               <View>
                 <ExitDriverTrip />
               </View>
             )}
+
+            {/* 
+
+            {completedTripdata && startTripdata && (
+              <View>
+                <Text>kdjsdkjsd</Text>
+                <TakeAnotherDriverMap />
+              </View>
+            )} */}
 
             <View>
               {/* {

@@ -39,6 +39,8 @@ import { reset as resetExitTripSlice } from "../../../Slice/Driver/ExitTripSlice
 
 import { reset as resetRejectTripSlice } from "../../../Slice/Driver/RejectTripSlice";
 import { reset as resetCompleteDriverTripSlice } from "../../../Slice/Driver/CompleteDriverTripSlice";
+import StartTrip from "./StartTrip";
+import TakeAnotherStartTrip from "./TakeAnotherStartTrip";
 const ExitDriverTrip = () => {
   const dispatch = useDispatch();
 
@@ -72,7 +74,8 @@ const ExitDriverTrip = () => {
 
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
 
-  console.log({ name: completedTripdata });
+  // console.log({ name7: completedTripdata });
+  // console.log({ name2: holdriderdata });
   // console.log({ name1: ExittripData.success });
 
   const onopentoexit = () => {
@@ -102,6 +105,7 @@ const ExitDriverTrip = () => {
     dispatch(resetholdriderdata());
     dispatch(resetUpdateDriverStatusSlice());
     dispatch(resetAll_Excerpt_startTripdata());
+    dispatch(CompleteDriverReset());
   }
   // else {
   //   Alert.alert("Alert", `Somthing went Wrong`, [{ text: "OK" }], {
@@ -149,92 +153,112 @@ const ExitDriverTrip = () => {
   return (
     // {
     //     this.props.drivertrip.isEnded == true &&
-    <View style={{ padding: 10 }}>
-      <View style={{ marginTop: 0, borderRadius: 5 }}>
-        <TouchableOpacity
-          style={{ backgroundColor: "#fff", padding: 10, marginTop: 3 }}
-        >
-          <Text
-            onPress={call}
-            style={{ alignSelf: "center", color: "black", fontSize: 18 }}
-          >
-            Trip Summary
-          </Text>
-        </TouchableOpacity>
 
-        <View style={{ backgroundColor: "#fff" }}>
-          <Card style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}>
-            <Text style={styles.details}>
-              Start Time: <Text style={styles.time}>{startDate}</Text>
-            </Text>
-          </Card>
-          <Card style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}>
-            <Text style={styles.details}>
-              Distant Covered:
-              <Text style={styles.time}>
-                this.props.drivertrip.distance_covered Meters
-              </Text>
-            </Text>
-          </Card>
-          <Card style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}>
-            <Text style={styles.details}>
-              End Time: <Text style={styles.time}>{EndDate}</Text>
-            </Text>
-          </Card>
-          <Card style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}>
-            <Text style={styles.details}>
-              Cost of Trip (NGN):{" "}
-              <Text style={styles.time}>{completedTripdata.tripAmt}</Text>
-            </Text>
-          </Card>
-          <Card style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}>
-            <Text style={styles.details}>
-              Waited Time:
-              <Text style={styles.time}>
-                this.toHHMMSS(this.props.drivertrip.waitingTime)
-              </Text>
-            </Text>
-          </Card>
-          <Card style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}>
-            <Text style={styles.details}>
-              Cost of Waiting (NGN):
-              <Text style={styles.time}>
-                this.props.drivertrip.totalwaitingcost .toFixed(2)
-                .replace(/\d(?=(\d{3})+\.)/g, "$&,")
-              </Text>
-            </Text>
-          </Card>
-
+    <>
+      {/* <TakeAnotherStartTrip /> */}
+      <View style={{ padding: 10 }}>
+        <View style={{ marginTop: 0, borderRadius: 5 }}>
           <TouchableOpacity
-            onPress={onopentoexit}
-            style={{
-              backgroundColor: "#a31225",
-              padding: 10,
-              borderRadius: 5,
-              marginTop: 20,
-              marginBottom: 40,
-            }}
+            style={{ backgroundColor: "#fff", padding: 10, marginTop: 3 }}
           >
-            {/* {this.props.data.isFetching == false && ( */}
-
-            {!IsLoading && (
-              <Text
-                style={{
-                  alignSelf: "center",
-                  color: "#fff",
-                  fontSize: 14,
-                  // fontFamily: "Roboto-Regular",
-                }}
-              >
-                Exit Trip with Rider
-              </Text>
-            )}
-
-            {IsLoading && <ActivityIndicator color="#fff" size="small" />}
+            <Text
+              onPress={call}
+              style={{ alignSelf: "center", color: "black", fontSize: 18 }}
+            >
+              Trip Summary
+            </Text>
           </TouchableOpacity>
+
+          <View style={{ backgroundColor: "#fff" }} className="items-center">
+            <Card
+              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
+            >
+              <Text style={styles.details}>
+                Start Time: <Text style={styles.time}>{startDate}</Text>
+              </Text>
+            </Card>
+            <Card
+              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
+            >
+              <Text style={styles.details}>
+                Distant Covered:
+                <Text style={styles.time}>
+                  {/* this.props.drivertrip.distance_covered Meters */}
+                  {completedTripdata.Distant_Covered}
+                </Text>
+              </Text>
+            </Card>
+            <Card
+              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
+            >
+              <Text style={styles.details}>
+                End Time: <Text style={styles.time}>{EndDate}</Text>
+              </Text>
+            </Card>
+            <Card
+              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
+            >
+              <Text style={styles.details}>
+                Cost of Trip (NGN):{" "}
+                <Text style={styles.time}>{completedTripdata.tripAmt}</Text>
+              </Text>
+            </Card>
+            <Card
+              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
+            >
+              <Text style={styles.details}>
+                Waited Time:
+                <Text style={styles.time}>
+                  {/* this.toHHMMSS(this.props.drivertrip.waitingTime) */}
+                  {completedTripdata.WaitedTime}
+                </Text>
+              </Text>
+            </Card>
+            <Card
+              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
+            >
+              <Text style={styles.details}>
+                Cost of Waiting (NGN):
+                <Text style={styles.time}>
+                  {/* this.props.drivertrip.totalwaitingcost .toFixed(2)
+                .replace(/\d(?=(\d{3})+\.)/g, "$&,") */}
+                  {completedTripdata.Cost_of_waiting}
+                </Text>
+              </Text>
+            </Card>
+
+            <TouchableOpacity
+              onPress={onopentoexit}
+              style={{
+                backgroundColor: "#a31225",
+                padding: 10,
+                borderRadius: 5,
+                marginTop: 20,
+                marginBottom: 40,
+              }}
+              className="w-[70%]"
+            >
+              {/* {this.props.data.isFetching == false && ( */}
+
+              {!IsLoading && (
+                <Text
+                  style={{
+                    alignSelf: "center",
+                    color: "#fff",
+                    fontSize: 14,
+                    // fontFamily: "Roboto-Regular",
+                  }}
+                >
+                  Exit Trip with Rider
+                </Text>
+              )}
+
+              {IsLoading && <ActivityIndicator color="#fff" size="small" />}
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </>
     // }
   );
 };

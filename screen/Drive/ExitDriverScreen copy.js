@@ -65,8 +65,8 @@ const ExitDriverScreen = () => {
 
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
 
-  console.log({ name: completedTripdata });
-  console.log({ name2: CompleteDriverTripData });
+  // console.log({ name: completedTripdata });
+  // console.log({ name2: CompleteDriverTripData });
 
   const onopentoexit = () => {
     dispatch(
