@@ -13,7 +13,7 @@ import { GOOGLE_MAPS_APIKEYS } from "@env";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import * as Location from "expo-location";
 
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import {
   CurrentLocationActivated,
   MapLocationActivated,
@@ -31,7 +31,7 @@ const DriverMap = () => {
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
-  const mapHeight = height * 0.8;
+  const mapHeight = height * 0.85;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [accepted, setAccepted] = useState(false);
@@ -76,10 +76,12 @@ const DriverMap = () => {
   console.log(location);
 
   const MainMAP = ({ locationdata }) => {
+    console.log({ nn: locationdata });
     return (
       <>
         <MapView
           className="border-2 border-red-200"
+          provider={PROVIDER_GOOGLE}
           style={{ flex: 1 }}
           initialRegion={{
             latitude: locationdata.coords.latitude,
@@ -87,6 +89,7 @@ const DriverMap = () => {
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA,
           }}
+          apiKey="AIzaSyAnpzxQjedU_nLRYyX5pIthS2BcSA6VAbk"
         >
           <Marker
             coordinate={{
