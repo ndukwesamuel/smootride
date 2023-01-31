@@ -102,11 +102,12 @@ const ExitDriverTrip = () => {
     dispatch(resetholdriderdata());
     dispatch(resetUpdateDriverStatusSlice());
     dispatch(resetAll_Excerpt_startTripdata());
-  } else {
-    Alert.alert("Alert", `Somthing went Wrong`, [{ text: "OK" }], {
-      cancelable: false,
-    });
   }
+  // else {
+  //   Alert.alert("Alert", `Somthing went Wrong`, [{ text: "OK" }], {
+  //     cancelable: false,
+  //   });
+  // }
   // useEffect(() => {
   //   console.log("table3");
 
