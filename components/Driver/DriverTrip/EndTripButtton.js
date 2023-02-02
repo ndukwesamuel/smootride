@@ -71,7 +71,7 @@ const EndTripButtton = () => {
   }, []);
 
   const stopTrip = async () => {
-    NetworkState();
+    setEndingTrip(true);
 
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -145,55 +145,59 @@ const EndTripButtton = () => {
         Distant_Covered: distance_In_KM,
       };
 
-      dispatch(CompleteDriverTripFunc(data));
+      // dispatch(CompleteDriverTripFunc(data));
       dispatch(CompletedTripActivated(TripSummaryData));
       dispatch(ActivateStartTrip());
       dispatch(resetGetLastAssignTripSlice());
     }
+
+    setEndingTrip(false);
   };
 
-  const NetworkState = () => {
-    if (isConnected == false) {
-      Alert.alert("Alert", "No Internet Connection", [{ text: "OK" }], {
-        cancelable: false,
-      });
-      return false;
-    }
-    if (isInternetReachable == false) {
-      Alert.alert(
-        "Alert",
-        "Internet Connection not Accessible",
-        [{ text: "OK" }],
-        { cancelable: false }
-      );
-      return false;
-    }
-  };
+  // const NetworkState = () => {
+  //   if (isConnected == false) {
+  //     Alert.alert("Alert", "No Internet Connection", [{ text: "OK" }], {
+  //       cancelable: false,
+  //     });
+  //     return false;
+  //   }
+  //   if (isInternetReachable == false) {
+  //     Alert.alert(
+  //       "Alert",
+  //       "Internet Connection not Accessible",
+  //       [{ text: "OK" }],
+  //       { cancelable: false }
+  //     );
+  //     return false;
+  //   }
+  // };
 
-  if (
-    CompleteDriverTripData?.message ==
-    "Trip could not be updated and is flagged"
-  ) {
-    Alert.alert(
-      "Alert",
-      `${CompleteDriverTripData?.message}`,
-      [{ text: "OK" }],
-      {
-        cancelable: false,
-      }
-    );
+  // if (
+  //   CompleteDriverTripData?.message ==
+  //   "Trip could not be updated and is flagged"
+  // ) {
+  //   Alert.alert(
+  //     "Alert",
+  //     `${CompleteDriverTripData?.message}`,
+  //     [{ text: "OK" }],
+  //     {
+  //       cancelable: false,
+  //     }
+  //   );
 
-    console.log("test2");
-  } else if (CompleteDriverTripData?.success == true) {
-    Alert.alert("Alert", `This is Trip is Successful`, [{ text: "OK" }], {
-      cancelable: false,
-    });
+  //   console.log("test2");
+  // } else if (CompleteDriverTripData?.success == true) {
+  //   console.log("test");
 
-    console.log("test");
-  } else {
-    console.log({ rrrh: CompleteDriverTripData });
-    console.log({ hhhh: completedTripdata });
-  }
+  //   Alert.alert("Alert", `This is Trip is Successful`, [{ text: "OK" }], {
+  //     cancelable: false,
+  //   });
+
+  //   console.log("test");
+  // } else {
+  //   console.log({ rrrh: CompleteDriverTripData });
+  //   console.log({ hhhh: completedTripdata });
+  // }
 
   return (
     <View className="">
@@ -202,7 +206,7 @@ const EndTripButtton = () => {
           onPress={stopTrip}
           style={{ backgroundColor: "#a31225", padding: 10 }}
         >
-          {IsLoading && (
+          {EndingTrip && (
             <TouchableOpacity
               style={{ backgroundColor: "#a31225", padding: 10 }}
             >
@@ -212,7 +216,7 @@ const EndTripButtton = () => {
 
           {/* CompleteDriverTripData */}
 
-          {!IsLoading && (
+          {!EndingTrip && (
             <Text
               style={{
                 alignSelf: "center",

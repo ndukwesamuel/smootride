@@ -106,8 +106,6 @@ const Driver = () => {
 
   console.log("Driver");
 
-  console.log({ complet: CompleteDriverTripData });
-
   const { startTripdata, completedTripdata } = useSelector(
     (state) => state.StartTripSlice
   );
