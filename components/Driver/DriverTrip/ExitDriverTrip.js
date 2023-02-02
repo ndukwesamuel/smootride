@@ -41,12 +41,21 @@ import { reset as resetRejectTripSlice } from "../../../Slice/Driver/RejectTripS
 import { reset as resetCompleteDriverTripSlice } from "../../../Slice/Driver/CompleteDriverTripSlice";
 import StartTrip from "./StartTrip";
 import TakeAnotherStartTrip from "./TakeAnotherStartTrip";
+import ExitDriverModal from "./ExitDriverModal";
 const ExitDriverTrip = () => {
   const dispatch = useDispatch();
 
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
   const { ExittripData, IsError, IsSucess, message, IsLoading } = useSelector(
     (state) => state.ExitTripSlice
+  );
+
+  const { CompleteDriverTripData } = useSelector(
+    (state) => state.CompleteDriverTripSlice
+  );
+
+  const { First_Trip_start_time } = useSelector(
+    (state) => state.FristTripSlice
   );
 
   const {
@@ -60,8 +69,8 @@ const ExitDriverTrip = () => {
   } = useSelector((state) => state.StartTripSlice);
   const call = () => {};
 
-  let date_start = moment(startTimecurrentLocationData);
-  let date_End = moment(EndTimeLastDestinationLocationData);
+  let date_start = moment(First_Trip_start_time);
+  let date_End = moment(completedTripdata.date_End);
   let The_year_start = date_start.year();
   let The_day_start = date_start.format("dddd");
   let The_time_start = date_start.format("HH:mm:ss");
@@ -79,83 +88,30 @@ const ExitDriverTrip = () => {
   // console.log({ name1: ExittripData.success });
 
   const onopentoexit = () => {
-    dispatch(
-      ExitTripFunc({
-        rider_id: holdriderdata?.data.id,
-      })
-    );
+    setExitTripIsloading(true);
+
+    let data = {
+      srcLat: completedTripdata.srcLat,
+      srcLong: completedTripdata.srcLong,
+      destLat: completedTripdata.destLat,
+      destLong: completedTripdata.destLong,
+      trip_start_time: First_Trip_start_time,
+      tripAmt: completedTripdata.tripAmt,
+    };
+
+    dispatch(CompleteDriverTripFunc(data));
+
+    setExitTripIsloading(false);
   };
-
-  if (ExittripData?.success) {
-    Alert.alert("Alert", `Congrat Trip Done and Exited`, [{ text: "OK" }], {
-      cancelable: false,
-    });
-
-    dispatch(resetGetLastAssignTripSlice());
-    dispatch(resetRejectTripSlice());
-    dispatch(resetCompleteDriverTripSlice());
-    dispatch(resetExitTripSlice());
-    dispatch(resetGetrider());
-    dispatch(resetAll_Excerpt_startTripdata());
-    dispatch(resetALLStartTrip());
-    dispatch(resetUpdateDriverStatusSlice());
-    dispatch(resetGetAllDriverTripsSlice());
-    dispatch(AcceptReset());
-    dispatch(resetholdriderdata());
-    dispatch(resetholdriderdata());
-    dispatch(resetUpdateDriverStatusSlice());
-    dispatch(resetAll_Excerpt_startTripdata());
-    dispatch(CompleteDriverReset());
-  }
-  // else {
-  //   Alert.alert("Alert", `Somthing went Wrong`, [{ text: "OK" }], {
-  //     cancelable: false,
-  //   });
-  // }
-  // useEffect(() => {
-  //   console.log("table3");
-
-  // dispatch(resetGetLastAssignTripSlice());
-  // dispatch(resetRejectTripSlice());
-  // dispatch(resetCompleteDriverTripSlice());
-  // dispatch(resetExitTripSlice());
-  // dispatch(resetGetrider());
-  // dispatch(resetPassowrdReset());
-  // dispatch(resetAll_Excerpt_startTripdata());
-  // dispatch(resetALLStartTrip());
-  // dispatch(resetUpdateDriverStatusSlice());
-  // dispatch(resetGetAllDriverTripsSlice());
-  // dispatch(AcceptReset());
-  // dispatch(resetholdriderdata());
-  //   dispatch(resetholdriderdata());
-  //   dispatch(resetUpdateDriverStatusSlice());
-  //   dispatch(resetAll_Excerpt_startTripdata());
-
-  // dispatch(resetGetAllDriverTripsSlice())
-
-  //   dispatch(CompleteDriverReset());
-  //   dispatch(AcceptReset());
-  //   dispatch(ExitReset());
-  //   dispatch(resetholdriderdata());
-  //   dispatch(resetAll_Excerpt_startTripdata());
-
-  //   return () => {};
-  // }, [ExittripData]);
-
-  // return (
-  //   <View>
-  //     <Card>
-  //       <Text>The Trip is Completed</Text>
-  //     </Card>
-  //   </View>
-  // );
 
   return (
     // {
     //     this.props.drivertrip.isEnded == true &&
 
     <>
-      {/* <TakeAnotherStartTrip /> */}
+      <TakeAnotherStartTrip />
+
+      {CompleteDriverTripData?.success == true && <ExitDriverModal />}
       <View style={{ padding: 10 }}>
         <View style={{ marginTop: 0, borderRadius: 5 }}>
           <TouchableOpacity
@@ -240,7 +196,7 @@ const ExitDriverTrip = () => {
             >
               {/* {this.props.data.isFetching == false && ( */}
 
-              {!IsLoading && (
+              {!ExitTripIsloading && (
                 <Text
                   style={{
                     alignSelf: "center",
@@ -253,7 +209,9 @@ const ExitDriverTrip = () => {
                 </Text>
               )}
 
-              {IsLoading && <ActivityIndicator color="#fff" size="small" />}
+              {ExitTripIsloading && (
+                <ActivityIndicator color="#fff" size="small" />
+              )}
             </TouchableOpacity>
           </View>
         </View>

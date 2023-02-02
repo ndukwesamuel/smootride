@@ -96,6 +96,12 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
+  const { First_Trip_start_time } = useSelector(
+    (state) => state.FristTripSlice
+  );
+
+  console.log({ ytyt: First_Trip_start_time });
+
   const { rejectData, isLoading: rejectisLoading } = useSelector(
     (state) => state.RejectTripSlice
   );
@@ -105,8 +111,6 @@ const Driver = () => {
   );
 
   console.log("Driver");
-
-  console.log({ complet: CompleteDriverTripData });
 
   const { startTripdata, completedTripdata } = useSelector(
     (state) => state.StartTripSlice
@@ -125,7 +129,7 @@ const Driver = () => {
   const { maplocationdata } = useSelector((state) => state.StartTripSlice);
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
-  console.log(completedTripdata);
+  console.log({ ExittripData });
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
@@ -786,14 +790,12 @@ const Driver = () => {
               </View>
             )}
 
-            {/* 
-
             {completedTripdata && startTripdata && (
               <View>
                 <Text>kdjsdkjsd</Text>
                 <TakeAnotherDriverMap />
               </View>
-            )} */}
+            )}
 
             <View>
               {/* {

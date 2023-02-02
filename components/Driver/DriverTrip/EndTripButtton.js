@@ -29,6 +29,7 @@ import { CompleteDriverTripFunc } from "../../../Slice/Driver/CompleteDriverTrip
 import { useNavigation } from "@react-navigation/native";
 
 import { reset as resetGetLastAssignTripSlice } from "../../../Slice/Driver/GetLastAssignTripSlice";
+import { First_Trip_StartTime } from "../../../Slice/Driver/FristTripSlice";
 
 const EndTripButtton = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,10 @@ const EndTripButtton = () => {
     completedTripdata,
     maplocationdata,
   } = useSelector((state) => state.StartTripSlice);
+
+  const { First_Trip_start_time } = useSelector(
+    (state) => state.FristTripSlice
+  );
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
@@ -71,7 +76,7 @@ const EndTripButtton = () => {
   }, []);
 
   const stopTrip = async () => {
-    NetworkState();
+    setEndingTrip(true);
 
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -83,7 +88,7 @@ const EndTripButtton = () => {
     if (
       currentLocationData &&
       destination &&
-      startTimecurrentLocationData &&
+      First_Trip_start_time &&
       EndTime
     ) {
       let start_lat = currentLocationData.coords.latitude;
@@ -102,7 +107,7 @@ const EndTripButtton = () => {
       let distance_In_KM = Result_Of_Meters_Corverd / 1000;
 
       let fare_In_Km = distance_In_KM * holdriderdata.config.basefare;
-      let startSec = new Date(startTimecurrentLocationData).getTime();
+      let startSec = new Date(First_Trip_start_time).getTime();
       let date = new Date(Date.now());
       let endSec = date.getTime();
 
@@ -122,22 +127,12 @@ const EndTripButtton = () => {
       // console.log(totlaCost);
       // console.log(unformattedcost);
 
-      let data = {
-        srcLat: start_lat,
-        srcLong: start_log,
-        destLat: end_lat,
-        destLong: end_log,
-        trip_start_time: startTimecurrentLocationData,
-        tripAmt: totlaCost,
-      };
-      console.log(data);
-
       let TripSummaryData = {
         srcLat: start_lat,
         srcLong: start_log,
         destLat: end_lat,
         destLong: end_log,
-        trip_start_time: startTimecurrentLocationData,
+        trip_start_time: First_Trip_start_time,
         tripAmt: totlaCost,
         date_End: EndTime,
         WaitedTime: "this is the time they waite",
@@ -145,55 +140,59 @@ const EndTripButtton = () => {
         Distant_Covered: distance_In_KM,
       };
 
-      dispatch(CompleteDriverTripFunc(data));
+      // dispatch(CompleteDriverTripFunc(data));
       dispatch(CompletedTripActivated(TripSummaryData));
       dispatch(ActivateStartTrip());
       dispatch(resetGetLastAssignTripSlice());
     }
+
+    setEndingTrip(false);
   };
 
-  const NetworkState = () => {
-    if (isConnected == false) {
-      Alert.alert("Alert", "No Internet Connection", [{ text: "OK" }], {
-        cancelable: false,
-      });
-      return false;
-    }
-    if (isInternetReachable == false) {
-      Alert.alert(
-        "Alert",
-        "Internet Connection not Accessible",
-        [{ text: "OK" }],
-        { cancelable: false }
-      );
-      return false;
-    }
-  };
+  // const NetworkState = () => {
+  //   if (isConnected == false) {
+  //     Alert.alert("Alert", "No Internet Connection", [{ text: "OK" }], {
+  //       cancelable: false,
+  //     });
+  //     return false;
+  //   }
+  //   if (isInternetReachable == false) {
+  //     Alert.alert(
+  //       "Alert",
+  //       "Internet Connection not Accessible",
+  //       [{ text: "OK" }],
+  //       { cancelable: false }
+  //     );
+  //     return false;
+  //   }
+  // };
 
-  if (
-    CompleteDriverTripData?.message ==
-    "Trip could not be updated and is flagged"
-  ) {
-    Alert.alert(
-      "Alert",
-      `${CompleteDriverTripData?.message}`,
-      [{ text: "OK" }],
-      {
-        cancelable: false,
-      }
-    );
+  // if (
+  //   CompleteDriverTripData?.message ==
+  //   "Trip could not be updated and is flagged"
+  // ) {
+  //   Alert.alert(
+  //     "Alert",
+  //     `${CompleteDriverTripData?.message}`,
+  //     [{ text: "OK" }],
+  //     {
+  //       cancelable: false,
+  //     }
+  //   );
 
-    console.log("test2");
-  } else if (CompleteDriverTripData?.success == true) {
-    Alert.alert("Alert", `This is Trip is Successful`, [{ text: "OK" }], {
-      cancelable: false,
-    });
+  //   console.log("test2");
+  // } else if (CompleteDriverTripData?.success == true) {
+  //   console.log("test");
 
-    console.log("test");
-  } else {
-    console.log({ rrrh: CompleteDriverTripData });
-    console.log({ hhhh: completedTripdata });
-  }
+  //   Alert.alert("Alert", `This is Trip is Successful`, [{ text: "OK" }], {
+  //     cancelable: false,
+  //   });
+
+  //   console.log("test");
+  // } else {
+  //   console.log({ rrrh: CompleteDriverTripData });
+  //   console.log({ hhhh: completedTripdata });
+  // }
 
   return (
     <View className="">
@@ -202,7 +201,7 @@ const EndTripButtton = () => {
           onPress={stopTrip}
           style={{ backgroundColor: "#a31225", padding: 10 }}
         >
-          {IsLoading && (
+          {EndingTrip && (
             <TouchableOpacity
               style={{ backgroundColor: "#a31225", padding: 10 }}
             >
@@ -212,7 +211,7 @@ const EndTripButtton = () => {
 
           {/* CompleteDriverTripData */}
 
-          {!IsLoading && (
+          {!EndingTrip && (
             <Text
               style={{
                 alignSelf: "center",
