@@ -100,76 +100,12 @@ const ExitDriverTrip = () => {
     setExitTripIsloading(false);
   };
 
-  // if (ExittripData?.success) {
-  //   Alert.alert("Alert", `Congrat Trip Done and Exited`, [{ text: "OK" }], {
-  //     cancelable: false,
-  //   });
-
-  //   dispatch(resetGetLastAssignTripSlice());
-  //   dispatch(resetRejectTripSlice());
-  //   dispatch(resetCompleteDriverTripSlice());
-  //   dispatch(resetExitTripSlice());
-  //   dispatch(resetGetrider());
-  //   dispatch(resetAll_Excerpt_startTripdata());
-  //   dispatch(resetALLStartTrip());
-  //   dispatch(resetUpdateDriverStatusSlice());
-  //   dispatch(resetGetAllDriverTripsSlice());
-  //   dispatch(AcceptReset());
-  //   dispatch(resetholdriderdata());
-  //   dispatch(resetholdriderdata());
-  //   dispatch(resetUpdateDriverStatusSlice());
-  //   dispatch(resetAll_Excerpt_startTripdata());
-  //   dispatch(CompleteDriverReset());
-  // }
-  // else {
-  //   Alert.alert("Alert", `Somthing went Wrong`, [{ text: "OK" }], {
-  //     cancelable: false,
-  //   });
-  // }
-  // useEffect(() => {
-  //   console.log("table3");
-
-  // dispatch(resetGetLastAssignTripSlice());
-  // dispatch(resetRejectTripSlice());
-  // dispatch(resetCompleteDriverTripSlice());
-  // dispatch(resetExitTripSlice());
-  // dispatch(resetGetrider());
-  // dispatch(resetPassowrdReset());
-  // dispatch(resetAll_Excerpt_startTripdata());
-  // dispatch(resetALLStartTrip());
-  // dispatch(resetUpdateDriverStatusSlice());
-  // dispatch(resetGetAllDriverTripsSlice());
-  // dispatch(AcceptReset());
-  // dispatch(resetholdriderdata());
-  //   dispatch(resetholdriderdata());
-  //   dispatch(resetUpdateDriverStatusSlice());
-  //   dispatch(resetAll_Excerpt_startTripdata());
-
-  // dispatch(resetGetAllDriverTripsSlice())
-
-  //   dispatch(CompleteDriverReset());
-  //   dispatch(AcceptReset());
-  //   dispatch(ExitReset());
-  //   dispatch(resetholdriderdata());
-  //   dispatch(resetAll_Excerpt_startTripdata());
-
-  //   return () => {};
-  // }, [ExittripData]);
-
-  // return (
-  //   <View>
-  //     <Card>
-  //       <Text>The Trip is Completed</Text>
-  //     </Card>
-  //   </View>
-  // );
-
   return (
     // {
     //     this.props.drivertrip.isEnded == true &&
 
     <>
-      {/* <TakeAnotherStartTrip /> */}
+      <TakeAnotherStartTrip />
 
       {CompleteDriverTripData?.success == true && <ExitDriverModal />}
       <View style={{ padding: 10 }}>

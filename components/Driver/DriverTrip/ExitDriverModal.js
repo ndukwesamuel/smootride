@@ -106,7 +106,7 @@ const ExitDriverModal = () => {
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalText}>
-                this trip will not be updated but move
+                {CompleteDriverTripData?.message}
               </Text>
 
               <Button
@@ -114,9 +114,6 @@ const ExitDriverModal = () => {
                 title="Click "
                 color="#841584"
               />
-              <Pressable style={[styles.button, styles.buttonClose]}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
-              </Pressable>
             </View>
           </View>
         ) : (
@@ -129,11 +126,6 @@ const ExitDriverModal = () => {
                 title="Click Me"
                 color="#841584"
               />
-              <Pressable style={[styles.button, styles.buttonClose]}>
-                <Text style={styles.textStyle}>Hide Modal</Text>
-
-                {IsLoading && <Text> This is loadiing </Text>}
-              </Pressable>
             </View>
           </View>
         )}

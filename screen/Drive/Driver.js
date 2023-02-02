@@ -123,7 +123,7 @@ const Driver = () => {
   const { maplocationdata } = useSelector((state) => state.StartTripSlice);
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
-  console.log(completedTripdata);
+  console.log({ ExittripData });
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
@@ -784,14 +784,12 @@ const Driver = () => {
               </View>
             )}
 
-            {/* 
-
             {completedTripdata && startTripdata && (
               <View>
                 <Text>kdjsdkjsd</Text>
                 <TakeAnotherDriverMap />
               </View>
-            )} */}
+            )}
 
             <View>
               {/* {
