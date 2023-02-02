@@ -57,19 +57,14 @@ const ExitDriverModal = () => {
 
   const [modalVisible, setModalVisible] = useState(true);
 
+  console.log({ f: CompleteDriverTripData });
+
   const onPressLearnMore = () => {
     console.log("click");
+    dispatch(ExitTripFunc(holdriderdata?.data.id));
 
-    ExitTripFunc("kjkjk");
+    setModalVisible(false);
   };
-
-  const Exist_assign_Driver = () => {
-    // console.log(ExittripData);
-    // ExitTripFunc();
-    // console.log("Sdsdjskdjsdkj");
-    // setModalVisible(false);
-  };
-
   console.log({ hdf: ExittripData });
 
   if (ExittripData?.success) {
@@ -119,10 +114,7 @@ const ExitDriverModal = () => {
                 title="Click "
                 color="#841584"
               />
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={Exist_assign_Driver}
-              >
+              <Pressable style={[styles.button, styles.buttonClose]}>
                 <Text style={styles.textStyle}>Hide Modal</Text>
               </Pressable>
             </View>
@@ -137,10 +129,7 @@ const ExitDriverModal = () => {
                 title="Click Me"
                 color="#841584"
               />
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={Exist_assign_Driver}
-              >
+              <Pressable style={[styles.button, styles.buttonClose]}>
                 <Text style={styles.textStyle}>Hide Modal</Text>
 
                 {IsLoading && <Text> This is loadiing </Text>}

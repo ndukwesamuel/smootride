@@ -36,9 +36,11 @@ export const ExitTripFunc = createAsyncThunk(
   "ExitTrip/data",
   async (Exitid, thunkAPI) => {
     try {
-      console.log(Exitid);
-      // const tokengot = await AsyncStorage.getItem("token");
-      // return await ExitTripService(Exitid, tokengot);
+      console.log({ ee: Exitid });
+      const tokengot = await AsyncStorage.getItem("token");
+
+      console.log(tokengot);
+      return await ExitTripService(Exitid, tokengot);
     } catch (error) {
       console.log(error);
       const message =
