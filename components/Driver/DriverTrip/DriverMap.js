@@ -21,6 +21,7 @@ import {
   StartTimeCurrentLocationActivated,
 } from "../../../Slice/Driver/StartTripSlice";
 import EndTripButtton from "./EndTripButtton";
+import { First_Trip_StartTime_Activated } from "../../../Slice/Driver/FristTripSlice";
 
 const DriverMap = () => {
   const { width, height } = Dimensions.get("window");
@@ -61,7 +62,7 @@ const DriverMap = () => {
     setMaplocation(false);
     dispatch(MapLocationActivated(maplocation));
     dispatch(CurrentLocationActivated(currentLocation));
-    dispatch(StartTimeCurrentLocationActivated(startTime));
+    dispatch(First_Trip_StartTime_Activated(startTime));
   };
 
   useEffect(() => {

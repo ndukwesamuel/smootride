@@ -29,6 +29,7 @@ import { CompleteDriverTripFunc } from "../../../Slice/Driver/CompleteDriverTrip
 import { useNavigation } from "@react-navigation/native";
 
 import { reset as resetGetLastAssignTripSlice } from "../../../Slice/Driver/GetLastAssignTripSlice";
+import { First_Trip_StartTime } from "../../../Slice/Driver/FristTripSlice";
 
 const EndTripButtton = () => {
   const dispatch = useDispatch();
@@ -44,6 +45,10 @@ const EndTripButtton = () => {
     completedTripdata,
     maplocationdata,
   } = useSelector((state) => state.StartTripSlice);
+
+  const { First_Trip_start_time } = useSelector(
+    (state) => state.FristTripSlice
+  );
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
@@ -83,7 +88,7 @@ const EndTripButtton = () => {
     if (
       currentLocationData &&
       destination &&
-      startTimecurrentLocationData &&
+      First_Trip_start_time &&
       EndTime
     ) {
       let start_lat = currentLocationData.coords.latitude;
@@ -102,7 +107,7 @@ const EndTripButtton = () => {
       let distance_In_KM = Result_Of_Meters_Corverd / 1000;
 
       let fare_In_Km = distance_In_KM * holdriderdata.config.basefare;
-      let startSec = new Date(startTimecurrentLocationData).getTime();
+      let startSec = new Date(First_Trip_start_time).getTime();
       let date = new Date(Date.now());
       let endSec = date.getTime();
 
@@ -122,22 +127,12 @@ const EndTripButtton = () => {
       // console.log(totlaCost);
       // console.log(unformattedcost);
 
-      let data = {
-        srcLat: start_lat,
-        srcLong: start_log,
-        destLat: end_lat,
-        destLong: end_log,
-        trip_start_time: startTimecurrentLocationData,
-        tripAmt: totlaCost,
-      };
-      console.log(data);
-
       let TripSummaryData = {
         srcLat: start_lat,
         srcLong: start_log,
         destLat: end_lat,
         destLong: end_log,
-        trip_start_time: startTimecurrentLocationData,
+        trip_start_time: First_Trip_start_time,
         tripAmt: totlaCost,
         date_End: EndTime,
         WaitedTime: "this is the time they waite",

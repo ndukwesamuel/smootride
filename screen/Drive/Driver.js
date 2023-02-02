@@ -96,6 +96,12 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
+  const { First_Trip_start_time } = useSelector(
+    (state) => state.FristTripSlice
+  );
+
+  console.log({ ytyt: First_Trip_start_time });
+
   const { rejectData, isLoading: rejectisLoading } = useSelector(
     (state) => state.RejectTripSlice
   );

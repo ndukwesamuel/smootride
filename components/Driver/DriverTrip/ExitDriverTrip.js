@@ -54,6 +54,10 @@ const ExitDriverTrip = () => {
     (state) => state.CompleteDriverTripSlice
   );
 
+  const { First_Trip_start_time } = useSelector(
+    (state) => state.FristTripSlice
+  );
+
   const {
     startTripdata,
     maplocationdata,
@@ -65,8 +69,8 @@ const ExitDriverTrip = () => {
   } = useSelector((state) => state.StartTripSlice);
   const call = () => {};
 
-  let date_start = moment(startTimecurrentLocationData);
-  let date_End = moment(EndTimeLastDestinationLocationData);
+  let date_start = moment(First_Trip_start_time);
+  let date_End = moment(completedTripdata.date_End);
   let The_year_start = date_start.year();
   let The_day_start = date_start.format("dddd");
   let The_time_start = date_start.format("HH:mm:ss");
@@ -91,7 +95,7 @@ const ExitDriverTrip = () => {
       srcLong: completedTripdata.srcLong,
       destLat: completedTripdata.destLat,
       destLong: completedTripdata.destLong,
-      trip_start_time: completedTripdata.trip_start_time,
+      trip_start_time: First_Trip_start_time,
       tripAmt: completedTripdata.tripAmt,
     };
 
