@@ -78,6 +78,11 @@ const EndTripButtton = () => {
   const stopTrip = async () => {
     setEndingTrip(true);
 
+    // this is where i'm doing my own
+    basefare = "";
+    distance_coverd = "";
+    time_taken_in_minit = "";
+
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
@@ -100,9 +105,7 @@ const EndTripButtton = () => {
       const startCoords = { latitude: start_lat, longitude: start_log };
       const endCoords = { latitude: end_lat, longitude: end_log };
 
-      let Result_Of_Meters_Corverd = haversine(startCoords, endCoords, {
-        unit: "meter",
-      });
+      let Result_Of_Meters_Corverd = haversine(startCoords, endCoords);
 
       let distance_In_KM = Result_Of_Meters_Corverd / 1000;
 
@@ -140,7 +143,6 @@ const EndTripButtton = () => {
         Distant_Covered: distance_In_KM,
       };
 
-      // dispatch(CompleteDriverTripFunc(data));
       dispatch(CompletedTripActivated(TripSummaryData));
       dispatch(ActivateStartTrip());
       dispatch(resetGetLastAssignTripSlice());
@@ -149,50 +151,7 @@ const EndTripButtton = () => {
     setEndingTrip(false);
   };
 
-  // const NetworkState = () => {
-  //   if (isConnected == false) {
-  //     Alert.alert("Alert", "No Internet Connection", [{ text: "OK" }], {
-  //       cancelable: false,
-  //     });
-  //     return false;
-  //   }
-  //   if (isInternetReachable == false) {
-  //     Alert.alert(
-  //       "Alert",
-  //       "Internet Connection not Accessible",
-  //       [{ text: "OK" }],
-  //       { cancelable: false }
-  //     );
-  //     return false;
-  //   }
-  // };
-
-  // if (
-  //   CompleteDriverTripData?.message ==
-  //   "Trip could not be updated and is flagged"
-  // ) {
-  //   Alert.alert(
-  //     "Alert",
-  //     `${CompleteDriverTripData?.message}`,
-  //     [{ text: "OK" }],
-  //     {
-  //       cancelable: false,
-  //     }
-  //   );
-
-  //   console.log("test2");
-  // } else if (CompleteDriverTripData?.success == true) {
-  //   console.log("test");
-
-  //   Alert.alert("Alert", `This is Trip is Successful`, [{ text: "OK" }], {
-  //     cancelable: false,
-  //   });
-
-  //   console.log("test");
-  // } else {
-  //   console.log({ rrrh: CompleteDriverTripData });
-  //   console.log({ hhhh: completedTripdata });
-  // }
+  const stop2 = () => {};
 
   return (
     <View className="">
