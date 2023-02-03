@@ -66,7 +66,7 @@ const RiderRequest = () => {
       }
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      // console.log("location gotten ",currentLocation)
+      console.log("location gotten ",currentLocation)
       setMaplocation(false);
     };
     getPermissions();
@@ -186,6 +186,25 @@ const RiderRequest = () => {
 
     initial();
   }, []);
+
+  // setTimeout(async ()=>{
+  //   const userdet = {
+  //     user_id: user_id,
+  //   };
+  //   await dispatch(AssignedDriver(userdet));
+  // }, 10000)
+  const MINUTE_MS = 10000;
+
+useEffect(() => {
+  const interval = setInterval(async() => {
+    const userdet = {
+          user_id: user_id,
+        };
+        await dispatch(AssignedDriver(userdet));
+  }, 10000);
+
+  return () => clearInterval(interval);
+}, [])
 
   const onRefresh = async () => {
     const userdet = {
@@ -657,54 +676,7 @@ const RiderRequest = () => {
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => {
                     return (
-                      <View
-                        style={{
-                          backgroundColor: "white",
-                          borderTopLeftRadius: 15,
-                          borderTopRightRadius: 20,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            color: "#007CC2",
-                            textAlign: "center",
-                            fontSize: 20,
-                            marginTop: 25,
-                          }}
-                        >
-                          Hi, {username}
-                        </Text>
-                        <TouchableOpacity
-                          style={{
-                            backgroundColor: "#EDEDED",
-                            padding: 1,
-                            width: "90%",
-                            marginLeft: "5%",
-                            borderRadius: 7,
-                            marginTop: 20,
-                          }}
-                        >
-                          {/* {
-                                         this.state.isrequestingdrivers == true &&
-                                         <Text style={styles.driverbtn}>Getting available drivers....</Text>
-                                     } */}
-                          {/* {
-                                         this.state.isrequestingdrivers == false && */}
-                          <Text
-                            style={{
-                              marginStart: 5,
-                              color: "#000",
-                              fontSize: 20,
-                              alignSelf: "center",
-                              // fontFamily:'Roboto-Regular',1
-                              color: "#C1C1C1",
-                            }}
-                          >
-                            {" "}
-                            {number} driver(s) available
-                          </Text>
-                          {/* } */}
-                        </TouchableOpacity>
+                      
                         <View
                           // key = {driver.id}
                           // value = {driver.id}
@@ -720,8 +692,7 @@ const RiderRequest = () => {
                             elevation: 3,
                             backgroundColor: "white",
                             borderRadius: 10,
-                            width: "90%",
-                            marginLeft: "5%",
+                            width: "100%",
                           }}
                         >
                           <View
@@ -860,35 +831,7 @@ const RiderRequest = () => {
                             </TouchableOpacity>
                           </View>
                         </View>
-                        <TouchableOpacity
-                          style={{
-                            marginTop: 7,
-                            backgroundColor: "#005091",
-                            padding: 10,
-                            width: "90%",
-                            borderRadius: 10,
-                            alignSelf: "center",
-                            marginBottom: 20,
-                            marginLeft: "5%",
-                          }}
-                          onPress={handleModal}
-                        >
-                          {loading ? (
-                            <ActivityIndicator animating={true} color="white" />
-                          ) : (
-                            <Text
-                              style={{
-                                alignSelf: "center",
-                                color: "#fff",
-                                fontSize: 25,
-                              }}
-                              onPress={handleModal}
-                            >
-                              REQUEST A RIDE
-                            </Text>
-                          )}
-                        </TouchableOpacity>
-                      </View>
+                        
                     );
                   }}
                 />
