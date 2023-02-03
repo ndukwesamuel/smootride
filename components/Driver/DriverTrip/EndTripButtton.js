@@ -140,7 +140,6 @@ const EndTripButtton = () => {
         Distant_Covered: distance_In_KM,
       };
 
-      // dispatch(CompleteDriverTripFunc(data));
       dispatch(CompletedTripActivated(TripSummaryData));
       dispatch(ActivateStartTrip());
       dispatch(resetGetLastAssignTripSlice());
@@ -148,51 +147,6 @@ const EndTripButtton = () => {
 
     setEndingTrip(false);
   };
-
-  // const NetworkState = () => {
-  //   if (isConnected == false) {
-  //     Alert.alert("Alert", "No Internet Connection", [{ text: "OK" }], {
-  //       cancelable: false,
-  //     });
-  //     return false;
-  //   }
-  //   if (isInternetReachable == false) {
-  //     Alert.alert(
-  //       "Alert",
-  //       "Internet Connection not Accessible",
-  //       [{ text: "OK" }],
-  //       { cancelable: false }
-  //     );
-  //     return false;
-  //   }
-  // };
-
-  // if (
-  //   CompleteDriverTripData?.message ==
-  //   "Trip could not be updated and is flagged"
-  // ) {
-  //   Alert.alert(
-  //     "Alert",
-  //     `${CompleteDriverTripData?.message}`,
-  //     [{ text: "OK" }],
-  //     {
-  //       cancelable: false,
-  //     }
-  //   );
-
-  //   console.log("test2");
-  // } else if (CompleteDriverTripData?.success == true) {
-  //   console.log("test");
-
-  //   Alert.alert("Alert", `This is Trip is Successful`, [{ text: "OK" }], {
-  //     cancelable: false,
-  //   });
-
-  //   console.log("test");
-  // } else {
-  //   console.log({ rrrh: CompleteDriverTripData });
-  //   console.log({ hhhh: completedTripdata });
-  // }
 
   return (
     <View className="">

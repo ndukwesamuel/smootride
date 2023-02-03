@@ -204,6 +204,22 @@ const Driver = () => {
     dispatch(AcceptTripFun({ trip_id: dataID }));
   };
 
+  // The purpose of this function is to get the item every 5 or 10 seconds.
+  const [counter, setCounter] = useState(0);
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      setCounter(counter + 1);
+      dispatch(
+        GetLastAssignTrip({
+          user_id: 1,
+        })
+      );
+      console.log({ namesss: "skjdskdjkj" });
+    }, 5000);
+    return () => clearTimeout(interval);
+  }, [counter]);
+  // this function end here
+
   return (
     <SafeAreaView>
       <StatusBar style="light" backgroundColor="#005091" />
