@@ -94,18 +94,22 @@ const ExitDriverTrip = () => {
   const onopentoexit = () => {
     setExitTripIsloading(true);
 
+    console.log({ jjj: "asjkasaksj" });
+
     let data = {
       srcLat: completedTripdata.srcLat,
       srcLong: completedTripdata.srcLong,
       destLat: completedTripdata.destLat,
       destLong: completedTripdata.destLong,
       trip_start_time: First_Trip_start_time,
-      tripAmt: completedTripdata.tripAmt,
+      tripAmt: finalaTotalCost,
     };
 
     dispatch(CompleteDriverTripFunc(data));
 
-    setExitTripIsloading(false);
+    setTimeout(() => {
+      setExitTripIsloading(false);
+    }, 10000);
   };
 
   return (
