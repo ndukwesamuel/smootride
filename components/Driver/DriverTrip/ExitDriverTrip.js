@@ -83,10 +83,6 @@ const ExitDriverTrip = () => {
 
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
 
-  // console.log({ name7: completedTripdata });
-  // console.log({ name2: holdriderdata });
-  // console.log({ name1: ExittripData.success });
-
   const onopentoexit = () => {
     setExitTripIsloading(true);
 

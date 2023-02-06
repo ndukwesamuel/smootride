@@ -129,8 +129,6 @@ const Driver = () => {
   const { maplocationdata } = useSelector((state) => state.StartTripSlice);
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
-  console.log({ ExittripData });
-
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
   };

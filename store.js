@@ -35,6 +35,8 @@ import HoldTripDataSlice from "./Slice/Driver/HoldTripDataSlice";
 
 import FristTripSlice from "./Slice/Driver/FristTripSlice";
 
+import GetUserConfigSlice from "./Slice/Driver/GetUserConfig";
+
 const reducers = combineReducers({
   nav: navReducer,
   LoginSlice: LoginSlice,
@@ -51,6 +53,7 @@ const reducers = combineReducers({
   CompleteDriverTripSlice: CompleteDriverTripSlice,
   HoldTripDataSlice: HoldTripDataSlice,
   FristTripSlice: FristTripSlice,
+  GetUserConfigSlice: GetUserConfigSlice,
 });
 
 const persistConfig = {

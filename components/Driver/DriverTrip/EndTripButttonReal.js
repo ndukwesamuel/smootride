@@ -34,39 +34,6 @@ import { First_Trip_StartTime } from "../../../Slice/Driver/FristTripSlice";
 import { GetUserConfigFun } from "../../../Slice/Driver/GetUserConfig";
 
 const EndTripButtton = () => {
-  const [pointA, setPointA] = useState(null);
-  const [pointB, setPointB] = useState(null);
-  const [pointc, setPointc] = useState(null);
-  const newData = [];
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      let location = await Location.getCurrentPositionAsync({});
-      setPointA(location);
-      newData.push(pointA);
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [pointB]);
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      let location = await Location.getCurrentPositionAsync({});
-      setPointB(location);
-
-      newData.push(pointB);
-      setPointc(+1);
-    }, 15000);
-
-    return () => clearInterval(interval);
-  }, [pointA]);
-
-  console.log({ pointA });
-  console.log({ pointB });
-  console.log({ newData });
-
-  console.log({ done: "done" });
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [EndingTrip, setEndingTrip] = useState(false);
@@ -109,6 +76,14 @@ const EndTripButtton = () => {
     return () => {};
   }, []);
 
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsConnected(state.isConnected);
+      setIsInternetReachable(state.isInternetReachable);
+    });
+    return () => unsubscribe();
+  }, []);
+
   const getPermissions = async () => {
     setMaplocation(true);
 
@@ -129,16 +104,8 @@ const EndTripButtton = () => {
     dispatch(First_Trip_StartTime_Activated(startTime));
   };
 
-  // useEffect(() => {
-  //   getPermissions();
-  // }, []);
-
   useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      setIsConnected(state.isConnected);
-      setIsInternetReachable(state.isInternetReachable);
-    });
-    return () => unsubscribe();
+    getPermissions();
   }, []);
 
   const stopTrip = async () => {
