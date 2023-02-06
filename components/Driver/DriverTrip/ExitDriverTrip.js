@@ -67,6 +67,9 @@ const ExitDriverTrip = () => {
     EndTimeLastDestinationLocationData,
     completedTripdata,
   } = useSelector((state) => state.StartTripSlice);
+  const { getuserDATA } = useSelector((state) => state.GetUserConfigSlice);
+
+  let basefare = getuserDATA?.config.basefare;
   const call = () => {};
 
   let date_start = moment(First_Trip_start_time);
@@ -82,6 +85,11 @@ const ExitDriverTrip = () => {
   let EndDate = `${The_year_end} / ${The_day_end} / ${The_time_end} `;
 
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
+
+  let finalaTotalCost = parseFloat(basefare) + completedTripdata.tripAmt;
+
+  console.log(completedTripdata.tripAmt);
+  console.log({ finalaTotalCost });
 
   const onopentoexit = () => {
     setExitTripIsloading(true);

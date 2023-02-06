@@ -9,6 +9,7 @@ const initialState = {
   EndTimeLastDestinationLocationData: "",
   completedTripdata: null,
   totalTripAmount: null,
+  total_distance_covered: 0,
 };
 
 export const StartTripSlice = createSlice({
@@ -42,6 +43,10 @@ export const StartTripSlice = createSlice({
       state.currentLocationData = action.payload;
     },
 
+    TotalDistanceCoveredFun: (state, action) => {
+      state.total_distance_covered = action.payload;
+    },
+
     LastDestinationLocationActivated: (state, action) => {
       state.LastDestinationLocationData = action.payload;
     },
@@ -71,6 +76,7 @@ export const {
   resetAll_Excerpt_startTripdata,
   resetALLStartTrip,
   TotalTripAmountFun,
+  TotalDistanceCoveredFun,
 } = StartTripSlice.actions;
 
 export default StartTripSlice.reducer;

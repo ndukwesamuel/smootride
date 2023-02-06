@@ -24,6 +24,7 @@ import {
   MapLocationActivated,
   resetAll_Excerpt_startTripdata,
   StartTimeCurrentLocationActivated,
+  TotalDistanceCoveredFun,
   TotalTripAmountFun,
 } from "../../../Slice/Driver/StartTripSlice";
 import { CompleteDriverTripFunc } from "../../../Slice/Driver/CompleteDriverTripSlice";
@@ -32,41 +33,9 @@ import { useNavigation } from "@react-navigation/native";
 import { reset as resetGetLastAssignTripSlice } from "../../../Slice/Driver/GetLastAssignTripSlice";
 import { First_Trip_StartTime } from "../../../Slice/Driver/FristTripSlice";
 import { GetUserConfigFun } from "../../../Slice/Driver/GetUserConfig";
+import { getType } from "@reduxjs/toolkit";
 
 const EndTripButtton = () => {
-  const [pointA, setPointA] = useState(null);
-  const [pointB, setPointB] = useState(null);
-  const [pointc, setPointc] = useState(null);
-  const newData = [];
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      let location = await Location.getCurrentPositionAsync({});
-      setPointA(location);
-      newData.push(pointA);
-    }, 10000);
-
-    return () => clearInterval(interval);
-  }, [pointB]);
-
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      let location = await Location.getCurrentPositionAsync({});
-      setPointB(location);
-
-      newData.push(pointB);
-      setPointc(+1);
-    }, 15000);
-
-    return () => clearInterval(interval);
-  }, [pointA]);
-
-  console.log({ pointA });
-  console.log({ pointB });
-  console.log({ newData });
-
-  console.log({ done: "done" });
-
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [EndingTrip, setEndingTrip] = useState(false);
@@ -80,11 +49,13 @@ const EndTripButtton = () => {
     completedTripdata,
     maplocationdata,
     totalTripAmount,
+    total_distance_covered,
   } = useSelector((state) => state.StartTripSlice);
 
   const { First_Trip_start_time } = useSelector(
     (state) => state.FristTripSlice
   );
+  ``;
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
@@ -109,25 +80,47 @@ const EndTripButtton = () => {
     return () => {};
   }, []);
 
+  const [counter, setCounter] = useState(0);
   const getPermissions = async () => {
-    setMaplocation(true);
-
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       console.log("Please grant Location permissions");
       return;
     }
     let currentLocation = await Location.getCurrentPositionAsync({});
-    let startTime = await new Date().toISOString();
 
-    console.log(startTime);
-    setLocation(currentLocation);
-    // console.log("location gotten ",currentLocation)
-    setMaplocation(false);
-    dispatch(MapLocationActivated(maplocation));
-    dispatch(CurrentLocationActivated(currentLocation));
-    dispatch(First_Trip_StartTime_Activated(startTime));
+    // dispatch(CurrentLocationActivated(currentLocation))
+
+    const startCoords = {
+      latitude: currentLocation.coords.latitude,
+      longitude: currentLocation.coords.longitude,
+    };
+    const endCoords = {
+      latitude: currentLocationData?.coords.latitude,
+      longitude: currentLocationData?.coords.longitude,
+    };
+
+    let Result_Of_Meters_Corverd = haversine(startCoords, endCoords);
+
+    let distance__ =
+      parseFloat(Result_Of_Meters_Corverd) + parseFloat(total_distance_covered);
+
+    dispatch(TotalDistanceCoveredFun(distance__));
   };
+
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      getPermissions();
+      setCounter(counter + 1);
+      // setCounter(counter + 1);
+      // dispatch(
+      //   GetLastAssignTrip({
+      //     user_id: 1,
+      //   })
+      // );
+    }, 5000);
+    return () => clearTimeout(interval);
+  }, [counter]);
 
   // useEffect(() => {
   //   getPermissions();
@@ -168,26 +161,27 @@ const EndTripButtton = () => {
 
       let Result_Of_Meters_Corverd = haversine(startCoords, endCoords);
 
-      let distance_In_KM = Result_Of_Meters_Corverd / 1000;
+      let distance__2 =
+        parseFloat(Result_Of_Meters_Corverd) +
+        parseFloat(total_distance_covered);
 
-      let fare_In_Km = distance_In_KM * holdriderdata.config.basefare;
-      let startSec = new Date(First_Trip_start_time).getTime();
-      let date = new Date(Date.now());
-      let endSec = date.getTime();
+      dispatch(TotalDistanceCoveredFun(distance__2));
 
-      let diff_In_sec = (endSec - startSec) / 1000;
-      let SecSpent =
-        (diff_In_sec / 60) * parseFloat(holdriderdata.config.permin);
+      // formular = base + km + time
+      let basefare = getuserDATA?.config.basefare;
+      let km = total_distance_covered * getuserDATA?.config.perkm;
 
-      let totlaCost =
-        fare_In_Km + SecSpent + parseFloat(holdriderdata.config.basefare);
-      let unformattedcost =
-        fare_In_Km + SecSpent + parseFloat(holdriderdata.config.basefare);
-      totlaCost = totlaCost.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
-      let travelTime = diff_In_sec;
+      const timestamp1 = First_Trip_start_time;
+      const timestamp2 = EndTime;
+      const date1 = new Date(timestamp1);
+      const date2 = new Date(timestamp2);
+      const diffInMs = date2 - date1;
+      const diffInMinutes = diffInMs / 1000 / 60;
+      let travelTime = diffInMinutes * getuserDATA?.config.permin;
 
-      // let finalaTotalCost = totalTripAmount + parseFloat(totlaCost);
-      // dispatch(TotalTripAmountFun(finalaTotalCost));
+      let Amount_without_Base_fare = travelTime + km;
+
+      console.log({ Amount_without_Base_fare });
 
       let TripSummaryData = {
         srcLat: start_lat,
@@ -195,11 +189,11 @@ const EndTripButtton = () => {
         destLat: end_lat,
         destLong: end_log,
         trip_start_time: First_Trip_start_time,
-        tripAmt: totalTripAmount,
+        tripAmt: Amount_without_Base_fare,
         date_End: EndTime,
         WaitedTime: "this is the time they waite",
         Cost_of_waiting: "this iw the waiting period",
-        Distant_Covered: distance_In_KM,
+        Distant_Covered: total_distance_covered,
       };
 
       dispatch(CompletedTripActivated(TripSummaryData));

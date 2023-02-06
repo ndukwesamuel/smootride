@@ -56,7 +56,6 @@ const DriverMap = () => {
     let currentLocation = await Location.getCurrentPositionAsync({});
     let startTime = await new Date().toISOString();
 
-    console.log(startTime);
     setLocation(currentLocation);
     // console.log("location gotten ",currentLocation)
     setMaplocation(false);
@@ -74,10 +73,7 @@ const DriverMap = () => {
   const LATITUDE_DELTA = 0.006339428281933124;
   const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 
-  console.log(location);
-
   const MainMAP = ({ locationdata }) => {
-    console.log({ nn: locationdata });
     return (
       <>
         <MapView
