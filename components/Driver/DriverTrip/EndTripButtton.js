@@ -178,7 +178,6 @@ const EndTripButtton = () => {
       const diffInMs = date2 - date1;
       const diffInMinutes = diffInMs / 1000 / 60;
       let travelTime = diffInMinutes * getuserDATA?.config.permin;
-
       let Amount_without_Base_fare = travelTime + km;
 
       console.log({ Amount_without_Base_fare });

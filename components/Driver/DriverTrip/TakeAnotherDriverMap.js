@@ -53,7 +53,13 @@ const TakeAnotherDriverMap = () => {
       console.log("Please grant Location permissions");
       return;
     }
-    let currentLocation = await Location.getCurrentPositionAsync({});
+    // let currentLocation = await Location.getCurrentPositionAsync({});
+
+    let currentLocation = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+      allowsBackgroundLocationUpdates: true,
+      showsBackgroundLocationIndicator: true,
+    });
     let startTime = await new Date().toISOString();
 
     console.log(startTime);
