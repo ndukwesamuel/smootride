@@ -29,8 +29,6 @@ const Trip = () => {
     (state) => state.GetAllDriverTripsSlice
   );
 
-  // console.log({ drivertrip });
-
   const dispatch = useDispatch();
 
   const getdrivertrip = () => {

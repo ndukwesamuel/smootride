@@ -153,9 +153,6 @@ const EndTripButtton = () => {
       totlaCost = totlaCost.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, "$&,");
       let travelTime = diff_In_sec;
 
-      // let finalaTotalCost = totalTripAmount + parseFloat(totlaCost);
-      // dispatch(TotalTripAmountFun(finalaTotalCost));
-
       let TripSummaryData = {
         srcLat: start_lat,
         srcLong: start_log,

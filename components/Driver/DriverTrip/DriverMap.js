@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { GOOGLE_MAPS_APIKEYS } from "@env";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
 
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import {
@@ -45,22 +46,40 @@ const DriverMap = () => {
   const [closedTrip, setClosedTrip] = useState(false);
   // const [startTime, setStartTime] = useState(null);
 
+  const verifyPermissions = async () => {
+    const result = await Permissions.askAsync(Permissions.LOCATION);
+    if (result.status !== "granted") {
+      Alert.alert(
+        "Insufficient permissions!",
+        "You need to grant location permissions to use this app.",
+        [{ text: "Okay" }]
+      );
+      return false;
+    }
+    return true;
+  };
+
   const getPermissions = async () => {
     setMaplocation(true);
 
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      console.log("Please grant Location permissions");
-      return;
+      Alert.alert(
+        "Insufficient permissions!",
+        "You need to grant location permissions to use this app.",
+        [{ text: "Okay" }]
+      );
+      return false;
     }
 
     let currentLocation = await Location.getCurrentPositionAsync({
+      timeout: 5000,
       accuracy: Location.Accuracy.High,
       allowsBackgroundLocationUpdates: true,
       showsBackgroundLocationIndicator: true,
     });
 
-    let startTime = await new Date().toISOString();
+    let startTime = new Date().toISOString();
 
     setLocation(currentLocation);
     // console.log("location gotten ",currentLocation)
