@@ -197,7 +197,7 @@ const ExitDriverModal = () => {
                       fontSize: 13,
                       padding: 12,
                       marginRight: 5,
-                      fontFamily: "Roboto-Regular",
+                      // fontFamily: "Roboto-Regular",
                     }}
                   >
                     Okay
