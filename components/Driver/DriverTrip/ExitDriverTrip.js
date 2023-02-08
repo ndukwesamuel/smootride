@@ -89,7 +89,7 @@ const ExitDriverTrip = () => {
   let finalaTotalCost = parseFloat(basefare) + completedTripdata.tripAmt;
 
   console.log(completedTripdata.tripAmt);
-  console.log({ finalaTotalCost });
+  console.log({});
 
   const onopentoexit = () => {
     setExitTripIsloading(true);

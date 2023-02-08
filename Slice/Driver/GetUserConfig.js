@@ -57,7 +57,7 @@ export const GetUserConfigSlice = createSlice({
   name: "getuserconfig",
   initialState,
   reducers: {
-    reset: (state) => initialState,
+    GetUserConfigreset: (state) => initialState,
   },
 
   extraReducers: (builder) => {
@@ -80,6 +80,6 @@ export const GetUserConfigSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { reset } = GetUserConfigSlice.actions;
+export const { GetUserConfigreset } = GetUserConfigSlice.actions;
 
 export default GetUserConfigSlice.reducer;

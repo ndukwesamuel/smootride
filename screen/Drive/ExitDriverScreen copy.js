@@ -76,10 +76,7 @@ const ExitDriverScreen = () => {
     );
   };
 
-  //   useEffect(() => {
-
-  //     return () => {};
-  //   }, [ExittripData]);
+  console.log({ trip: "CompleteDriverTripData" });
 
   if (ExittripData) {
     console.log("table3");
@@ -93,37 +90,6 @@ const ExitDriverScreen = () => {
       screen: "Driver",
     });
   }
-
-  //   return (
-  //     <View>
-  //       <Text> JJJJ</Text>
-  //       <TouchableOpacity
-  //         onPress={onopentoexit}
-  //         style={{
-  //           backgroundColor: "#a31225",
-  //           padding: 10,
-  //           borderRadius: 5,
-  //           marginTop: 20,
-  //           marginBottom: 40,
-  //         }}
-  //       >
-  //         {!IsLoading && (
-  //           <Text
-  //             style={{
-  //               alignSelf: "center",
-  //               color: "#fff",
-  //               fontSize: 14,
-  //               // fontFamily: "Roboto-Regular",
-  //             }}
-  //           >
-  //             Exit Trip with Rider
-  //           </Text>
-  //         )}
-
-  //         {IsLoading && <ActivityIndicator color="#fff" size="small" />}
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
 
   return (
     <>

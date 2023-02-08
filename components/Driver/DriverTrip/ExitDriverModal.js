@@ -45,6 +45,8 @@ import { reset as resetCompleteDriverTripSlice } from "../../../Slice/Driver/Com
 import StartTrip from "./StartTrip";
 import TakeAnotherStartTrip from "./TakeAnotherStartTrip";
 import { Card } from "react-native-shadow-cards";
+import { GetUserConfigreset } from "../../../Slice/Driver/GetUserConfig";
+import { resetALLFristTripSlice } from "../../../Slice/Driver/FristTripSlice";
 const ExitDriverModal = () => {
   const dispatch = useDispatch();
 
@@ -74,6 +76,8 @@ const ExitDriverModal = () => {
       cancelable: false,
     });
 
+    dispatch(resetALLFristTripSlice());
+    dispatch(GetUserConfigreset());
     dispatch(resetGetLastAssignTripSlice());
     dispatch(resetRejectTripSlice());
     dispatch(resetCompleteDriverTripSlice());

@@ -59,6 +59,7 @@ const DriverMap = () => {
       allowsBackgroundLocationUpdates: true,
       showsBackgroundLocationIndicator: true,
     });
+
     let startTime = await new Date().toISOString();
 
     setLocation(currentLocation);
@@ -79,6 +80,7 @@ const DriverMap = () => {
   const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 
   const MainMAP = ({ locationdata }) => {
+    console.log({ locationdata });
     return (
       <>
         <MapView
