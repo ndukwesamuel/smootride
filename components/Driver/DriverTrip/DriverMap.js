@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { GOOGLE_MAPS_APIKEYS } from "@env";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
 
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import {
@@ -50,21 +51,23 @@ const DriverMap = () => {
 
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      console.log("Please grant Location permissions");
-      return;
+      Alert.alert(
+        "Insufficient permissions!",
+        "You need to grant location permissions to use this app.",
+        [{ text: "Okay" }]
+      );
+      return false;
     }
 
-    let currentLocation = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.High,
-      allowsBackgroundLocationUpdates: true,
-      showsBackgroundLocationIndicator: true,
-    });
+    let currentLocation = await Location.getCurrentPositionAsync({});
 
-    let startTime = await new Date().toISOString();
+    let startTime = new Date().toISOString();
 
     setLocation(currentLocation);
     // console.log("location gotten ",currentLocation)
     setMaplocation(false);
+
+    console.log({ maplocation });
     dispatch(MapLocationActivated(maplocation));
     dispatch(CurrentLocationActivated(currentLocation));
     dispatch(First_Trip_StartTime_Activated(startTime));
@@ -107,9 +110,39 @@ const DriverMap = () => {
     );
   };
 
+  console.log({ maplocation });
+
+  console.log({ location });
+
   return (
     <View style={{ height: mapHeight }} className="">
-      {maplocation ? (
+      {maplocation && (
+        <View className="pt-10 ">
+          <View className="  items-center">
+            <Card className=" items-center py-5">
+              <Text>Location is Loading </Text>
+              <ActivityIndicator animating={true} color="black" />
+            </Card>
+          </View>
+        </View>
+      )}
+
+      {!maplocation && location && (
+        <>{riderdata?.data && <MainMAP locationdata={location} />}</>
+      )}
+
+      {!maplocation && !location && (
+        <View className="pt-10 ">
+          <View className="  items-center">
+            <Card className=" items-center py-5">
+              <Text>Cant Find Location </Text>
+              <ActivityIndicator animating={true} color="black" />
+            </Card>
+          </View>
+        </View>
+      )}
+
+      {/* {maplocation ? (
         <View className="pt-10 ">
           <View className="  items-center">
             <Card className=" items-center py-5">
@@ -133,7 +166,7 @@ const DriverMap = () => {
             </View>
           )}
         </>
-      )}
+      )} */}
     </View>
   );
 

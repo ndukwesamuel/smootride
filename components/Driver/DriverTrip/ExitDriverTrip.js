@@ -119,6 +119,7 @@ const ExitDriverTrip = () => {
     <>
       <TakeAnotherStartTrip />
 
+      <ExitDriverModal />
       {CompleteDriverTripData?.success == true && <ExitDriverModal />}
       <View style={{ padding: 10 }}>
         <View style={{ marginTop: 0, borderRadius: 5 }}>
@@ -164,7 +165,9 @@ const ExitDriverTrip = () => {
             >
               <Text style={styles.details}>
                 Cost of Trip (NGN):{" "}
-                <Text style={styles.time}>{completedTripdata.tripAmt}</Text>
+                <Text style={styles.time}>
+                  {parseFloat(basefare) + completedTripdata.tripAmt}
+                </Text>
               </Text>
             </Card>
             <Card

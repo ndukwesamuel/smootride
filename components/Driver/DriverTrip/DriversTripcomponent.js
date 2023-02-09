@@ -103,7 +103,7 @@ const DriversTripcomponent = ({ driverTripData }) => {
                   <View style={{ width: "70%" }}>
                     <Text style={{ color: "#fff" }}>{d.name}</Text>
                     <Text style={{ color: "#fff", fontSize: 12 }}>
-                      Travel Time: kaka
+                      Travel Time: There was no time tralve found. 
                       {/* {this.toHHMMSS(d.travelTime)} */}
                     </Text>
                   </View>

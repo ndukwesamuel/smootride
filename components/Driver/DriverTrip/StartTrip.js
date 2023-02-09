@@ -14,7 +14,6 @@ const StartTrip = () => {
   const dispatch = useDispatch();
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
   const { startTripdata } = useSelector((state) => state.StartTripSlice);
-
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
   useEffect(() => {

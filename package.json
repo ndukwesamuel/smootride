@@ -28,6 +28,7 @@
     "expo": "~47.0.8",
     "expo-dev-client": "~2.0.1",
     "expo-location": "~15.0.1",
+    "expo-permissions": "^14.0.0",
     "expo-status-bar": "~1.4.2",
     "haversine": "^1.1.1",
     "moment": "^2.29.4",
