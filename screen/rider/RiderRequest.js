@@ -170,7 +170,9 @@ const RiderRequest = () => {
     }
     Linking.openURL(phoneNumber);
   };
-  const handleModal = () => setIsModalVisible(!isModalVisible);
+  const handleModal = () => {
+    setIsModalVisible(!isModalVisible)
+  };
 
   useEffect(() => {
     const initial = async () => {
@@ -201,7 +203,7 @@ useEffect(() => {
           user_id: user_id,
         };
         await dispatch(AssignedDriver(userdet));
-  }, 10000);
+  }, 25000);
 
   return () => clearInterval(interval);
 }, [])
