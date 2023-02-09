@@ -30,8 +30,6 @@ const DriverProfile = () => {
 
   const { user, data } = useSelector((state) => state.LoginSlice);
 
-  console.log({ name: drivertrip.length });
-
   const handleLogout = async () => {
     console.log("sdsd");
     persistStore(store).purge();

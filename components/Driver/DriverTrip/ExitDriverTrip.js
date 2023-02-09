@@ -50,6 +50,12 @@ const ExitDriverTrip = () => {
     (state) => state.ExitTripSlice
   );
 
+  const { user, data, isError, isSuccess, isLoading } = useSelector(
+    (state) => state.LoginSlice
+  );
+  console.log({ log: data.user.id });
+
+  // console.log(holdriderdata.driverdetails);
   const { CompleteDriverTripData } = useSelector(
     (state) => state.CompleteDriverTripSlice
   );
@@ -88,24 +94,38 @@ const ExitDriverTrip = () => {
 
   let finalaTotalCost = parseFloat(basefare) + completedTripdata.tripAmt;
 
-  console.log(completedTripdata.tripAmt);
-  console.log({});
-
   const onopentoexit = () => {
     setExitTripIsloading(true);
 
     console.log({ jjj: "asjkasaksj" });
 
-    let data = {
+    let maindata = {
       srcLat: completedTripdata.srcLat,
       srcLong: completedTripdata.srcLong,
       destLat: completedTripdata.destLat,
       destLong: completedTripdata.destLong,
       trip_start_time: First_Trip_start_time,
       tripAmt: finalaTotalCost,
+      driverId: data?.user.id,
     };
 
-    dispatch(CompleteDriverTripFunc(data));
+    let data2 = {
+      srcLat: completedTripdata.srcLat,
+      srcLong: completedTripdata.srcLong,
+      destLat: completedTripdata.destLat,
+      destLong: completedTripdata.destLong,
+      trip_start_time: First_Trip_start_time,
+      tripAmt: finalaTotalCost,
+      driverId: data?.user.id,
+      // pickUpAddress: tripdetails.startAddress,
+      // destAddress: tripdetails.stopAddress,
+      // tripPoints: JSON.stringify(tripdetails.waypoints),
+      // tripEndTime: tripdetails.endTime,
+      // travelTime: tripdetails.travelTime,
+      // tripDist: tripdetails.distance_covered,
+    };
+
+    dispatch(CompleteDriverTripFunc(maindata));
 
     setTimeout(() => {
       setExitTripIsloading(false);
