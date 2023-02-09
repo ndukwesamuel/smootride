@@ -96,12 +96,6 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
-  // const u = useSelector((state) => state);
-  // console.log(
-  //   "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
-  // );
-  // console.log({ u });
-
   const { First_Trip_start_time } = useSelector(
     (state) => state.FristTripSlice
   );
@@ -135,6 +129,10 @@ const Driver = () => {
   );
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
+  // const holdriderdat = useSelector((state) => state);
+
+  // console.log({ holdriderdat });
+
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
   };
@@ -158,6 +156,7 @@ const Driver = () => {
       // dispatch(reset());
     };
   }, [reload]);
+
   const [counter, setCounter] = useState(0);
   useEffect(() => {
     const interval = setTimeout(() => {
@@ -809,7 +808,6 @@ const Driver = () => {
 
             {completedTripdata && startTripdata && (
               <View>
-                <Text>kdjsdkjsd</Text>
                 <TakeAnotherDriverMap />
               </View>
             )}

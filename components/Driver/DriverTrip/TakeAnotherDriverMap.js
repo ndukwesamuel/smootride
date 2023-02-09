@@ -132,7 +132,33 @@ const TakeAnotherDriverMap = () => {
 
   return (
     <View style={{ height: mapHeight }} className="">
-      {maplocation ? (
+      {maplocation && (
+        <View className="pt-10 ">
+          <View className="  items-center">
+            <Card className=" items-center py-5">
+              <Text>Location is Loading </Text>
+              <ActivityIndicator animating={true} color="black" />
+            </Card>
+          </View>
+        </View>
+      )}
+
+      {!maplocation && location && (
+        <>{holdriderdata?.data && <MainMAP locationdata={location} />}</>
+      )}
+
+      {!maplocation && !location && (
+        <View className="pt-10 ">
+          <View className="  items-center">
+            <Card className=" items-center py-5">
+              <Text>Cant Find Location </Text>
+              <ActivityIndicator animating={true} color="black" />
+            </Card>
+          </View>
+        </View>
+      )}
+
+      {/* {maplocation ? (
         <View className="pt-10 ">
           <View className="  items-center">
             <Card className=" items-center py-5">
@@ -156,7 +182,7 @@ const TakeAnotherDriverMap = () => {
             </View>
           )}
         </>
-      )}
+      )} */}
     </View>
   );
 };

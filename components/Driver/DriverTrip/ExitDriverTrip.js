@@ -164,7 +164,9 @@ const ExitDriverTrip = () => {
             >
               <Text style={styles.details}>
                 Cost of Trip (NGN):{" "}
-                <Text style={styles.time}>{completedTripdata.tripAmt}</Text>
+                <Text style={styles.time}>
+                  {parseFloat(basefare) + completedTripdata.tripAmt}
+                </Text>
               </Text>
             </Card>
             <Card
