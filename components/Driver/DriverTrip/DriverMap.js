@@ -46,19 +46,6 @@ const DriverMap = () => {
   const [closedTrip, setClosedTrip] = useState(false);
   // const [startTime, setStartTime] = useState(null);
 
-  const verifyPermissions = async () => {
-    const result = await Permissions.askAsync(Permissions.LOCATION);
-    if (result.status !== "granted") {
-      Alert.alert(
-        "Insufficient permissions!",
-        "You need to grant location permissions to use this app.",
-        [{ text: "Okay" }]
-      );
-      return false;
-    }
-    return true;
-  };
-
   const getPermissions = async () => {
     setMaplocation(true);
 
@@ -72,12 +59,7 @@ const DriverMap = () => {
       return false;
     }
 
-    let currentLocation = await Location.getCurrentPositionAsync({
-      timeout: 5000,
-      accuracy: Location.Accuracy.High,
-      allowsBackgroundLocationUpdates: true,
-      showsBackgroundLocationIndicator: true,
-    });
+    let currentLocation = await Location.getCurrentPositionAsync({});
 
     let startTime = new Date().toISOString();
 
