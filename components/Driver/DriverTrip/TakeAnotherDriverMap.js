@@ -53,7 +53,13 @@ const TakeAnotherDriverMap = () => {
       console.log("Please grant Location permissions");
       return;
     }
-    let currentLocation = await Location.getCurrentPositionAsync({});
+    // let currentLocation = await Location.getCurrentPositionAsync({});
+
+    let currentLocation = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+      allowsBackgroundLocationUpdates: true,
+      showsBackgroundLocationIndicator: true,
+    });
     let startTime = await new Date().toISOString();
 
     console.log(startTime);
@@ -126,7 +132,33 @@ const TakeAnotherDriverMap = () => {
 
   return (
     <View style={{ height: mapHeight }} className="">
-      {maplocation ? (
+      {maplocation && (
+        <View className="pt-10 ">
+          <View className="  items-center">
+            <Card className=" items-center py-5">
+              <Text>Location is Loading </Text>
+              <ActivityIndicator animating={true} color="black" />
+            </Card>
+          </View>
+        </View>
+      )}
+
+      {!maplocation && location && (
+        <>{holdriderdata?.data && <MainMAP locationdata={location} />}</>
+      )}
+
+      {!maplocation && !location && (
+        <View className="pt-10 ">
+          <View className="  items-center">
+            <Card className=" items-center py-5">
+              <Text>Cant Find Location </Text>
+              <ActivityIndicator animating={true} color="black" />
+            </Card>
+          </View>
+        </View>
+      )}
+
+      {/* {maplocation ? (
         <View className="pt-10 ">
           <View className="  items-center">
             <Card className=" items-center py-5">
@@ -150,7 +182,7 @@ const TakeAnotherDriverMap = () => {
             </View>
           )}
         </>
-      )}
+      )} */}
     </View>
   );
 };

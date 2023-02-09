@@ -7,6 +7,8 @@ import {
   Pressable,
   View,
   Button,
+  Image,
+  TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -43,6 +45,8 @@ import { reset as resetCompleteDriverTripSlice } from "../../../Slice/Driver/Com
 import StartTrip from "./StartTrip";
 import TakeAnotherStartTrip from "./TakeAnotherStartTrip";
 import { Card } from "react-native-shadow-cards";
+import { GetUserConfigreset } from "../../../Slice/Driver/GetUserConfig";
+import { resetALLFristTripSlice } from "../../../Slice/Driver/FristTripSlice";
 const ExitDriverModal = () => {
   const dispatch = useDispatch();
 
@@ -72,6 +76,8 @@ const ExitDriverModal = () => {
       cancelable: false,
     });
 
+    dispatch(resetALLFristTripSlice());
+    dispatch(GetUserConfigreset());
     dispatch(resetGetLastAssignTripSlice());
     dispatch(resetRejectTripSlice());
     dispatch(resetCompleteDriverTripSlice());
@@ -103,29 +109,175 @@ const ExitDriverModal = () => {
         }}
       >
         {CompleteDriverTripData?.message ? (
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>
+          <View style={styles.modalView}>
+            <View
+              style={{
+                backgroundColor: "#fff",
+                width: "98%",
+                height: "auto",
+                padding: 15,
+                paddingTop: 5,
+                marginRight: 0,
+                alignSelf: "center",
+              }}
+            >
+              <Image
+                source={require("../../../assets/images/request.png")}
+                style={{
+                  width: 40,
+                  height: 40,
+                  alignSelf: "center",
+                  marginTop: 20,
+                  marginBottom: 15,
+                }}
+              />
+
+              <Text
+                style={{
+                  color: "#000",
+                  fontSize: 15,
+                  // fontFamily: "Roboto-Bold",
+                  textAlign: "center",
+                }}
+              >
+                Trip Information
+              </Text>
+
+              <Text
+                style={{
+                  color: "#000",
+                  alignSelf: "center",
+                  fontSize: 13,
+                  padding: 12,
+                  marginRight: 5,
+                  // fontFamily: "Roboto-Regular",
+                }}
+              >
                 {CompleteDriverTripData?.message}
               </Text>
 
-              <Button
-                onPress={onPressLearnMore}
-                title="Click "
-                color="#841584"
-              />
+              <View
+                style={{
+                  padding: 10,
+                  alignSelf: "center",
+                  marginTop: 5,
+                  width: "100%",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={onPressLearnMore}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#fff",
+                    borderWidth: 1,
+                    borderColor: "#005091",
+                    backgroundColor: "#005091",
+                    marginTop: 2,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      alignSelf: "center",
+                      fontSize: 13,
+                      padding: 12,
+                      marginRight: 5,
+                      // fontFamily: "Roboto-Regular",
+                    }}
+                  >
+                    Okay
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.modalText}>The trip has been updated</Text>
             </View>
           </View>
         ) : (
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>The trip has been updated</Text>
-
-              <Button
-                onPress={onPressLearnMore}
-                title="Click Me"
-                color="#841584"
+          <View style={styles.modalView}>
+            <View
+              style={{
+                backgroundColor: "#fff",
+                width: "98%",
+                height: "auto",
+                padding: 15,
+                paddingTop: 5,
+                marginRight: 0,
+                alignSelf: "center",
+              }}
+            >
+              <Image
+                source={require("../../../assets/images/request.png")}
+                style={{
+                  width: 40,
+                  height: 40,
+                  alignSelf: "center",
+                  marginTop: 20,
+                  marginBottom: 15,
+                }}
               />
+
+              <Text
+                style={{
+                  color: "#000",
+                  fontSize: 15,
+                  // fontFamily: "Roboto-Bold",
+                  textAlign: "center",
+                }}
+              >
+                Trip Information
+              </Text>
+
+              <Text
+                style={{
+                  color: "#000",
+                  alignSelf: "center",
+                  fontSize: 13,
+                  padding: 12,
+                  marginRight: 5,
+                  // fontFamily: "Roboto-Regular",
+                }}
+              >
+                Driver Has ended Trip
+              </Text>
+
+              <View
+                style={{
+                  padding: 10,
+                  alignSelf: "center",
+                  marginTop: 5,
+                  width: "100%",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={onPressLearnMore}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#fff",
+                    borderWidth: 1,
+                    borderColor: "#005091",
+                    backgroundColor: "#005091",
+                    marginTop: 2,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      alignSelf: "center",
+                      fontSize: 13,
+                      padding: 12,
+                      marginRight: 5,
+                      // fontFamily: "Roboto-Regular",
+                    }}
+                  >
+                    Okay
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.modalText}>The trip has been updated</Text>
             </View>
           </View>
         )}

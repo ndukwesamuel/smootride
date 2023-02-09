@@ -67,6 +67,9 @@ const ExitDriverTrip = () => {
     EndTimeLastDestinationLocationData,
     completedTripdata,
   } = useSelector((state) => state.StartTripSlice);
+  const { getuserDATA } = useSelector((state) => state.GetUserConfigSlice);
+
+  let basefare = getuserDATA?.config.basefare;
   const call = () => {};
 
   let date_start = moment(First_Trip_start_time);
@@ -83,12 +86,15 @@ const ExitDriverTrip = () => {
 
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
 
-  // console.log({ name7: completedTripdata });
-  // console.log({ name2: holdriderdata });
-  // console.log({ name1: ExittripData.success });
+  let finalaTotalCost = parseFloat(basefare) + completedTripdata.tripAmt;
+
+  console.log(completedTripdata.tripAmt);
+  console.log({});
 
   const onopentoexit = () => {
     setExitTripIsloading(true);
+
+    console.log({ jjj: "asjkasaksj" });
 
     let data = {
       srcLat: completedTripdata.srcLat,
@@ -96,12 +102,14 @@ const ExitDriverTrip = () => {
       destLat: completedTripdata.destLat,
       destLong: completedTripdata.destLong,
       trip_start_time: First_Trip_start_time,
-      tripAmt: completedTripdata.tripAmt,
+      tripAmt: finalaTotalCost,
     };
 
     dispatch(CompleteDriverTripFunc(data));
 
-    setExitTripIsloading(false);
+    setTimeout(() => {
+      setExitTripIsloading(false);
+    }, 10000);
   };
 
   return (
@@ -111,6 +119,7 @@ const ExitDriverTrip = () => {
     <>
       <TakeAnotherStartTrip />
 
+      <ExitDriverModal />
       {CompleteDriverTripData?.success == true && <ExitDriverModal />}
       <View style={{ padding: 10 }}>
         <View style={{ marginTop: 0, borderRadius: 5 }}>
@@ -156,7 +165,9 @@ const ExitDriverTrip = () => {
             >
               <Text style={styles.details}>
                 Cost of Trip (NGN):{" "}
-                <Text style={styles.time}>{completedTripdata.tripAmt}</Text>
+                <Text style={styles.time}>
+                  {parseFloat(basefare) + completedTripdata.tripAmt}
+                </Text>
               </Text>
             </Card>
             <Card

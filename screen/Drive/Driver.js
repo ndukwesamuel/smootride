@@ -100,8 +100,6 @@ const Driver = () => {
     (state) => state.FristTripSlice
   );
 
-  console.log({ ytyt: First_Trip_start_time });
-
   const { rejectData, isLoading: rejectisLoading } = useSelector(
     (state) => state.RejectTripSlice
   );
@@ -126,10 +124,14 @@ const Driver = () => {
     (state) => state.DriverAcceptTripSlice
   );
 
-  const { maplocationdata } = useSelector((state) => state.StartTripSlice);
+  const { maplocationdata, total_distance_covered } = useSelector(
+    (state) => state.StartTripSlice
+  );
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
-  console.log({ ExittripData });
+  // const holdriderdat = useSelector((state) => state);
+
+  // console.log({ holdriderdat });
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
@@ -154,6 +156,21 @@ const Driver = () => {
       // dispatch(reset());
     };
   }, [reload]);
+
+  const [counter, setCounter] = useState(0);
+  useEffect(() => {
+    const interval = setTimeout(() => {
+      setCounter(counter + 1);
+      dispatch(
+        GetLastAssignTrip({
+          user_id: 1,
+        })
+      );
+    }, 10000);
+    return () => clearTimeout(interval);
+  }, [counter]);
+
+  console.log({ counter });
 
   let dataforDriverRequest = {
     isrequesting: false,
@@ -180,7 +197,6 @@ const Driver = () => {
 
   const call = (data) => {
     console.log("this is f");
-
     let phoneNumber = "";
     if (Platform.OS === "android") {
       phoneNumber = `tel:${data}`;
@@ -792,7 +808,6 @@ const Driver = () => {
 
             {completedTripdata && startTripdata && (
               <View>
-                <Text>kdjsdkjsd</Text>
                 <TakeAnotherDriverMap />
               </View>
             )}
