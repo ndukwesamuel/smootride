@@ -119,7 +119,6 @@ const ExitDriverTrip = () => {
     <>
       <TakeAnotherStartTrip />
 
-      <ExitDriverModal />
       {CompleteDriverTripData?.success == true && <ExitDriverModal />}
       <View style={{ padding: 10 }}>
         <View style={{ marginTop: 0, borderRadius: 5 }}>
