@@ -34,6 +34,10 @@ import { reset as resetGetLastAssignTripSlice } from "../../../Slice/Driver/GetL
 import { First_Trip_StartTime } from "../../../Slice/Driver/FristTripSlice";
 import { GetUserConfigFun } from "../../../Slice/Driver/GetUserConfig";
 import { getType } from "@reduxjs/toolkit";
+import {
+  Pick_Place_Function,
+  thisFun,
+} from "../../../screen/Drive/GoogleLocationAPi";
 
 const EndTripButtton = () => {
   const dispatch = useDispatch();
@@ -112,15 +116,17 @@ const EndTripButtton = () => {
     const interval = setTimeout(() => {
       getPermissions();
       setCounter(counter + 1);
-      // setCounter(counter + 1);
-      // dispatch(
-      //   GetLastAssignTrip({
-      //     user_id: 1,
-      //   })
-      // );
     }, 5000);
     return () => clearTimeout(interval);
   }, [counter]);
+
+  // const [getPlace, setGetPlace] = useState(0);
+  // useEffect(() => {
+  //   const interval = setTimeout(() => {
+  //     Pick_Place_Function();
+  //   }, 15000);
+  //   return () => clearTimeout(interval);
+  // }, [getPlace]);
 
   // useEffect(() => {
   //   getPermissions();

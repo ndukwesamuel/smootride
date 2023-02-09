@@ -24,6 +24,11 @@ import {
 import EndTripButtton from "./EndTripButtton";
 import { First_Trip_StartTime_Activated } from "../../../Slice/Driver/FristTripSlice";
 import PTRView from "react-native-pull-to-refresh";
+import {
+  Ex,
+  GetAddress_OF_Location,
+  thisFun,
+} from "../../../screen/Drive/GoogleLocationAPi";
 
 const DriverMap = () => {
   const { width, height } = Dimensions.get("window");
@@ -49,7 +54,7 @@ const DriverMap = () => {
 
   const getPermissions = async () => {
     setMaplocation(true);
-
+    let pickUpAddress = "pickUpAddress";
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
@@ -65,8 +70,12 @@ const DriverMap = () => {
     let startTime = new Date().toISOString();
 
     setLocation(currentLocation);
+
+    // GetAddress_OF_Location(currentLocation);
     // console.log("location gotten ",currentLocation)
     setMaplocation(false);
+
+    GetAddress_OF_Location(currentLocation, pickUpAddress);
 
     console.log({ maplocation });
     dispatch(MapLocationActivated(maplocation));
@@ -88,7 +97,6 @@ const DriverMap = () => {
   };
 
   const MainMAP = ({ locationdata }) => {
-    console.log({ locationdata });
     return (
       <>
         <MapView
@@ -114,10 +122,6 @@ const DriverMap = () => {
       </>
     );
   };
-
-  console.log({ maplocation });
-
-  console.log({ location });
 
   return (
     <PTRView onRefresh={refresh}>

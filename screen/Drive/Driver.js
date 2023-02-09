@@ -47,6 +47,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import TakeAnotherStartTrip from "../../components/Driver/DriverTrip/TakeAnotherStartTrip";
 import TakeAnotherDriverMap from "../../components/Driver/DriverTrip/TakeAnotherDriverMap";
+import { GetAddress_OF_Location } from "./GoogleLocationAPi";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -166,7 +167,7 @@ const Driver = () => {
           user_id: 1,
         })
       );
-    }, 10000);
+    }, 5000);
     return () => clearTimeout(interval);
   }, [counter]);
 
@@ -258,7 +259,6 @@ const Driver = () => {
                 Status
               </Text>
             </View>
-
             <ChangeDriveStatus
               data1={driver_request_Status}
               data2={setDriver_request_Status}

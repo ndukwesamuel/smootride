@@ -10,6 +10,9 @@ const initialState = {
   completedTripdata: null,
   totalTripAmount: null,
   total_distance_covered: 0,
+
+  pickUpAddressData: null,
+  destAddressData: null,
 };
 
 export const StartTripSlice = createSlice({
@@ -33,6 +36,10 @@ export const StartTripSlice = createSlice({
 
     MapLocationActivated: (state, action) => {
       state.maplocationdata = action.payload;
+    },
+
+    TotalTripAmountFun: (state, action) => {
+      state.totalTripAmount = action.payload;
     },
 
     TotalTripAmountFun: (state, action) => {
