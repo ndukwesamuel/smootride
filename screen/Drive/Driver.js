@@ -234,13 +234,6 @@ const Driver = () => {
       <StatusBar style="light" backgroundColor="#005091" />
       <PTRView onRefresh={refresh}>
         <View classname="flex-1 bg-red-600 ">
-          {/* {
-                     this.props.drivertrip.IsjustSubmittedTrip == true &&
-                     <View>
-                      {this.ff()}
-                     </View>
-                 }  */}
-
           <ScrollView keyboardShouldPersistTaps="always">
             <ProgressDialog
               // visible={this.state.isSavingAvailability}

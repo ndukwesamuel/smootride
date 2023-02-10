@@ -43,7 +43,10 @@ const DriverMap = () => {
     destAddressData,
     currentLocationData,
     startTripdata,
+    maplocationdata,
   } = useSelector((state) => state.StartTripSlice);
+
+  const { First_Trip_Location } = useSelector((state) => state.FristTripSlice);
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
   // console.log({ pickUpAddressData });
@@ -60,39 +63,39 @@ const DriverMap = () => {
   const [closedTrip, setClosedTrip] = useState(false);
   // const [startTime, setStartTime] = useState(null);
 
-  const getPermissions = async () => {
-    setMaplocation(true);
-    let pickUpAddress = "pickUpAddress";
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert(
-        "Insufficient permissions!",
-        "You need to grant location permissions to use this app.",
-        [{ text: "Okay" }]
-      );
-      return false;
-    }
+  // const getPermissions = async () => {
+  //   setMaplocation(true);
+  //   let pickUpAddress = "pickUpAddress";
+  //   let { status } = await Location.requestForegroundPermissionsAsync();
+  //   if (status !== "granted") {
+  //     Alert.alert(
+  //       "Insufficient permissions!",
+  //       "You need to grant location permissions to use this app.",
+  //       [{ text: "Okay" }]
+  //     );
+  //     return false;
+  //   }
 
-    let currentLocation = await Location.getCurrentPositionAsync({});
+  //   let currentLocation = await Location.getCurrentPositionAsync({});
 
-    let startTime = new Date().toISOString();
+  //   let startTime = new Date().toISOString();
 
-    setLocation(currentLocation);
+  //   setLocation(currentLocation);
 
-    let adddressResult = await GetAddress_OF_Location(currentLocation);
-    dispatch(PickUpAddressFun(adddressResult));
-    setMaplocation(false);
+  //   let adddressResult = await GetAddress_OF_Location(currentLocation);
+  //   dispatch(PickUpAddressFun(adddressResult));
+  //   setMaplocation(false);
 
-    console.log({ maplocation });
-    dispatch(MapLocationActivated(maplocation));
-    dispatch(First_Trip_Location_Activated(currentLocation));
-    dispatch(CurrentLocationActivated(currentLocation));
-    dispatch(First_Trip_StartTime_Activated(startTime));
-  };
+  //   console.log({ maplocation });
+  //   dispatch(MapLocationActivated(maplocation));
+  //   dispatch(First_Trip_Location_Activated(currentLocation));
+  //   dispatch(CurrentLocationActivated(currentLocation));
+  //   dispatch(First_Trip_StartTime_Activated(startTime));
+  // };
 
-  useEffect(() => {
-    getPermissions();
-  }, []);
+  // useEffect(() => {
+  //   getPermissions();
+  // }, []);
 
   const ASPECT_RATIO = width / height;
 
@@ -133,7 +136,7 @@ const DriverMap = () => {
   return (
     <PTRView onRefresh={refresh}>
       <View style={{ height: mapHeight }} className="">
-        {maplocation && (
+        {maplocationdata && (
           <View className="pt-10 ">
             <View className="  items-center">
               <Card className=" items-center py-5">
@@ -144,11 +147,13 @@ const DriverMap = () => {
           </View>
         )}
 
-        {!maplocation && location && (
-          <>{riderdata?.data && <MainMAP locationdata={location} />}</>
+        {!maplocationdata && First_Trip_Location && (
+          <>
+            {riderdata?.data && <MainMAP locationdata={First_Trip_Location} />}
+          </>
         )}
 
-        {!maplocation && !location && (
+        {!maplocationdata && !First_Trip_Location && (
           <View className="pt-10 ">
             <View className="  items-center">
               <Card className=" items-center py-5">
@@ -158,32 +163,6 @@ const DriverMap = () => {
             </View>
           </View>
         )}
-
-        {/* {maplocation ? (
-        <View className="pt-10 ">
-          <View className="  items-center">
-            <Card className=" items-center py-5">
-              <Text>Location is Loading </Text>
-              <ActivityIndicator animating={true} color="black" />
-            </Card>
-          </View>
-        </View>
-      ) : (
-        <>
-          {location ? (
-            <>{riderdata?.data && <MainMAP locationdata={location} />}</>
-          ) : (
-            <View className="pt-10 ">
-              <View className="  items-center">
-                <Card className=" items-center py-5">
-                  <Text>Location is Loading </Text>
-                  <ActivityIndicator animating={true} color="black" />
-                </Card>
-              </View>
-            </View>
-          )}
-        </>
-      )} */}
       </View>
     </PTRView>
   );

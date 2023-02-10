@@ -1,17 +1,32 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect } from "react";
+import {
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { Card } from "react-native-shadow-cards";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
 import {
   ActivateStartTrip,
+  CurrentLocationActivated,
+  MapLocationActivated,
   resetAll_Excerpt_startTripdata,
+  StartTimeCurrentLocationActivated,
 } from "../../../Slice/Driver/StartTripSlice";
 import { HoldRiderInfoActivated } from "../../../Slice/Driver/HoldTripDataSlice";
 let driverIcon = require("../../../assets/images/profile.jpg");
 
+import * as Location from "expo-location";
+
 const TakeAnotherStartTrip = () => {
   const dispatch = useDispatch();
+
+  const [maplocation, setMaplocation] = useState(false);
+
   const { startTripdata } = useSelector((state) => state.StartTripSlice);
 
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
@@ -42,14 +57,47 @@ const TakeAnotherStartTrip = () => {
 
   const startTrip = () => {
     dispatch(ActivateStartTrip());
-    // console.log("jajsajshj");
   };
 
-  // return (
-  //   <View>
-  //     <Text>YYYY</Text>
-  //   </View>
-  // );
+  const getPermissions = async () => {
+    setMaplocation(true);
+
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      console.log("Please grant Location permissions");
+      return;
+    }
+    // let currentLocation = await Location.getCurrentPositionAsync({});
+
+    let currentLocation = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+      allowsBackgroundLocationUpdates: true,
+      showsBackgroundLocationIndicator: true,
+    });
+    let startTime = await new Date().toISOString();
+
+    console.log(startTime);
+    // console.log("location gotten ",currentLocation)
+    setMaplocation(false);
+    dispatch(MapLocationActivated(maplocation));
+    dispatch(CurrentLocationActivated(currentLocation));
+    dispatch(StartTimeCurrentLocationActivated(startTime));
+  };
+
+  useEffect(() => {
+    getPermissions();
+  }, []);
+
+  const call = (data) => {
+    console.log("this is f");
+    let phoneNumber = "";
+    if (Platform.OS === "android") {
+      phoneNumber = `tel:${data}`;
+    } else {
+      phoneNumber = `telprompt:${data}`;
+    }
+    Linking.openURL(phoneNumber);
+  };
 
   return (
     <View className="items-center mt-5">
@@ -133,6 +181,7 @@ const TakeAnotherStartTrip = () => {
               }}
             >
               <Ionicons
+                onPress={() => call(holdriderdata?.data.phone)}
                 name="md-call"
                 size={20}
                 style={{
