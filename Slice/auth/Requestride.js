@@ -106,6 +106,38 @@ export const RequestRide= createAsyncThunk(
         
     }
   )
+
+
+  export const TripStatus= createAsyncThunk(
+    "TripStatus/Statustrip", async(id, {rejectWithValue})=>{
+      // console.log("trip id ",id)
+        const tokengot = await  AsyncStorage.getItem("token")
+        const infoneeded= `Bearer ${tokengot}`
+        const instance = axios.create({
+            baseURL: process.env.SMOOTHRIDE_NEWAPI,
+            timeout: 20000,
+      
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              "Authorization": infoneeded
+            },
+          });
+          return await instance
+            .get(`getdriverstate/${id}`)
+            .then( async (response) => {
+              console.log("driver status response ",response.data)
+              return response.data;
+            })
+             
+      .catch((err) =>{ 
+        let errdata = err.response.data;
+        
+      return rejectWithValue(err.response.data)
+    })
+        
+    }
+  )
   
 
   export const CancelRequest= createAsyncThunk(
@@ -155,7 +187,8 @@ export const RequestRide= createAsyncThunk(
     isRequest: false,
     assignedDriver: null,
     RequestData: null,
-    Lastassigned: null
+    Lastassigned: null,
+    tripStatus: null
   };
 
   export const RequestRideSlice = createSlice({
@@ -221,12 +254,34 @@ export const RequestRide= createAsyncThunk(
           state.isLoading = true;
         })
         .addCase(LastAssignedDriver.fulfilled, (state, action) => {
+          // console.log("actions ", action.payload)
+          if(action.payload?.data == null){
+            state.isRequest= false;
+            }
           state.isLoading = false;
           state.isSuccess = true;
           state.Lastassigned= action.payload;
+          
         })
         .addCase(LastAssignedDriver.rejected, (state, action) => {
           // console.log("rejected values ",action.payload)
+          state.isLoading = false;
+          state.isError = true;
+          state.message = action.payload;
+        })
+        .addCase(TripStatus.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(TripStatus.fulfilled, (state, action) => {
+          if(action.payload?.status == null){
+            state.isRequest= false;
+            console.log("state is", action.payload);
+          }
+          state.isLoading = false;
+          state.isSuccess = true;
+          state.tripStatus= action.payload;
+        })
+        .addCase(TripStatus.rejected, (state, action) => {          
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
