@@ -45,10 +45,11 @@ import StartTrip from "./StartTrip";
 import TakeAnotherStartTrip from "./TakeAnotherStartTrip";
 import ExitDriverModal from "./ExitDriverModal";
 import { WaitingTimeFun } from "../../../Config/GoogleLocationAPi";
-import CancelTripDriverModal from "./CancelTripDriverModal";
 
 const ExitDriverTrip = () => {
   const dispatch = useDispatch();
+
+  const [cancle_Ride_Finally, setCancle_Ride_Finally] = useState(false);
 
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
   const { ExittripData, IsError, IsSucess, message, IsLoading } = useSelector(
@@ -144,9 +145,6 @@ const ExitDriverTrip = () => {
 
   const onopentoexit = () => {
     setExitTripIsloading(true);
-
-    console.log({ jjj: "asjkasaksj" });
-
     let maindata = {
       srcLat: completedTripdata.srcLat,
       srcLong: completedTripdata.srcLong,
@@ -171,13 +169,9 @@ const ExitDriverTrip = () => {
 
     setTimeout(() => {
       setExitTripIsloading(false);
-    }, 10000);
-  };
+    }, 1000);
 
-  const [cancle_Ride_Finally, setCancle_Ride_Finally] = useState(true);
-
-  const cancle_Ride_Finally_Fun = () => {
-    setCancle_Ride_Finally(!true);
+    setCancle_Ride_Finally(false);
   };
 
   return (
@@ -185,6 +179,131 @@ const ExitDriverTrip = () => {
       <TakeAnotherStartTrip />
 
       {CompleteDriverTripData?.success == true && <ExitDriverModal />}
+
+      {cancle_Ride_Finally && (
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={cancle_Ride_Finally}
+          >
+            <View
+              className=" mt-16  rounded-2xl"
+              style={{
+                backgroundColor: "#fff",
+                width: "88%",
+                height: 300,
+                padding: 15,
+                paddingTop: 5,
+                marginRight: 0,
+                alignSelf: "center",
+              }}
+            >
+              <Image
+                source={require("../../../assets/images/request.png")}
+                style={{
+                  width: 40,
+                  height: 40,
+                  alignSelf: "center",
+                  marginTop: 20,
+                  marginBottom: 15,
+                }}
+              />
+
+              <Text
+                style={{
+                  color: "#000",
+                  fontSize: 18,
+                  // fontFamily: "Roboto-Bold",
+                  textAlign: "center",
+                }}
+              >
+                Trip Exit
+              </Text>
+              <Text
+                style={{
+                  color: "#000",
+                  fontSize: 15,
+                  // fontFamily: "Roboto-Regular",
+                  textAlign: "center",
+                  marginTop: 5,
+                }}
+              >
+                Do you really want to exit trip with this rider ?
+              </Text>
+
+              <View
+                style={{
+                  padding: 10,
+                  alignSelf: "center",
+                  marginTop: 5,
+                  width: "100%",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={onopentoexit}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#fff",
+                    borderWidth: 1,
+                    borderColor: "#005091",
+                    backgroundColor: "#005091",
+                    marginTop: 2,
+                    borderRadius: 5,
+                  }}
+                >
+                  {!ExitTripIsloading && (
+                    <Text
+                      style={{
+                        color: "#fff",
+                        alignSelf: "center",
+                        fontSize: 13,
+                        padding: 12,
+                        marginRight: 5,
+                        // fontFamily: "Roboto-Regular",
+                      }}
+                    >
+                      Yes
+                    </Text>
+                  )}
+
+                  {ExitTripIsloading && (
+                    <ActivityIndicator color="#fff" size="small" />
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  // onPress={() => {
+                  //   this.setState({ showDialogforExit: false });
+                  // }}
+
+                  onPress={() => setCancle_Ride_Finally(false)}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#a31225",
+                    marginTop: 10,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      alignSelf: "center",
+                      fontSize: 13,
+                      padding: 12,
+                      marginRight: 5,
+                      // fontFamily: "Roboto-Regular",
+                    }}
+                  >
+                    No
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* this is bad */}
+            </View>
+          </Modal>
+        </View>
+      )}
 
       <View style={{ padding: 10 }}>
         <View style={{ marginTop: 0, borderRadius: 5 }}>
@@ -260,7 +379,8 @@ const ExitDriverTrip = () => {
             </Card>
 
             <TouchableOpacity
-              onPress={onopentoexit}
+              // onPress={onopentoexit}
+              onPress={() => setCancle_Ride_Finally(true)}
               style={{
                 backgroundColor: "#a31225",
                 padding: 10,
