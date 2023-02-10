@@ -81,7 +81,6 @@ const TakeAnotherDriverMap = () => {
   const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 
   const MainMAP = ({ locationdata }) => {
-    console.log({ iiii: locationdata });
     return (
       <>
         <MapView

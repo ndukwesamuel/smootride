@@ -99,7 +99,7 @@ const DriverProfile = () => {
                   marginLeft: "40%",
                 }}
               >
-                {drivertrip.length}
+                {drivertrip?.length}
               </Text>
             </View>
           </View>

@@ -2,6 +2,9 @@ import { StyleSheet, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import * as Location from "expo-location";
 import Geolocation from "react-native-geolocation-service";
+import { PickUpAddressFun } from "../Slice/Driver/StartTripSlice";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 
 export const Pick_Place_Function = () => {
   const getAddress = async (latitude, longitude) => {
@@ -50,31 +53,54 @@ export const Pick_Place_Function = () => {
   };
 
   getPermissions();
-
-  //   useEffect(() => {
-  //     getPermissions();
-  //   }, []);
 };
 
-// export const GetAddress_OF_Location = async (coordinate_data) => {
-//   console.log({ coordinate_data });
-//   // const response = await fetch(
-//   //   `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyAsjKM16fbsmVRNU4jlrhn3yinTyu3z5JU`
-//   // );
-//   // const data = await response.json();
-//   // console.log("skdsldddddddddddddddddddddddddddddddddd");
-//   // console.log({ lala: data.results[0].formatted_address });
-//   // // return data.results[0].formatted_address;
+export const GetAddress_OF_Location = async (currentLocation, address) => {
+  const { latitude, longitude } = currentLocation.coords;
+  let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyAsjKM16fbsmVRNU4jlrhn3yinTyu3z5JU`;
+
+  try {
+    const response = await axios.post(url);
+    let Address = response.data.results[0].formatted_address;
+
+    return Address;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const Get_Location_Way_Point = async (currentLocation) => {
+  const { latitude, longitude } = currentLocation.coords;
+  let item = { latitude, longitude };
+
+  let data = [];
+  data.push(item);
+  console.log(data);
+};
+
+export const WaitingTimeFun = async () => {
+  console.log("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq");
+};
+// const getAddress = async (currentLocation, address) => {
+//   const { latitude, longitude } = currentLocation.coords;
+
+//   try {
+//     const response = await axios.post(url);
+//     console.log({ CompleteDriverTripService: response.data });
+//   } catch (error) {
+//     console.log(error);
+//   }
 // };
 
-export const GetAddress_OF_Location = async (currentLocation, address) => {
-  console.log({ address });
-  const { latitude, longitude } = currentLocation.coords;
-  console.log({ data });
-  const response = await fetch(
-    `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=AIzaSyAsjKM16fbsmVRNU4jlrhn3yinTyu3z5JU`
-  );
-  const data = await response.json();
-  console.log("skdsldddddddddddddddddddddddddddddddddd");
-  console.log({ lala: data.results[0].formatted_address });
+// if (address == "pickUpAddress") {
+//   console.log("this is to get start address");
+//   console.log({ placeeData });
+//   dispatch(PickUpAddressFun(placeeData));
+// }
+
+// PickUpAddressFun,
+// DestAddressDataFun,
+
+const NAme = () => {
+  let ans = 2 + 2;
 };

@@ -1,6 +1,8 @@
 import {
   ActivityIndicator,
   Alert,
+  Image,
+  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -42,6 +44,9 @@ import { reset as resetCompleteDriverTripSlice } from "../../../Slice/Driver/Com
 import StartTrip from "./StartTrip";
 import TakeAnotherStartTrip from "./TakeAnotherStartTrip";
 import ExitDriverModal from "./ExitDriverModal";
+import { WaitingTimeFun } from "../../../Config/GoogleLocationAPi";
+import CancelTripDriverModal from "./CancelTripDriverModal";
+
 const ExitDriverTrip = () => {
   const dispatch = useDispatch();
 
@@ -60,7 +65,7 @@ const ExitDriverTrip = () => {
     (state) => state.CompleteDriverTripSlice
   );
 
-  const { First_Trip_start_time } = useSelector(
+  const { First_Trip_start_time, First_Trip_Location } = useSelector(
     (state) => state.FristTripSlice
   );
 
@@ -72,6 +77,8 @@ const ExitDriverTrip = () => {
     LastDestinationLocationData,
     EndTimeLastDestinationLocationData,
     completedTripdata,
+    pickUpAddressData,
+    destAddressData,
   } = useSelector((state) => state.StartTripSlice);
   const { getuserDATA } = useSelector((state) => state.GetUserConfigSlice);
 
@@ -94,6 +101,47 @@ const ExitDriverTrip = () => {
 
   let finalaTotalCost = parseFloat(basefare) + completedTripdata.tripAmt;
 
+  let data22 = {
+    srcLat: completedTripdata.srcLat,
+    srcLong: completedTripdata.srcLong,
+    destLat: completedTripdata.destLat,
+    destLong: completedTripdata.destLong,
+    trip_start_time: completedTripdata.trip_start_time,
+    tripAmt: finalaTotalCost,
+    driverId: data?.user.id,
+    pickUpAddress: pickUpAddressData,
+    destAddress: destAddressData,
+    // tripPoints: JSON.stringify(tripdetails.waypoints),
+    tripPoints: completedTripdata.tripPoints,
+    tripEndTime: completedTripdata.date_End,
+    travelTime: completedTripdata.travelTime,
+    tripDist: completedTripdata.Distant_Covered,
+  };
+
+  // console.log({ data22 });
+
+  const [startTime, setStartTime] = useState(null);
+  const [timeSpent, setTimeSpent] = useState(0);
+  const [cost_W, setCost_W] = useState(10);
+
+  useEffect(() => {
+    setStartTime(new Date());
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // setTimeSpent((new Date() - startTime) / 1000 / 60);
+
+      setTimeSpent(Math.floor((new Date() - startTime) / 1000 / 60));
+      setCost_W(timeSpent * cost_W);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+      console.log(`Time spent on : ${timeSpent} seconds`);
+    };
+  }, [startTime, timeSpent]);
+
   const onopentoexit = () => {
     setExitTripIsloading(true);
 
@@ -104,25 +152,19 @@ const ExitDriverTrip = () => {
       srcLong: completedTripdata.srcLong,
       destLat: completedTripdata.destLat,
       destLong: completedTripdata.destLong,
-      trip_start_time: First_Trip_start_time,
+      trip_start_time: completedTripdata.trip_start_time,
       tripAmt: finalaTotalCost,
       driverId: data?.user.id,
-    };
-
-    let data2 = {
-      srcLat: completedTripdata.srcLat,
-      srcLong: completedTripdata.srcLong,
-      destLat: completedTripdata.destLat,
-      destLong: completedTripdata.destLong,
-      trip_start_time: First_Trip_start_time,
-      tripAmt: finalaTotalCost,
-      driverId: data?.user.id,
-      // pickUpAddress: tripdetails.startAddress,
-      // destAddress: tripdetails.stopAddress,
+      pickUpAddress: pickUpAddressData,
+      destAddress: destAddressData,
       // tripPoints: JSON.stringify(tripdetails.waypoints),
-      // tripEndTime: tripdetails.endTime,
-      // travelTime: tripdetails.travelTime,
-      // tripDist: tripdetails.distance_covered,
+      tripPoints: completedTripdata.tripPoints,
+      tripEndTime: completedTripdata.date_End,
+      travelTime: completedTripdata.travelTime,
+      tripDist: completedTripdata.Distant_Covered,
+
+      WaitedTime: "this is the time they waite",
+      Cost_of_waiting: "this iw the waiting period",
     };
 
     dispatch(CompleteDriverTripFunc(maindata));
@@ -132,14 +174,18 @@ const ExitDriverTrip = () => {
     }, 10000);
   };
 
-  return (
-    // {
-    //     this.props.drivertrip.isEnded == true &&
+  const [cancle_Ride_Finally, setCancle_Ride_Finally] = useState(true);
 
+  const cancle_Ride_Finally_Fun = () => {
+    setCancle_Ride_Finally(!true);
+  };
+
+  return (
     <>
       <TakeAnotherStartTrip />
 
       {CompleteDriverTripData?.success == true && <ExitDriverModal />}
+
       <View style={{ padding: 10 }}>
         <View style={{ marginTop: 0, borderRadius: 5 }}>
           <TouchableOpacity
@@ -193,22 +239,22 @@ const ExitDriverTrip = () => {
               style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
             >
               <Text style={styles.details}>
-                Waited Time:
+                Waited Time :
                 <Text style={styles.time}>
                   {/* this.toHHMMSS(this.props.drivertrip.waitingTime) */}
-                  {completedTripdata.WaitedTime}
+                  {timeSpent}min
                 </Text>
               </Text>
             </Card>
             <Card
               style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
             >
-              <Text style={styles.details}>
+              <Text style={styles.details} className="text-200-red">
                 Cost of Waiting (NGN):
-                <Text style={styles.time}>
+                <Text style={styles.time} className="pl-10 border-2">
                   {/* this.props.drivertrip.totalwaitingcost .toFixed(2)
                 .replace(/\d(?=(\d{3})+\.)/g, "$&,") */}
-                  {completedTripdata.Cost_of_waiting}
+                  {cost_W}
                 </Text>
               </Text>
             </Card>
@@ -254,6 +300,13 @@ const ExitDriverTrip = () => {
 export default ExitDriverTrip;
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+
   header: {
     backgroundColor: "#005091",
     alignSelf: "center",

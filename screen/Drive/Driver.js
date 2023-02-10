@@ -42,12 +42,19 @@ import StartTrip from "../../components/Driver/DriverTrip/StartTrip";
 import EndTripButtton from "../../components/Driver/DriverTrip/EndTripButtton";
 import ExitDriverTrip from "../../components/Driver/DriverTrip/ExitDriverTrip";
 import { ExitTripFunc } from "../../Slice/Driver/ExitTripSlice";
-import { resetALLStartTrip } from "../../Slice/Driver/StartTripSlice";
+import {
+  ActivateStartTrip,
+  PickUpAddressFun,
+  resetALLStartTrip,
+} from "../../Slice/Driver/StartTripSlice";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import TakeAnotherStartTrip from "../../components/Driver/DriverTrip/TakeAnotherStartTrip";
 import TakeAnotherDriverMap from "../../components/Driver/DriverTrip/TakeAnotherDriverMap";
-import { GetAddress_OF_Location } from "./GoogleLocationAPi";
+import {
+  GetAddress_OF_Location,
+  Get_Location_Way_Point,
+} from "../../Config/GoogleLocationAPi";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -158,6 +165,7 @@ const Driver = () => {
     };
   }, [reload]);
 
+  // this must never be remove
   const [counter, setCounter] = useState(0);
   useEffect(() => {
     const interval = setTimeout(() => {
@@ -242,7 +250,7 @@ const Driver = () => {
             />
 
             <View style={styles.header}>
-              <Text style={styles.headerText}>
+              <Text style={styles.headerText} className="">
                 Trip Request <Text style={{ fontSize: 12 }}>{driver_mode}</Text>
               </Text>
               <Text
