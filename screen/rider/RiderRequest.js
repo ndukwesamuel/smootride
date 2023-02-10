@@ -33,6 +33,7 @@ import {
   CancelRequest,
   LastAssignedDriver,
   RequestRide,
+  TripStatus,
 } from "../../Slice/auth/Requestride";
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
@@ -53,6 +54,7 @@ const RiderRequest = () => {
   const [closedTrip, setClosedTrip] = useState(false);
   const [reboot, setReboot] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [driverStat, setDriverstatus] = useState(null)
 
   const user_id = useSelector((state) => state.LoginSlice?.data?.user?.id);
 
@@ -66,7 +68,7 @@ const RiderRequest = () => {
       }
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      console.log("location gotten ", currentLocation);
+      console.log("location gotten ",currentLocation)
       setMaplocation(false);
     };
     getPermissions();
@@ -197,16 +199,7 @@ const RiderRequest = () => {
   // }, 10000)
   const MINUTE_MS = 10000;
 
-useEffect(() => {
-  const interval = setInterval(async() => {
-    const userdet = {
-          user_id: user_id,
-        };
-        await dispatch(AssignedDriver(userdet));
-  }, 25000);
 
-    return () => clearInterval(interval);
-  }, []);
 
   const onRefresh = async () => {
     const userdet = {
@@ -224,7 +217,34 @@ useEffect(() => {
   const onLoaddata = useSelector(
     (state) => state.RequestRideSlice?.Lastassigned
   );
-  // console.log("onLoaddata status ", requeststat)
+
+  // console.log("onLoaddata status 2 ", onLoaddata?.driverdetails)
+  const TripStat = useSelector(
+    (state) => state.RequestRideSlice?.tripStatus?.status
+  );
+
+  useEffect(() => {
+    const interval = setInterval(async() => {
+      const userdet = {
+            user_id: user_id,
+          };
+          await dispatch(AssignedDriver(userdet));
+          if(onLoaddata?.driverdetails?.driverId){
+              await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
+              setDriverstatus(TripStat)
+          }
+          else if(onLoaddata?.driverdetails?.driverId == undefined){
+            setDriverstatus(null)
+          }
+          
+  
+    }, 30000);
+  
+    return () => clearInterval(interval);
+  }, [])
+
+  // setDriverstatus(TripStat)
+
   const username = useSelector((state) => state.LoginSlice?.data?.user?.name);
   const number = knowdata?.length;
 
@@ -568,7 +588,7 @@ useEffect(() => {
             </View>
           )}
 
-          {onLoaddata?.data == null && requeststat == false && (
+          {onLoaddata?.data == null && requeststat == false && driverStat == null && (
             <View>
               {number == 0 ? (
                 <View
@@ -678,160 +698,162 @@ useEffect(() => {
                   keyExtractor={(item) => item.id}
                   renderItem={({ item }) => {
                     return (
-                      <View
-                        // key = {driver.id}
-                        // value = {driver.id}
-                        style={{
-                          marginTop: 20,
-                          shadowOffset: {
-                            width: 0,
-                            height: 1,
-                          },
-                          shadowOpacity: 0.22,
-                          shadowRadius: 2.22,
-                          shadowColor: "gray",
-                          elevation: 3,
-                          backgroundColor: "white",
-                          borderRadius: 10,
-                          width: "100%",
-                        }}
-                      >
+                      
                         <View
+                          // key = {driver.id}
+                          // value = {driver.id}
                           style={{
+                            marginTop: 20,
+                            shadowOffset: {
+                              width: 0,
+                              height: 1,
+                            },
+                            shadowOpacity: 0.22,
+                            shadowRadius: 2.22,
+                            shadowColor: "gray",
+                            elevation: 3,
                             backgroundColor: "white",
-                            borderTopLeftRadius: 15,
-                            borderTopRightRadius: 20,
+                            borderRadius: 10,
+                            width: "100%",
                           }}
                         >
-                          <Text
+                          <View
                             style={{
-                              color: "#007CC2",
-                              textAlign: "center",
-                              fontSize: 20,
-                              marginTop: 25,
+                              backgroundColor: "white",
+                              borderTopLeftRadius: 15,
+                              borderTopRightRadius: 20,
                             }}
                           >
-                            Hi, {username}
-                          </Text>
-                          <TouchableOpacity
-                            style={{
-                              backgroundColor: "#EDEDED",
-                              padding: 1,
-                              width: "90%",
-                              marginLeft: "5%",
-                              borderRadius: 7,
-                              marginTop: 20,
-                            }}
-                          >
-                            {/* {
+                            <Text
+                              style={{
+                                color: "#007CC2",
+                                textAlign: "center",
+                                fontSize: 20,
+                                marginTop: 25,
+                              }}
+                            >
+                              Hi, {username}
+                            </Text>
+                            <TouchableOpacity
+                              style={{
+                                backgroundColor: "#EDEDED",
+                                padding: 1,
+                                width: "90%",
+                                marginLeft: "5%",
+                                borderRadius: 7,
+                                marginTop: 20,
+                              }}
+                            >
+                              {/* {
                                                    this.state.isrequestingdrivers == true &&
                                                    <Text style={styles.driverbtn}>Getting available drivers....</Text>
                                                } */}
-                            {/* {
+                              {/* {
                                                    this.state.isrequestingdrivers == false && */}
-                            <Text
-                              style={{
-                                marginStart: 5,
-                                color: "#000",
-                                fontSize: 20,
-                                alignSelf: "center",
-                                // fontFamily:'Roboto-Regular',1
-                                color: "#C1C1C1",
-                              }}
-                            >
-                              {" "}
-                              {number} driver(s) available
-                            </Text>
-                            {/* } */}
-                          </TouchableOpacity>
-                          <View
-                            // key = {driver.id}
-                            // value = {driver.id}
-                            style={{
-                              marginTop: 20,
-                              shadowOffset: {
-                                width: 0,
-                                height: 1,
-                              },
-                              shadowOpacity: 0.22,
-                              shadowRadius: 2.22,
-                              shadowColor: "gray",
-                              elevation: 3,
-                              backgroundColor: "white",
-                              borderRadius: 10,
-                              width: "90%",
-                              marginLeft: "5%",
-                            }}
-                          >
-                            <View
-                              style={{
-                                flexDirection: "row",
-                                borderBottomWidth: 1,
-                                borderBottomColor: "#EDEDED",
-                                flexDirection: "row",
-                                alignItems: "center",
-                              }}
-                            >
-                              <View style={{ width: "15%", marginStart: 10 }}>
-                                <Image
-                                  source={clientimg}
-                                  style={{
-                                    width: 50,
-                                    height: 50,
-                                    borderRadius: 20,
-                                    alignSelf: "center",
-                                    margin: 5,
-                                  }}
-                                />
-                              </View>
-                              <View style={{ width: "60%", marginLeft: 5 }}>
-                                <Text
-                                  style={{
-                                    fontSize: 17,
-                                    marginTop: 10,
-                                    color: "#877A80",
-                                    fontWeight: "400",
-                                  }}
-                                >
-                                  {" "}
-                                  {item?.name}{" "}
-                                </Text>
-                              </View>
-                            </View>
-                          </View>
-                          <TouchableOpacity
-                            style={{
-                              marginTop: 7,
-                              backgroundColor: "#005091",
-                              padding: 10,
-                              width: "90%",
-                              borderRadius: 10,
-                              alignSelf: "center",
-                              marginBottom: 20,
-                              marginLeft: "5%",
-                            }}
-                            onPress={handleModal}
-                          >
-                            {loading ? (
-                              <ActivityIndicator
-                                animating={true}
-                                color="white"
-                              />
-                            ) : (
                               <Text
                                 style={{
+                                  marginStart: 5,
+                                  color: "#000",
+                                  fontSize: 20,
                                   alignSelf: "center",
-                                  color: "#fff",
-                                  fontSize: 25,
+                                  // fontFamily:'Roboto-Regular',1
+                                  color: "#C1C1C1",
                                 }}
-                                onPress={handleModal}
                               >
-                                REQUEST A RIDE
+                                {" "}
+                                {number} driver(s) available
                               </Text>
-                            )}
-                          </TouchableOpacity>
+                              {/* } */}
+                            </TouchableOpacity>
+                            <View
+                              // key = {driver.id}
+                              // value = {driver.id}
+                              style={{
+                                marginTop: 20,
+                                shadowOffset: {
+                                  width: 0,
+                                  height: 1,
+                                },
+                                shadowOpacity: 0.22,
+                                shadowRadius: 2.22,
+                                shadowColor: "gray",
+                                elevation: 3,
+                                backgroundColor: "white",
+                                borderRadius: 10,
+                                width: "90%",
+                                marginLeft: "5%",
+                              }}
+                            >
+                              <View
+                                style={{
+                                  flexDirection: "row",
+                                  borderBottomWidth: 1,
+                                  borderBottomColor: "#EDEDED",
+                                  flexDirection: "row",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <View style={{ width: "15%", marginStart: 10 }}>
+                                  <Image
+                                    source={clientimg}
+                                    style={{
+                                      width: 50,
+                                      height: 50,
+                                      borderRadius: 20,
+                                      alignSelf: "center",
+                                      margin: 5,
+                                    }}
+                                  />
+                                </View>
+                                <View style={{ width: "60%", marginLeft: 5 }}>
+                                  <Text
+                                    style={{
+                                      fontSize: 17,
+                                      marginTop: 10,
+                                      color: "#877A80",
+                                      fontWeight: "400",
+                                    }}
+                                  >
+                                    {" "}
+                                    {item?.name}{" "}
+                                  </Text>
+                                </View>
+                              </View>
+                            </View>
+                            <TouchableOpacity
+                              style={{
+                                marginTop: 7,
+                                backgroundColor: "#005091",
+                                padding: 10,
+                                width: "90%",
+                                borderRadius: 10,
+                                alignSelf: "center",
+                                marginBottom: 20,
+                                marginLeft: "5%",
+                              }}
+                              onPress={handleModal}
+                            >
+                              {loading ? (
+                                <ActivityIndicator
+                                  animating={true}
+                                  color="white"
+                                />
+                              ) : (
+                                <Text
+                                  style={{
+                                    alignSelf: "center",
+                                    color: "#fff",
+                                    fontSize: 25,
+                                  }}
+                                  onPress={handleModal}
+                                >
+                                  REQUEST A RIDE
+                                </Text>
+                              )}
+                            </TouchableOpacity>
+                          </View>
                         </View>
-                      </View>
+                        
                     );
                   }}
                 />

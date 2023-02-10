@@ -67,13 +67,13 @@ const Login = () => {
   };
 
   return (
-    <KeyboardAvoidingView>
+    <View>
       <StatusBar style="light" backgroundColor="#005091" visible={false} />
       <ImageBackground
         source={require("../assets/images/Smot.jpg")}
         style={{ width: "100%", height: "100%" }}
       >
-        <KeyboardAvoidingView
+        <View
           behavior="padding"
           style={{ flex: 1, justifyContent: "center" }}
         >
@@ -188,9 +188,9 @@ const Login = () => {
               </Text>
             </View>
           </View>
-        </KeyboardAvoidingView>
+        </View>
       </ImageBackground>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
