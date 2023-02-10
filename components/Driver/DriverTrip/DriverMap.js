@@ -18,21 +18,35 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import {
   CurrentLocationActivated,
   MapLocationActivated,
+  PickUpAddressFun,
   resetAll_Excerpt_startTripdata,
   StartTimeCurrentLocationActivated,
 } from "../../../Slice/Driver/StartTripSlice";
 import EndTripButtton from "./EndTripButtton";
-import { First_Trip_StartTime_Activated } from "../../../Slice/Driver/FristTripSlice";
+import {
+  First_Trip_Location_Activated,
+  First_Trip_StartTime_Activated,
+} from "../../../Slice/Driver/FristTripSlice";
+import PTRView from "react-native-pull-to-refresh";
+import {
+  Ex,
+  GetAddress_OF_Location,
+  GGGG,
+  thisFun,
+} from "../../../Config/GoogleLocationAPi";
 
 const DriverMap = () => {
   const { width, height } = Dimensions.get("window");
 
-  const { currentLocationData, startTripdata } = useSelector(
-    (state) => state.StartTripSlice
-  );
+  const {
+    pickUpAddressData,
+    destAddressData,
+    currentLocationData,
+    startTripdata,
+  } = useSelector((state) => state.StartTripSlice);
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
-
+  // console.log({ pickUpAddressData });
   const mapHeight = height * 0.85;
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -48,7 +62,7 @@ const DriverMap = () => {
 
   const getPermissions = async () => {
     setMaplocation(true);
-
+    let pickUpAddress = "pickUpAddress";
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       Alert.alert(
@@ -64,11 +78,14 @@ const DriverMap = () => {
     let startTime = new Date().toISOString();
 
     setLocation(currentLocation);
-    // console.log("location gotten ",currentLocation)
+
+    let adddressResult = await GetAddress_OF_Location(currentLocation);
+    dispatch(PickUpAddressFun(adddressResult));
     setMaplocation(false);
 
     console.log({ maplocation });
     dispatch(MapLocationActivated(maplocation));
+    dispatch(First_Trip_Location_Activated(currentLocation));
     dispatch(CurrentLocationActivated(currentLocation));
     dispatch(First_Trip_StartTime_Activated(startTime));
   };
@@ -82,8 +99,11 @@ const DriverMap = () => {
   const LATITUDE_DELTA = 0.006339428281933124;
   const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 
+  const refresh = () => {
+    getPermissions();
+  };
+
   const MainMAP = ({ locationdata }) => {
-    console.log({ locationdata });
     return (
       <>
         <MapView
@@ -110,39 +130,36 @@ const DriverMap = () => {
     );
   };
 
-  console.log({ maplocation });
-
-  console.log({ location });
-
   return (
-    <View style={{ height: mapHeight }} className="">
-      {maplocation && (
-        <View className="pt-10 ">
-          <View className="  items-center">
-            <Card className=" items-center py-5">
-              <Text>Location is Loading </Text>
-              <ActivityIndicator animating={true} color="black" />
-            </Card>
+    <PTRView onRefresh={refresh}>
+      <View style={{ height: mapHeight }} className="">
+        {maplocation && (
+          <View className="pt-10 ">
+            <View className="  items-center">
+              <Card className=" items-center py-5">
+                <Text>Location is Loading </Text>
+                <ActivityIndicator animating={true} color="black" />
+              </Card>
+            </View>
           </View>
-        </View>
-      )}
+        )}
 
-      {!maplocation && location && (
-        <>{riderdata?.data && <MainMAP locationdata={location} />}</>
-      )}
+        {!maplocation && location && (
+          <>{riderdata?.data && <MainMAP locationdata={location} />}</>
+        )}
 
-      {!maplocation && !location && (
-        <View className="pt-10 ">
-          <View className="  items-center">
-            <Card className=" items-center py-5">
-              <Text>Cant Find Location </Text>
-              <ActivityIndicator animating={true} color="black" />
-            </Card>
+        {!maplocation && !location && (
+          <View className="pt-10 ">
+            <View className="  items-center">
+              <Card className=" items-center py-5">
+                <Text>Cant Find Location </Text>
+                <ActivityIndicator animating={true} color="black" />
+              </Card>
+            </View>
           </View>
-        </View>
-      )}
+        )}
 
-      {/* {maplocation ? (
+        {/* {maplocation ? (
         <View className="pt-10 ">
           <View className="  items-center">
             <Card className=" items-center py-5">
@@ -167,35 +184,9 @@ const DriverMap = () => {
           )}
         </>
       )} */}
-    </View>
+      </View>
+    </PTRView>
   );
-
-  // return (
-  //   <View style={{ height: mapHeight }} className="">
-  //     {maplocation ? (
-  //       <View className="pt-10 ">
-  //         <View className="  items-center">
-  //           <Card className=" items-center py-5">
-  //             <Text>Loaction is Loading </Text>
-  //             <ActivityIndicator animating={true} color="black" />
-  //           </Card>
-  //         </View>
-  //       </View>
-  //     ) : (
-  //       <>
-  //         <MapView
-  //           className="border-2 border-red-200"
-  //           style={{ flex: 1 }}
-  //           initialRegion={INITIAL_POSITION}
-  //         >
-  //           <Marker coordinate={INITIAL_POSITION} identifier="origin" />
-  //         </MapView>
-
-  //         <EndTripButtton />
-  //       </>
-  //     )}
-  //   </View>
-  // );
 };
 
 export default DriverMap;

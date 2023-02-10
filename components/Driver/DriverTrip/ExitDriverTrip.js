@@ -1,6 +1,8 @@
 import {
   ActivityIndicator,
   Alert,
+  Image,
+  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -42,19 +44,29 @@ import { reset as resetCompleteDriverTripSlice } from "../../../Slice/Driver/Com
 import StartTrip from "./StartTrip";
 import TakeAnotherStartTrip from "./TakeAnotherStartTrip";
 import ExitDriverModal from "./ExitDriverModal";
+import { WaitingTimeFun } from "../../../Config/GoogleLocationAPi";
+
 const ExitDriverTrip = () => {
   const dispatch = useDispatch();
+
+  const [cancle_Ride_Finally, setCancle_Ride_Finally] = useState(false);
 
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
   const { ExittripData, IsError, IsSucess, message, IsLoading } = useSelector(
     (state) => state.ExitTripSlice
   );
 
+  const { user, data, isError, isSuccess, isLoading } = useSelector(
+    (state) => state.LoginSlice
+  );
+  console.log({ log: data.user.id });
+
+  // console.log(holdriderdata.driverdetails);
   const { CompleteDriverTripData } = useSelector(
     (state) => state.CompleteDriverTripSlice
   );
 
-  const { First_Trip_start_time } = useSelector(
+  const { First_Trip_start_time, First_Trip_Location } = useSelector(
     (state) => state.FristTripSlice
   );
 
@@ -66,6 +78,8 @@ const ExitDriverTrip = () => {
     LastDestinationLocationData,
     EndTimeLastDestinationLocationData,
     completedTripdata,
+    pickUpAddressData,
+    destAddressData,
   } = useSelector((state) => state.StartTripSlice);
   const { getuserDATA } = useSelector((state) => state.GetUserConfigSlice);
 
@@ -88,39 +102,209 @@ const ExitDriverTrip = () => {
 
   let finalaTotalCost = parseFloat(basefare) + completedTripdata.tripAmt;
 
-  console.log(completedTripdata.tripAmt);
-  console.log({});
+  let data22 = {
+    srcLat: completedTripdata.srcLat,
+    srcLong: completedTripdata.srcLong,
+    destLat: completedTripdata.destLat,
+    destLong: completedTripdata.destLong,
+    trip_start_time: completedTripdata.trip_start_time,
+    tripAmt: finalaTotalCost,
+    driverId: data?.user.id,
+    pickUpAddress: pickUpAddressData,
+    destAddress: destAddressData,
+    // tripPoints: JSON.stringify(tripdetails.waypoints),
+    tripPoints: completedTripdata.tripPoints,
+    tripEndTime: completedTripdata.date_End,
+    travelTime: completedTripdata.travelTime,
+    tripDist: completedTripdata.Distant_Covered,
+  };
+
+  // console.log({ data22 });
+
+  const [startTime, setStartTime] = useState(null);
+  const [timeSpent, setTimeSpent] = useState(0);
+  const [cost_W, setCost_W] = useState(10);
+
+  useEffect(() => {
+    setStartTime(new Date());
+  }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // setTimeSpent((new Date() - startTime) / 1000 / 60);
+
+      setTimeSpent(Math.floor((new Date() - startTime) / 1000 / 60));
+      setCost_W(timeSpent * cost_W);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+      console.log(`Time spent on : ${timeSpent} seconds`);
+    };
+  }, [startTime, timeSpent]);
 
   const onopentoexit = () => {
     setExitTripIsloading(true);
-
-    console.log({ jjj: "asjkasaksj" });
-
-    let data = {
+    let maindata = {
       srcLat: completedTripdata.srcLat,
       srcLong: completedTripdata.srcLong,
       destLat: completedTripdata.destLat,
       destLong: completedTripdata.destLong,
-      trip_start_time: First_Trip_start_time,
+      trip_start_time: completedTripdata.trip_start_time,
       tripAmt: finalaTotalCost,
+      driverId: data?.user.id,
+      pickUpAddress: pickUpAddressData,
+      destAddress: destAddressData,
+      // tripPoints: JSON.stringify(tripdetails.waypoints),
+      tripPoints: completedTripdata.tripPoints,
+      tripEndTime: completedTripdata.date_End,
+      travelTime: completedTripdata.travelTime,
+      tripDist: completedTripdata.Distant_Covered,
+
+      WaitedTime: "this is the time they waite",
+      Cost_of_waiting: "this iw the waiting period",
     };
 
-    dispatch(CompleteDriverTripFunc(data));
+    dispatch(CompleteDriverTripFunc(maindata));
 
     setTimeout(() => {
       setExitTripIsloading(false);
-    }, 10000);
+    }, 1000);
+
+    setCancle_Ride_Finally(false);
   };
 
   return (
-    // {
-    //     this.props.drivertrip.isEnded == true &&
-
     <>
       <TakeAnotherStartTrip />
 
-      <ExitDriverModal />
       {CompleteDriverTripData?.success == true && <ExitDriverModal />}
+
+      {cancle_Ride_Finally && (
+        <View style={styles.centeredView}>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={cancle_Ride_Finally}
+          >
+            <View
+              className=" mt-16  rounded-2xl"
+              style={{
+                backgroundColor: "#fff",
+                width: "88%",
+                height: 300,
+                padding: 15,
+                paddingTop: 5,
+                marginRight: 0,
+                alignSelf: "center",
+              }}
+            >
+              <Image
+                source={require("../../../assets/images/request.png")}
+                style={{
+                  width: 40,
+                  height: 40,
+                  alignSelf: "center",
+                  marginTop: 20,
+                  marginBottom: 15,
+                }}
+              />
+
+              <Text
+                style={{
+                  color: "#000",
+                  fontSize: 18,
+                  // fontFamily: "Roboto-Bold",
+                  textAlign: "center",
+                }}
+              >
+                Trip Exit
+              </Text>
+              <Text
+                style={{
+                  color: "#000",
+                  fontSize: 15,
+                  // fontFamily: "Roboto-Regular",
+                  textAlign: "center",
+                  marginTop: 5,
+                }}
+              >
+                Do you really want to exit trip with this rider ?
+              </Text>
+
+              <View
+                style={{
+                  padding: 10,
+                  alignSelf: "center",
+                  marginTop: 5,
+                  width: "100%",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={onopentoexit}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#fff",
+                    borderWidth: 1,
+                    borderColor: "#005091",
+                    backgroundColor: "#005091",
+                    marginTop: 2,
+                    borderRadius: 5,
+                  }}
+                >
+                  {!ExitTripIsloading && (
+                    <Text
+                      style={{
+                        color: "#fff",
+                        alignSelf: "center",
+                        fontSize: 13,
+                        padding: 12,
+                        marginRight: 5,
+                        // fontFamily: "Roboto-Regular",
+                      }}
+                    >
+                      Yes
+                    </Text>
+                  )}
+
+                  {ExitTripIsloading && (
+                    <ActivityIndicator color="#fff" size="small" />
+                  )}
+                </TouchableOpacity>
+                <TouchableOpacity
+                  // onPress={() => {
+                  //   this.setState({ showDialogforExit: false });
+                  // }}
+
+                  onPress={() => setCancle_Ride_Finally(false)}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#a31225",
+                    marginTop: 10,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      alignSelf: "center",
+                      fontSize: 13,
+                      padding: 12,
+                      marginRight: 5,
+                      // fontFamily: "Roboto-Regular",
+                    }}
+                  >
+                    No
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* this is bad */}
+            </View>
+          </Modal>
+        </View>
+      )}
+
       <View style={{ padding: 10 }}>
         <View style={{ marginTop: 0, borderRadius: 5 }}>
           <TouchableOpacity
@@ -174,28 +358,29 @@ const ExitDriverTrip = () => {
               style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
             >
               <Text style={styles.details}>
-                Waited Time:
+                Waited Time :
                 <Text style={styles.time}>
                   {/* this.toHHMMSS(this.props.drivertrip.waitingTime) */}
-                  {completedTripdata.WaitedTime}
+                  {timeSpent}min
                 </Text>
               </Text>
             </Card>
             <Card
               style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
             >
-              <Text style={styles.details}>
+              <Text style={styles.details} className="text-200-red">
                 Cost of Waiting (NGN):
-                <Text style={styles.time}>
+                <Text style={styles.time} className="pl-10 border-2">
                   {/* this.props.drivertrip.totalwaitingcost .toFixed(2)
                 .replace(/\d(?=(\d{3})+\.)/g, "$&,") */}
-                  {completedTripdata.Cost_of_waiting}
+                  {cost_W}
                 </Text>
               </Text>
             </Card>
 
             <TouchableOpacity
-              onPress={onopentoexit}
+              // onPress={onopentoexit}
+              onPress={() => setCancle_Ride_Finally(true)}
               style={{
                 backgroundColor: "#a31225",
                 padding: 10,
@@ -235,6 +420,13 @@ const ExitDriverTrip = () => {
 export default ExitDriverTrip;
 
 const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+
   header: {
     backgroundColor: "#005091",
     alignSelf: "center",
