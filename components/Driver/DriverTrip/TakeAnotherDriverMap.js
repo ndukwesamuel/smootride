@@ -101,6 +101,7 @@ const TakeAnotherDriverMap = () => {
 
   return (
     <View style={{ height: mapHeight }} className="">
+      <Text>skdjskdjk</Text>
       {maplocationdata && (
         <View className="pt-10 ">
           <View className="  items-center">

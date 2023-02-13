@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   Linking,
   StyleSheet,
@@ -103,13 +104,29 @@ const StartTrip = () => {
     dispatch(First_Trip_StartTime_Activated(startTime));
   };
 
+  const { First_Trip_Location } = useSelector((state) => state.FristTripSlice);
+
+  console.log({ Fwww: First_Trip_Location });
+
   console.log({ maplocationdata });
-  useEffect(() => {
-    getPermissions();
-  }, []);
+  // useEffect(() => {
+  //   getPermissions();
+  // }, []);
+
+  const [startLoading, setStartLoading] = useState(false);
 
   const startTrip = () => {
+    setStartLoading(true);
+    // if (First_Trip_Location) {
+    //   dispatch(ActivateStartTrip());
+    // }
+    getPermissions();
     dispatch(ActivateStartTrip());
+    // setStartLoading(true);
+    // console.log();
+    setTimeout(() => {
+      setStartLoading(false);
+    }, 10000);
   };
 
   const call = (data) => {
@@ -264,16 +281,22 @@ const StartTrip = () => {
                       // opacity:this.state.opacity
                     }}
                   >
-                    <Text
-                      style={{
-                        alignSelf: "center",
-                        color: "#fff",
-                        fontSize: 15,
-                        // fontFamily: "Roboto-Regular",
-                      }}
-                    >
-                      Start Trip
-                    </Text>
+                    {!startLoading && (
+                      <Text
+                        style={{
+                          alignSelf: "center",
+                          color: "#fff",
+                          fontSize: 15,
+                          // fontFamily: "Roboto-Regular",
+                        }}
+                      >
+                        Start Trip
+                      </Text>
+                    )}
+
+                    {startLoading && (
+                      <ActivityIndicator size="small" color="#FFFFFF" />
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>
