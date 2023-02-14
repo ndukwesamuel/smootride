@@ -218,30 +218,36 @@ const RiderRequest = () => {
     (state) => state.RequestRideSlice?.Lastassigned
   );
 
-  // console.log("onLoaddata status 2 ", onLoaddata?.driverdetails)
-  const TripStat = useSelector(
-    (state) => state.RequestRideSlice?.tripStatus?.status
+  const {tripStatus} = useSelector(
+    (state) => state.RequestRideSlice
   );
 
+  // this must never be remove
+  const [counter, setCounter] = useState(0);
+
   useEffect(() => {
-    const interval = setInterval(async() => {
+    
+    const interval = setTimeout(async() => {
+      setCounter(counter + 1);
       const userdet = {
             user_id: user_id,
           };
+          if(!assignedDet?.driverdetails?.driverId){
           await dispatch(AssignedDriver(userdet));
+          }
           if(onLoaddata?.driverdetails?.driverId){
+            console.log("showing here ", tripStatus?.status)
               await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
-              setDriverstatus(TripStat)
-          }
-          else if(onLoaddata?.driverdetails?.driverId == undefined){
-            setDriverstatus(null)
-          }
+          }else if(assignedDet?.driverdetails?.driverId){
+            console.log("showing here too", tripStatus?.status)
+            await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
+        }
           
   
-    }, 30000);
+    }, 15000);
   
-    return () => clearInterval(interval);
-  }, [])
+    return () => clearTimeout(interval);
+  }, [counter])
 
   // setDriverstatus(TripStat)
 
@@ -406,7 +412,7 @@ const RiderRequest = () => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
-                    <View style={{ width: "40%" }}>
+                    {tripStatus?.status == "ontrip"? <View></View> :<View style={{ width: "40%" }}>
                       <TouchableOpacity
                         // onPress={this.oncompleted}
                         onPress={handleCloseModeTrip}
@@ -430,7 +436,7 @@ const RiderRequest = () => {
                           CANCEL REQUEST
                         </Text>
                       </TouchableOpacity>
-                    </View>
+                    </View>}
                   </View>
                 </View>
               </View>
@@ -557,7 +563,7 @@ const RiderRequest = () => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
-                    <View style={{ width: "40%" }}>
+                    {tripStatus?.status == "ontrip"? <View></View> : <View style={{ width: "40%" }}>
                       <TouchableOpacity
                         // onPress={this.oncompleted}
                         onPress={handleCloseModeTrip}
@@ -581,14 +587,14 @@ const RiderRequest = () => {
                           CANCEL REQUEST
                         </Text>
                       </TouchableOpacity>
-                    </View>
+                    </View>}
                   </View>
                 </View>
               </View>
             </View>
           )}
 
-          {onLoaddata?.data == null && requeststat == false && driverStat == null && (
+          {onLoaddata?.data == null && requeststat == false && tripStatus == null && (
             <View>
               {number == 0 ? (
                 <View

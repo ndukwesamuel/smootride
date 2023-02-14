@@ -90,6 +90,9 @@ export const RequestRide= createAsyncThunk(
             .post("getassigneddriver", requestdetails)
             .then( async (response) => {
               // console.log("assigned response ",response.data)
+              if(response.data?.driverdetails != null){
+                Alert.alert("Trip has been assigned to a driver")
+              }
               return response.data;
             })
              
@@ -126,7 +129,7 @@ export const RequestRide= createAsyncThunk(
           return await instance
             .get(`getdriverstate/${id}`)
             .then( async (response) => {
-              console.log("driver status response ",response.data)
+              // console.log("driver status response ",response.data)
               return response.data;
             })
              
@@ -231,6 +234,7 @@ export const RequestRide= createAsyncThunk(
         })
         .addCase(CancelRequest.rejected, (state, action) => {
           // console.log("rejected values ",action.payload)
+          state.tripStatus= null;
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
@@ -275,11 +279,15 @@ export const RequestRide= createAsyncThunk(
         .addCase(TripStatus.fulfilled, (state, action) => {
           if(action.payload?.status == null){
             state.isRequest= false;
-            console.log("state is", action.payload);
+            state.assignedDriver= null;
+            state.tripStatus= null;
+            console.log("got here")
+          }else{            
+          state.tripStatus= action.payload;
           }
           state.isLoading = false;
           state.isSuccess = true;
-          state.tripStatus= action.payload;
+          console.log("state is", action.payload);
         })
         .addCase(TripStatus.rejected, (state, action) => {          
           state.isLoading = false;
