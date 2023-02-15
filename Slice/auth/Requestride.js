@@ -90,6 +90,9 @@ export const RequestRide= createAsyncThunk(
             .post("getassigneddriver", requestdetails)
             .then( async (response) => {
               // console.log("assigned response ",response.data)
+              if(response.data?.driverdetails != null){
+                Alert.alert("Trip has been assigned to a driver")
+              }
               return response.data;
             })
              
@@ -126,7 +129,39 @@ export const RequestRide= createAsyncThunk(
           return await instance
             .get(`getdriverstate/${id}`)
             .then( async (response) => {
-              console.log("driver status response ",response.data)
+              // console.log("driver status response ",response.data)
+              return response.data;
+            })
+             
+      .catch((err) =>{ 
+        let errdata = err.response.data;
+        
+      return rejectWithValue(err.response.data)
+    })
+        
+    }
+  )
+  
+
+  export const KnowTrip= createAsyncThunk(
+    "KnowTrip/tripstat", async(id, {rejectWithValue})=>{
+      // console.log("trip id ",id)
+        const tokengot = await  AsyncStorage.getItem("token")
+        const infoneeded= `Bearer ${tokengot}`
+        const instance = axios.create({
+            baseURL: process.env.SMOOTHRIDE_NEWAPI,
+            timeout: 20000,
+      
+            headers: {
+              "Content-Type": "application/json",
+              "Accept": "application/json",
+              "Authorization": infoneeded
+            },
+          });
+          return await instance
+            .get(`gettripstatus/${id}`)
+            .then( async (response) => {
+              console.log("Know Trip response ",response.data)
               return response.data;
             })
              
@@ -188,7 +223,8 @@ export const RequestRide= createAsyncThunk(
     assignedDriver: null,
     RequestData: null,
     Lastassigned: null,
-    tripStatus: null
+    tripStatus: null,
+    KnowTrip: null
   };
 
   export const RequestRideSlice = createSlice({
@@ -231,6 +267,7 @@ export const RequestRide= createAsyncThunk(
         })
         .addCase(CancelRequest.rejected, (state, action) => {
           // console.log("rejected values ",action.payload)
+          state.tripStatus= null;
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
@@ -275,13 +312,40 @@ export const RequestRide= createAsyncThunk(
         .addCase(TripStatus.fulfilled, (state, action) => {
           if(action.payload?.status == null){
             state.isRequest= false;
-            console.log("state is", action.payload);
+            state.assignedDriver= null;
+            state.tripStatus= null;
+            state.RequestData = null;
+            // console.log("got here")
+          }else{            
+          state.tripStatus= action.payload;
           }
           state.isLoading = false;
           state.isSuccess = true;
-          state.tripStatus= action.payload;
+          // console.log("state is", action.payload);
         })
         .addCase(TripStatus.rejected, (state, action) => {          
+          state.isLoading = false;
+          state.isError = true;
+          state.message = action.payload;
+        })
+        .addCase(KnowTrip.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(KnowTrip.fulfilled, (state, action) => {
+          if(action.payload?.success == false ){
+            Alert.alert("Trip was rejected");
+            state.tripStatus= null;
+            state.assignedDriver= null;
+            state.RequestData= null;
+            state.isRequest= false;
+            state.Lastassigned= null;
+          }
+          state.KnowTrip= action.payload;
+          state.isLoading = false;
+          state.isSuccess = true;
+          // console.log("state is", state.RequestData?.data?.id);
+        })
+        .addCase(KnowTrip.rejected, (state, action) => {          
           state.isLoading = false;
           state.isError = true;
           state.message = action.payload;
