@@ -162,6 +162,9 @@ export const RequestRide= createAsyncThunk(
             .get(`gettripstatus/${id}`)
             .then( async (response) => {
               console.log("Know Trip response ",response.data)
+              if(response.data?.success == false ){
+                Alert.alert("Trip was rejected");
+              }
               return response.data;
             })
              
@@ -333,7 +336,6 @@ export const RequestRide= createAsyncThunk(
         })
         .addCase(KnowTrip.fulfilled, (state, action) => {
           if(action.payload?.success == false ){
-            Alert.alert("Trip was rejected");
             state.tripStatus= null;
             state.assignedDriver= null;
             state.RequestData= null;
