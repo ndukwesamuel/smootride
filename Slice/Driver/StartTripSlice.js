@@ -12,7 +12,7 @@ const initialState = {
   total_distance_covered: 0,
   pickUpAddressData: null,
   destAddressData: null,
-  totalpointData: ["name"],
+  totalpointData: [],
 };
 
 export const StartTripSlice = createSlice({
@@ -73,6 +73,10 @@ export const StartTripSlice = createSlice({
     CompletedTripActivated: (state, action) => {
       state.completedTripdata = action.payload;
     },
+
+    TotalpointActivated: (state, action) => {
+      state.totalpointData.push(action.payload);
+    },
   },
 });
 
@@ -90,6 +94,7 @@ export const {
   TotalDistanceCoveredFun,
   PickUpAddressFun,
   DestAddressDataFun,
+  TotalpointActivated,
 } = StartTripSlice.actions;
 
 export default StartTripSlice.reducer;

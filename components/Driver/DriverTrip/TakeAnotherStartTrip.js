@@ -55,10 +55,6 @@ const TakeAnotherStartTrip = () => {
     },
   };
 
-  const startTrip = () => {
-    dispatch(ActivateStartTrip());
-  };
-
   const getPermissions = async () => {
     setMaplocation(true);
 
@@ -84,9 +80,21 @@ const TakeAnotherStartTrip = () => {
     dispatch(StartTimeCurrentLocationActivated(startTime));
   };
 
-  useEffect(() => {
+  const [startLoading, setStartLoading] = useState(false);
+
+  const startTrip = () => {
+    setStartLoading(true);
+    // if (First_Trip_Location) {
+    //   dispatch(ActivateStartTrip());
+    // }
     getPermissions();
-  }, []);
+    dispatch(ActivateStartTrip());
+    // setStartLoading(true);
+    // console.log();
+    setTimeout(() => {
+      setStartLoading(false);
+    }, 10000);
+  };
 
   const call = (data) => {
     console.log("this is f");
@@ -240,16 +248,22 @@ const TakeAnotherStartTrip = () => {
                       // opacity:this.state.opacity
                     }}
                   >
-                    <Text
-                      style={{
-                        alignSelf: "center",
-                        color: "#fff",
-                        fontSize: 15,
-                        // fontFamily: "Roboto-Regular",
-                      }}
-                    >
-                      Start Trip
-                    </Text>
+                    {!startLoading && (
+                      <Text
+                        style={{
+                          alignSelf: "center",
+                          color: "#fff",
+                          fontSize: 15,
+                          // fontFamily: "Roboto-Regular",
+                        }}
+                      >
+                        Start Trip
+                      </Text>
+                    )}
+
+                    {startLoading && (
+                      <ActivityIndicator size="small" color="#FFFFFF" />
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>

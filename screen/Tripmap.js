@@ -51,11 +51,14 @@ const Tripmap = ({ route }) => {
       Address.push(res);
       //Alert.alert(this.props.rider.startAddress);
     }
-    Address.push({ time: "End", title: "Final", description: `${destAddress}` });
+    Address.push({
+      time: "End",
+      title: "Final",
+      description: `${destAddress}`,
+    });
     // console.log("Address ", Address)
     setPoints(Address);
     setLoading(false);
-    
   };
 
   useEffect(() => {
@@ -88,7 +91,7 @@ const Tripmap = ({ route }) => {
               // fontFamily: "Roboto-Bold",
             }}
           >
-            Way Points
+            Way Points emem
           </Text>
         </View>
       </View>
@@ -109,9 +112,6 @@ const Tripmap = ({ route }) => {
           <Triptimeline wayPoints={wayPoints} />
         </View>
       )}
-      
-
-      
     </View>
   );
 };

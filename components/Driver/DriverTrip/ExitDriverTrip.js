@@ -119,7 +119,7 @@ const ExitDriverTrip = () => {
     tripDist: completedTripdata.Distant_Covered,
   };
 
-  // console.log({ data22 });
+  console.log({ data22 });
 
   const [startTime, setStartTime] = useState(null);
   const [timeSpent, setTimeSpent] = useState(0);

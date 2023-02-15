@@ -26,6 +26,12 @@ const loginfetchDatahandle = async (userData) => {
     const response = await axios.post(userAPi, userData);
     if (response.data) {
       // console.warn("login data ", response.data)
+
+      if (userData.rememberMe) {
+        console.log({ userData });
+        let data = JSON.stringify(userData);
+        await AsyncStorage.setItem("rememberData", data);
+      }
       await AsyncStorage.setItem("token", response.data.access_token);
       await AsyncStorage.setItem("userdata", JSON.stringify(response.data));
       return response.data;
@@ -54,12 +60,7 @@ export const LoginSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.message = "";
-    },
+    reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
