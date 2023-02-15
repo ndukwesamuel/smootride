@@ -93,7 +93,6 @@ const ExitDriverModal = () => {
     dispatch(resetUpdateDriverStatusSlice());
     dispatch(resetAll_Excerpt_startTripdata());
     dispatch(CompleteDriverReset());
-
     setModalVisible(false);
   }
 
@@ -209,7 +208,7 @@ const ExitDriverModal = () => {
               <Image
                 source={require("../../../assets/images/request.png")}
                 style={{
-                  width: 40,
+                  width: 40,  
                   height: 40,
                   alignSelf: "center",
                   marginTop: 20,

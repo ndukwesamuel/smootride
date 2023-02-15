@@ -13,6 +13,9 @@ import {
   View,
 } from "react-native";
 import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+import { Feather } from "@expo/vector-icons";
 
 import { APP_NAME, APIBASEURL } from "@env";
 import { useNavigation } from "@react-navigation/native";
@@ -20,16 +23,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectOrigin } from "../Slice/navSlice";
 import { login, reset } from "../Slice/auth/LoginSlice";
 import { StatusBar } from "expo-status-bar";
+import Checkbox from "expo-checkbox";
 
 const image = { uri: "https://reactjs.org/logo-og.png" };
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const origin = useSelector(selectOrigin);
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [secureTextEntry, setSecureTextEntry] = useState(true);
 
   const { user, data, isError, isSuccess, message, isLoading } = useSelector(
     (state) => state.LoginSlice
@@ -58,13 +64,52 @@ const Login = () => {
     const userData = {
       email,
       password,
+      rememberMe,
     };
+
+    console.log(userData);
     // setLoading(true)
     dispatch(login(userData));
-
-    dispatch(reset());
+    // dispatch(reset());
     // setLoading(false)
   };
+
+  const retrieveData = async () => {
+    console.log("skjdskdjskj");
+    // try {
+
+    //   console.log({ storedUsername });
+    //   console.log({ storedPassword });
+
+    //   if (storedUsername && storedPassword) {
+    //     const [email, setEmail] = useState("");
+    //     const [password, setPassword] = useState("");
+    //     setEmail(storedUsername);
+    //     setPassword(storedPassword);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
+    try {
+      const storedData = await AsyncStorage.getItem("rememberData");
+
+      console.log({ storedData });
+      const obj = JSON.parse(storedData);
+      console.log({ obj });
+
+      if (obj.rememberMe) {
+        setEmail(obj.email);
+        setPassword(obj.password);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    retrieveData();
+  }, []);
 
   return (
     <View>
@@ -73,10 +118,7 @@ const Login = () => {
         source={require("../assets/images/Smot.jpg")}
         style={{ width: "100%", height: "100%" }}
       >
-        <View
-          behavior="padding"
-          style={{ flex: 1, justifyContent: "center" }}
-        >
+        <View behavior="padding" style={{ flex: 1, justifyContent: "center" }}>
           <View style={styles.container}>
             <View style={{ padding: 10 }}>
               <Image
@@ -117,24 +159,52 @@ const Login = () => {
                 }}
               />
 
-              <TextInput
-                value={password}
-                onChangeText={(text) => setPassword(text)}
-                placeholder="Password"
-                secureTextEntry={true}
-                placeholderTextColor="#fff"
-                style={{
-                  paddingStart: 20,
-                  color: "#fff",
-                  height: 45,
-                  borderColor: "#fff",
-                  marginTop: 20,
-                  fontSize: 14,
-                  borderRadius: 30,
-                  borderWidth: 1,
-                  // fontFamily: "Roboto-Regular",
-                }}
-              />
+              <View className="mt-5 border border-white rounded-[30px]  flex-row items-center">
+                <TextInput
+                  className="w-[90%] pl-5 text-white"
+                  value={password}
+                  onChangeText={(text) => setPassword(text)}
+                  placeholder="Password"
+                  secureTextEntry={secureTextEntry}
+                  placeholderTextColor="#fff"
+                  style={{
+                    height: 45,
+                    fontSize: 14,
+                    // fontFamily: "Roboto-Regular",
+                  }}
+                />
+
+                <TouchableOpacity
+                  onPress={() => setSecureTextEntry(!secureTextEntry)}
+                >
+                  <Text>
+                    {secureTextEntry ? (
+                      <Feather name="eye" size={24} color="white" />
+                    ) : (
+                      <Feather name="eye-off" size={24} color="white" />
+                    )}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View className="mt-5 ml-2">
+              <View className="flex-row gap-2">
+                <Checkbox
+                  style={styles.checkbox}
+                  value={rememberMe}
+                  onValueChange={() => setRememberMe(!rememberMe)}
+                />
+                <Text
+                  style={{
+                    fontSize: 15,
+                    color: "#fff",
+                    fontWeight: "800",
+                  }}
+                >
+                  Remember me
+                </Text>
+              </View>
             </View>
 
             <TouchableOpacity onPress={handleLogin}>
@@ -184,7 +254,7 @@ const Login = () => {
                   marginTop: 15,
                 }}
               >
-                Forget PASSWORD?
+                Forgot Password ?
               </Text>
             </View>
           </View>

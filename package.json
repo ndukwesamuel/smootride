@@ -26,6 +26,7 @@
     "axios": "^1.2.1",
     "eas-cli": "^0.60.0",
     "expo": "~47.0.8",
+    "expo-checkbox": "~2.2.2",
     "expo-dev-client": "~2.0.1",
     "expo-location": "~15.0.1",
     "expo-permissions": "^14.0.0",
