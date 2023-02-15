@@ -31,6 +31,7 @@ import { GetRider } from "../../Slice/auth/Getrider";
 import {
   AssignedDriver,
   CancelRequest,
+  KnowTrip,
   LastAssignedDriver,
   RequestRide,
   TripStatus,
@@ -218,9 +219,10 @@ const RiderRequest = () => {
     (state) => state.RequestRideSlice?.Lastassigned
   );
 
-  const {tripStatus} = useSelector(
+  const {tripStatus, RequestData} = useSelector(
     (state) => state.RequestRideSlice
   );
+
 
   // this must never be remove
   const [counter, setCounter] = useState(0);
@@ -237,9 +239,11 @@ const RiderRequest = () => {
           }
           if(onLoaddata?.driverdetails?.driverId){
             console.log("showing here ", tripStatus?.status)
+            await dispatch(KnowTrip(onLoaddata?.data?.id));
               await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
           }else if(assignedDet?.driverdetails?.driverId){
             console.log("showing here too", tripStatus?.status)
+            await dispatch(KnowTrip(assignedDet?.data?.id));
             await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
         }
           
@@ -261,6 +265,7 @@ const RiderRequest = () => {
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
+            <Text>Please wait, getting current location</Text>
             <ActivityIndicator animating={true} color="black" />
           </View>
         ) : (
