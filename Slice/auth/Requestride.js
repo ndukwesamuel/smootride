@@ -161,9 +161,9 @@ export const RequestRide= createAsyncThunk(
           return await instance
             .get(`gettripstatus/${id}`)
             .then( async (response) => {
-              console.log("Know Trip response ",response.data)
+              // console.log("Know Trip response ",response.data)
               if(response.data?.success == false ){
-                Alert.alert("Trip was rejected");
+                Alert.alert("Trip rejected");
               }
               return response.data;
             })
