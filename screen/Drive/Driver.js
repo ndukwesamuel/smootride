@@ -118,7 +118,7 @@ const Driver = () => {
 
   console.log("Driver");
 
-  const { startTripdata, completedTripdata } = useSelector(
+  const { startTripdata, completedTripdata, totalpointData } = useSelector(
     (state) => state.StartTripSlice
   );
 
@@ -168,15 +168,18 @@ const Driver = () => {
   // this must never be remove
   const [counter, setCounter] = useState(0);
   useEffect(() => {
-    const interval = setTimeout(() => {
-      setCounter(counter + 1);
-      dispatch(
-        GetLastAssignTrip({
-          user_id: 1,
-        })
-      );
-    }, 5000);
-    return () => clearTimeout(interval);
+    if (!startTripdata) {
+      const interval = setTimeout(() => {
+        setCounter(counter + 1);
+        dispatch(
+          GetLastAssignTrip({
+            user_id: 1,
+          })
+        );
+      }, 5000);
+
+      return () => clearTimeout(interval);
+    }
   }, [counter]);
 
   console.log({ counter });
@@ -861,7 +864,7 @@ const Driver = () => {
                 </View>
               )}
 
-              {dataforDriverRequest.drivertrip.isReady == false &&
+              {/* {dataforDriverRequest.drivertrip.isReady == false &&
                 dataforDriverRequest.drivertrip.isStarted == true && (
                   <View style={{ textAlign: "center" }}>
                     <Text style={{ color: "#877A80", alignSelf: "center" }}>
@@ -869,14 +872,14 @@ const Driver = () => {
                     </Text>
                     <ActivityIndicator color="#007cc2" size="large" />
                   </View>
-                )}
+                )} */}
 
               <View>
-                {dataforDriverRequest.isFetching == true && (
+                {/* {dataforDriverRequest.isFetching == true && (
                   <ActivityIndicator color="#007cc2" size="large" />
-                )}
+                )} */}
 
-                {dataforDriverRequest.drivertrip.isStarted == false &&
+                {/* {dataforDriverRequest.drivertrip.isStarted == false &&
                   dataforDriverRequest.rider.rider_id !== "" &&
                   dataforDriverRequest.rider.accept == true && (
                     <View style={{ padding: 10, marginBottom: 50 }}>
@@ -1121,7 +1124,7 @@ const Driver = () => {
                         </View>
                       </Card>
                     </View>
-                  )}
+                  )} */}
 
                 {/* surposet to be end */}
               </View>

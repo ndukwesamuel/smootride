@@ -135,7 +135,7 @@ const Forgetpassword = () => {
                         fontSize: 17,
                       }}
                     >
-                      RESETPASSWORD
+                      Reset Password
                     </Text>
                   )}
 
@@ -157,7 +157,7 @@ const Forgetpassword = () => {
                     marginTop: 15,
                   }}
                 >
-                  GO TO LOGIN
+                  Back To Login
                 </Text>
               </View>
             </View>

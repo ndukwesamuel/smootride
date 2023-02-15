@@ -26,6 +26,7 @@ import {
   resetAll_Excerpt_startTripdata,
   StartTimeCurrentLocationActivated,
   TotalDistanceCoveredFun,
+  TotalpointActivated,
   TotalTripAmountFun,
 } from "../../../Slice/Driver/StartTripSlice";
 import { CompleteDriverTripFunc } from "../../../Slice/Driver/CompleteDriverTripSlice";
@@ -103,10 +104,13 @@ const EndTripButtton = () => {
       latitude: currentLocationData?.coords.latitude,
       longitude: currentLocationData?.coords.longitude,
     };
+
     const endCoords = {
       latitude: currentLocation.coords.latitude,
       longitude: currentLocation.coords.longitude,
     };
+
+    dispatch(TotalpointActivated(endCoords));
 
     let Result_Of_Meters_Corverd = haversine(startCoords, endCoords);
 
@@ -121,7 +125,7 @@ const EndTripButtton = () => {
     const interval = setTimeout(() => {
       getPermissions();
       setCounter(counter + 1);
-    }, 5000);
+    }, 10000);
     return () => clearTimeout(interval);
   }, [counter]);
 
@@ -197,7 +201,7 @@ const EndTripButtton = () => {
         Cost_of_waiting: "this iw the waiting period",
         Distant_Covered: total_distance_covered,
         travelTime: travelTime,
-        tripPoints: "non yet",
+        tripPoints: JSON.stringify(totalpointData),
       };
 
       dispatch(CompletedTripActivated(TripSummaryData));

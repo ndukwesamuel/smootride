@@ -97,6 +97,40 @@ const DriverMap = () => {
   //   getPermissions();
   // }, []);
 
+  const getPermissions = async () => {
+    setMaplocation(true);
+    let pickUpAddress = "pickUpAddress";
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Insufficient permissions!",
+        "You need to grant location permissions to use this app.",
+        [{ text: "Okay" }]
+      );
+      return false;
+    }
+
+    let currentLocation = await Location.getCurrentPositionAsync({});
+
+    let startTime = new Date().toISOString();
+
+    // setLocation(currentLocation);
+
+    let adddressResult = await GetAddress_OF_Location(currentLocation);
+    dispatch(PickUpAddressFun(adddressResult));
+    setMaplocation(false);
+
+    console.log({ maplocation });
+    dispatch(MapLocationActivated(maplocation));
+    dispatch(First_Trip_Location_Activated(currentLocation));
+    dispatch(CurrentLocationActivated(currentLocation));
+    dispatch(First_Trip_StartTime_Activated(startTime));
+  };
+
+  useEffect(() => {
+    getPermissions();
+  }, []);
+
   const ASPECT_RATIO = width / height;
 
   const LATITUDE_DELTA = 0.006339428281933124;
@@ -147,7 +181,7 @@ const DriverMap = () => {
           </View>
         )}
 
-        {!maplocationdata && First_Trip_Location && (
+        {First_Trip_Location && (
           <>
             {riderdata?.data && <MainMAP locationdata={First_Trip_Location} />}
           </>
