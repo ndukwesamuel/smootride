@@ -122,8 +122,6 @@ const Driver = () => {
     (state) => state.StartTripSlice
   );
 
-  console.log({ totalpointData });
-
   const { ExittripData } = useSelector((state) => state.ExitTripSlice);
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
@@ -155,9 +153,6 @@ const Driver = () => {
     );
   };
 
-  // const { First_Trip_Location } = useSelector((state) => state.FristTripSlice);
-
-  // console.log({ Fwww: First_Trip_Location });
   useEffect(() => {
     dispatch(
       GetLastAssignTrip({

@@ -106,9 +106,6 @@ const StartTrip = () => {
 
   const { First_Trip_Location } = useSelector((state) => state.FristTripSlice);
 
-  console.log({ Fwww: First_Trip_Location });
-
-  console.log({ maplocationdata });
   // useEffect(() => {
   //   getPermissions();
   // }, []);

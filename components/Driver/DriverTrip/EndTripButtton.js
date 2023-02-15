@@ -110,13 +110,7 @@ const EndTripButtton = () => {
       longitude: currentLocation.coords.longitude,
     };
 
-    // totalpointData.push(endCoords);
-
     dispatch(TotalpointActivated(endCoords));
-
-    console.log("skjjjjjjdddddjjdjdjdj");
-
-    // console.log({ totalpointData });
 
     let Result_Of_Meters_Corverd = haversine(startCoords, endCoords);
 

@@ -69,7 +69,9 @@ const DriverProfile = () => {
           />
         </View>
         <View style={{ width: "75%" }}>
-          <Text style={{ color: "#fff", marginTop: 10 }}>{data.user.name}</Text>
+          <Text style={{ color: "#fff", marginTop: 10 }}>
+            {data?.user.name}
+          </Text>
           <View style={{ flexDirection: "row" }}>
             <View style={{ width: "50%" }}>
               <Text style={{ color: "#fff", marginTop: 4, fontSize: 13 }}>

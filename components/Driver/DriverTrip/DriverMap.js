@@ -131,10 +131,6 @@ const DriverMap = () => {
     getPermissions();
   }, []);
 
-  console.log({ qqq: First_Trip_Location });
-
-  console.log({ maplocationdata });
-
   const ASPECT_RATIO = width / height;
 
   const LATITUDE_DELTA = 0.006339428281933124;
