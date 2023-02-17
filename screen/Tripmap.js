@@ -21,6 +21,7 @@ const Tripmap = ({ route }) => {
   const [loading, setLoading] = useState(true);
   const [wayPoints, setPoints] = useState(null);
   let { tripPoints, pickUpAddress, destAddress } = route.params.data;
+
   const [position, setPosition] = useState(0);
   const dispatch = useDispatch();
   const num = JSON.parse(tripPoints);
@@ -28,6 +29,9 @@ const Tripmap = ({ route }) => {
 
   const getaddress = async (tripPoints, pickUpAddress, destAddress) => {
     const jsontripPoints = JSON.parse(tripPoints);
+
+    console.log({ tripPoints });
+    console.log({ jsontripPoints });
 
     const Address = [];
     setLoading(true);
@@ -40,7 +44,7 @@ const Tripmap = ({ route }) => {
     for (let r = 0; r < jsontripPoints.length; r++) {
       const latitude = jsontripPoints[r].latitude;
       const longitude = jsontripPoints[r].longitude;
-      await dispatch(GetAddress({ latitude, longitude }));
+      dispatch(GetAddress({ latitude, longitude }));
       let res = {
         time: `${r + 1}`,
         title: `Point ${r + 1}`,
@@ -91,7 +95,7 @@ const Tripmap = ({ route }) => {
               // fontFamily: "Roboto-Bold",
             }}
           >
-            Way Points emem
+            Way Points
           </Text>
         </View>
       </View>

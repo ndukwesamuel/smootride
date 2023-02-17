@@ -22,7 +22,8 @@ import ExitDriverScreen from "./screen/Drive/ExitDriverScreen";
 // import messaging from '@react-native-firebase/messaging';
 // import messaging from "@react-native-firebase/messaging";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
+import * as Notifications from "expo-notifications";
+import { useState } from "react";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -93,8 +94,61 @@ export function TabNavigation() {
   );
 }
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+    };
+  },
+});
 export default function App() {
-  let user = false;
+  const [pushToken, setPushToken] = useState();
+
+  useEffect(() => {
+    async function getNotificationPermission() {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+      }
+      if (status !== "granted") {
+        // Handle the case where the user declines permission
+        console.log("Failed to get push token for push notification!");
+        return;
+      }
+
+      let token;
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      // Permission granted, handle accordingly
+      setPushToken(token);
+    }
+
+    getNotificationPermission();
+    // getNotificationPermission();
+  }, []);
+
+  useEffect(() => {
+    const backgroundSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log({ response });
+      });
+
+    const foregroundSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log({ notification });
+        // let data = notification;
+        // console.log({ data });
+        // GetAddress_OF_Location(notification);
+
+        return;
+      });
+
+    return () => {
+      backgroundSubscription.remove();
+      foregroundSubscription.remove();
+    };
+  }, []);
+
+  console.log({ pushToken });
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
