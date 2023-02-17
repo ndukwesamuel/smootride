@@ -31,6 +31,7 @@ import { GetRider } from "../../Slice/auth/Getrider";
 import {
   AssignedDriver,
   CancelRequest,
+  CloseReject,
   KnowTrip,
   LastAssignedDriver,
   RequestRide,
@@ -41,6 +42,7 @@ import { Marker } from "react-native-maps";
 import RideRequestSuccess from "../../components/rider/RideRequestSuccess";
 import CancelModalTrip from "../../components/rider/CancelModalTrip";
 import PTRView from "react-native-pull-to-refresh";
+import RejectRequest from "../../components/rider/RejectRequest";
 
 const { width, height } = Dimensions.get("window");
 const RiderRequest = () => {
@@ -56,6 +58,7 @@ const RiderRequest = () => {
   const [reboot, setReboot] = useState(false);
   const [loader, setLoader] = useState(false);
   const [driverStat, setDriverstatus] = useState(null)
+  const [rejTrip, setRejTrip] = useState(false)
 
   const user_id = useSelector((state) => state.LoginSlice?.data?.user?.id);
 
@@ -114,6 +117,15 @@ const RiderRequest = () => {
     setClosedTrip(!closedTrip);
   };
 
+  const closeRejectTrip = () => {
+    setRejTrip(false);
+    dispatch(CloseReject())
+  };
+
+  const ListDriver = useSelector(
+    (state) => state.GetRiderSlice
+  );
+
   const handlePurpose = async () => {
     if (purpose == 0) {
       Alert.alert("Please fill the field");
@@ -129,16 +141,13 @@ const RiderRequest = () => {
       setIsModalVisible(false);
       setLoading(true);
       await dispatch(RequestRide(userdata));
-      if (requeststat == true) {
-        console.log("it works");
+      if (ListDriver?.data != null) {
+        setAccepted(true);
+        console.log("accepted value ", accepted)
         await dispatch(AssignedDriver(userdet));
       }
       setLoading(false);
       setPurpose("");
-
-      if (requeststat == true) {
-        setAccepted(true);
-      }
     }
   };
 
@@ -219,7 +228,7 @@ const RiderRequest = () => {
     (state) => state.RequestRideSlice?.Lastassigned
   );
 
-  const {tripStatus, RequestData} = useSelector(
+  const {tripStatus, rejectedTrip} = useSelector(
     (state) => state.RequestRideSlice
   );
 
@@ -229,21 +238,33 @@ const RiderRequest = () => {
 
   useEffect(() => {
     
+    // if(data?.message == "Trip deleted"){
+    //   () => clearTimeout(interval);
+    // }
+        if(rejectedTrip == true){
+          setRejTrip(true)
+        }
+
     const interval = setTimeout(async() => {
       setCounter(counter + 1);
       const userdet = {
             user_id: user_id,
           };
+          
           if(!assignedDet?.driverdetails?.driverId){
           await dispatch(AssignedDriver(userdet));
           }
           if(onLoaddata?.driverdetails?.driverId){
-            console.log("showing here ", tripStatus?.status)
+            // console.log("showing here ", tripStatus?.status)
+            if(tripStatus?.status == "assign"){
             await dispatch(KnowTrip(onLoaddata?.data?.id));
+            }
               await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
           }else if(assignedDet?.driverdetails?.driverId){
-            console.log("showing here too", tripStatus?.status)
-            await dispatch(KnowTrip(assignedDet?.data?.id));
+            // console.log("showing here too", tripStatus?.status)
+            if(tripStatus?.status == "assign"){
+              await dispatch(KnowTrip(assignedDet?.data?.id));
+              }
             await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
         }
           
@@ -417,7 +438,33 @@ const RiderRequest = () => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
-                    {tripStatus?.status == "ontrip"? <View></View> :<View style={{ width: "40%" }}>
+                    {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
+                    <TouchableOpacity
+                        // onPress={this.oncompleted}
+                        // onPress={handleCloseModeTrip}
+                        style={{
+                          marginTop: 7,
+                          backgroundColor: "#005091",
+                          padding: 10,
+                          width: "100%",
+                          borderRadius: 10,
+                          alignSelf: "center",
+                          marginBottom: 15,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            alignSelf: "center",
+                            color: "#fff",
+                            fontSize: 13,
+                          }}
+                        >
+                          SHARE DETAILS
+                        </Text>
+                      </TouchableOpacity>
+                    </View> 
+                    :
+                    <View style={{ width: "40%" }}>
                       <TouchableOpacity
                         // onPress={this.oncompleted}
                         onPress={handleCloseModeTrip}
@@ -568,7 +615,33 @@ const RiderRequest = () => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
-                    {tripStatus?.status == "ontrip"? <View></View> : <View style={{ width: "40%" }}>
+                    {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
+                    <TouchableOpacity
+                        // onPress={this.oncompleted}
+                        // onPress={handleCloseModeTrip}
+                        style={{
+                          marginTop: 7,
+                          backgroundColor: "#005091",
+                          padding: 10,
+                          width: "100%",
+                          borderRadius: 10,
+                          alignSelf: "center",
+                          marginBottom: 15,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            alignSelf: "center",
+                            color: "#fff",
+                            fontSize: 13,
+                          }}
+                        >
+                          SHARE DETAILS
+                        </Text>
+                      </TouchableOpacity>
+                    </View> 
+                     : 
+                     <View style={{ width: "40%" }}>
                       <TouchableOpacity
                         // onPress={this.oncompleted}
                         onPress={handleCloseModeTrip}
@@ -869,45 +942,7 @@ const RiderRequest = () => {
                   }}
                 />
 
-                // <View style={{flexDirection:"column"}}>
-                //   {knowdata.map((each)=>(
-                //   <View
-                //         style={{
-                //           flexDirection: "row",
-                //           borderBottomWidth: 1,
-                //           borderBottomColor: "#EDEDED",
-                //           flexDirection: "row",
-                //           alignItems: "center",
-                //         }}
-                //       >
-                //         <View style={{ width: "15%", marginStart: 10 }}>
-                //           <Image
-                //             source={clientimg}
-                //             style={{
-                //               width: 50,
-                //               height: 50,
-                //               borderRadius: 20,
-                //               alignSelf: "center",
-                //               margin: 5,
-                //             }}
-                //           />
-                //         </View>
-                //         <View style={{ width: "60%", marginLeft: 5 }}>
-                //           <Text
-                //             style={{
-                //               fontSize: 17,
-                //               marginTop: 10,
-                //               color: "#877A80",
-                //               fontWeight: "400",
-                //             }}
-                //           >
-                //             {" "}
-                //             {each?.name}{" "}
-                //           </Text>
-                //         </View>
-                //       </View>
-                //       ))}
-                // </View>
+                
               )}
             </View>
           )}
@@ -1012,6 +1047,7 @@ const RiderRequest = () => {
         </View>
       </Modal>
       <RideRequestSuccess accepted={accepted} handleAccept={handleAccept} />
+      <RejectRequest accepted={rejTrip} handleAccept={closeRejectTrip} />
       <CancelModalTrip
         closedTrip={closedTrip}
         handleCloseModeTrip={handleCloseModeTrip}

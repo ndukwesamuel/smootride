@@ -90,9 +90,6 @@ export const RequestRide= createAsyncThunk(
             .post("getassigneddriver", requestdetails)
             .then( async (response) => {
               // console.log("assigned response ",response.data)
-              if(response.data?.driverdetails != null){
-                Alert.alert("Trip has been assigned to a driver")
-              }
               return response.data;
             })
              
@@ -215,6 +212,8 @@ export const RequestRide= createAsyncThunk(
     }
   )
 
+  
+
   const initialState = {
     user: false,
     isError: false,
@@ -227,14 +226,26 @@ export const RequestRide= createAsyncThunk(
     RequestData: null,
     Lastassigned: null,
     tripStatus: null,
-    KnowTrip: null
+    KnowTrip: null,
+    rejectedTrip: false,
   };
+
+  // export const CloseReject= (state, action) =>{
+  //   // if (action.type === "REJECT"){
+  //   //   state.rejectedTrip = false;
+  //   // }
+  //   state.rejectedTrip = false;
+  // }
 
   export const RequestRideSlice = createSlice({
     name: "getRiderreducer",
     initialState,
     reducers: {
       reset: (state) => initialState,
+      CloseReject: (state) =>{          
+          state.rejectedTrip = false;
+          console.log("rejected lets see ", state.rejectedTrip)
+      }
     },
     extraReducers: (builder) => {
       builder
@@ -242,9 +253,10 @@ export const RequestRide= createAsyncThunk(
           state.isLoading = true;
         })
         .addCase(RequestRide.fulfilled, (state, action) => {
-          Alert.alert("Trip requested")
+          // Alert.alert("Trip requested")
           state.isLoading = false;
           state.isSuccess = true;
+          state.data= null;
           state.user = true;
           state.isRequest= true;
           state.RequestData= action.payload;
@@ -261,6 +273,9 @@ export const RequestRide= createAsyncThunk(
         })
         .addCase(CancelRequest.fulfilled, (state, action) => {
           // Alert.alert("Trip requested")
+          state.tripStatus= null;
+          state.assignedDriver= null;
+          state.RequestData= null;
           state.isLoading = false;
           state.isSuccess = true;
           state.user = true;
@@ -336,6 +351,7 @@ export const RequestRide= createAsyncThunk(
         })
         .addCase(KnowTrip.fulfilled, (state, action) => {
           if(action.payload?.success == false ){
+            state.rejectedTrip= true;
             state.tripStatus= null;
             state.assignedDriver= null;
             state.RequestData= null;
@@ -355,5 +371,5 @@ export const RequestRide= createAsyncThunk(
     },
   });
 
-  export const { reset } = RequestRideSlice.actions;
+  export const { reset, CloseReject } = RequestRideSlice.actions;
   export default RequestRideSlice.reducer;
