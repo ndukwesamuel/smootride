@@ -94,9 +94,7 @@ const Login = () => {
     try {
       const storedData = await AsyncStorage.getItem("rememberData");
 
-      console.log({ storedData });
       const obj = JSON.parse(storedData);
-      console.log({ obj });
 
       if (obj.rememberMe) {
         setEmail(obj.email);

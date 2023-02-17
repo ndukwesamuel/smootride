@@ -102,7 +102,7 @@ const DriversTripcomponent = ({ driverTripData }) => {
           <TouchableOpacity
             key={uuid()}
             value={uuid()}
-            onPress={() => startTimeAgain(d)}
+            // onPress={() => startTimeAgain(d)}
           >
             <View
               style={{
