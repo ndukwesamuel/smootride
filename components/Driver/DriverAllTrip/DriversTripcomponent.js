@@ -54,6 +54,25 @@ const DriversTripcomponent = ({ driverTripData }) => {
     );
   }
 
+  // Sample array of objects with trip_start_time property
+
+  // Map and sort the array by trip_start_time in descending order
+  const mappedAndSortedArray = driverTripData
+    .map((obj) => ({ ...obj })) // Create a shallow copy of each object
+    .sort((a, b) => new Date(b.trip_start_time) - new Date(a.trip_start_time))
+    .map((obj) => {
+      const date = new Date(obj.trip_start_time);
+      const newtime = date.toLocaleTimeString();
+      return {
+        ...obj,
+        trip_start_date: date.toLocaleDateString(),
+        trip_start_time: newtime,
+      };
+    });
+
+  // Output the resulting array
+  console.log(mappedAndSortedArray);
+
   return (
     <ScrollView>
       <Modal
@@ -78,12 +97,12 @@ const DriversTripcomponent = ({ driverTripData }) => {
           }}
         ></View>
       </Modal>
-      {driverTripData.map((d) => {
+      {mappedAndSortedArray.map((d) => {
         return (
           <TouchableOpacity
             key={uuid()}
             value={uuid()}
-            onPress={() => startTimeAgain(d)}
+            // onPress={() => startTimeAgain(d)}
           >
             <View
               style={{
@@ -103,8 +122,7 @@ const DriversTripcomponent = ({ driverTripData }) => {
                   <View style={{ width: "70%" }}>
                     <Text style={{ color: "#fff" }}>{d.name}</Text>
                     <Text style={{ color: "#fff", fontSize: 12 }}>
-                      Travel Time:
-                      {d.travelTime}
+                      Travel Time: {d.travelTime} min
                     </Text>
                   </View>
 
@@ -142,7 +160,11 @@ const DriversTripcomponent = ({ driverTripData }) => {
                 </View>
                 <View>
                   <Text style={{ color: "#fff", fontSize: 12 }}>
-                    Start Time: {d.tripEndTime}
+                    Start Time:{d.trip_start_time}
+                  </Text>
+
+                  <Text style={{ color: "#fff", fontSize: 12 }}>
+                    Start Date: {d.trip_start_date}
                   </Text>
                 </View>
               </View>
@@ -173,7 +195,7 @@ const DriversTripcomponent = ({ driverTripData }) => {
                       name="md-pin"
                       size={15}
                       style={{ color: "red", marginTop: 10 }}
-                    />{" "}
+                    />
                     {d.destAddress}
                   </Text>
                 </View>
