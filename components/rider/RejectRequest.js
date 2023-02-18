@@ -19,6 +19,7 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import requestfile from "../../assets/images/requestfile.png";
+import { MaterialIcons } from '@expo/vector-icons';
 
 
 
@@ -26,19 +27,15 @@ import requestfile from "../../assets/images/requestfile.png";
 
 
 const { width, height } = Dimensions.get("window");
-const RideRequestSuccess = ({accepted, handleAccept}) => {
+const RejectRequest = ({accepted, handleAccept}) => {
   
   return (
     
       <Modal isVisible={accepted}>
-        <View style={{backgroundColor:'#fff',width:'98%',height:'auto',padding:15,paddingTop:5,marginRight:0,alignSelf:'center' }}>
-                    <Image
-                                source={requestfile}
-                                style={{width:40,height:40, alignSelf:'center',marginTop:20,marginBottom:15}}
-                                />
-                        <Text style={{color:'#000',fontSize:15,textAlign:'center'}}>Trip Information</Text> 
+        <View style={{backgroundColor:'#fff',width:'98%',height:'auto',padding:15,paddingTop:5,marginRight:0,alignItems:'center', justifyContent:"center" }}>
+        <MaterialIcons name="cancel" size={38} color="red" />
+                        <Text style={{color:'#000',fontSize:15,textAlign:'center'}}>Trip Rejected</Text> 
                     
-                        <Text style={{color:'#000',alignSelf:'center',fontSize:13,padding:12,marginRight:5}}> Trip assigned to a driver </Text>  
                         <View style={{padding:10,alignSelf:'center',marginTop:5,width:'100%'}}>
                             <TouchableOpacity onPress = {handleAccept} style={{width:'100%',backgroundColor:'#fff',borderWidth:1,borderColor:'#005091',backgroundColor:'#005091',marginTop:2,borderRadius:5}}>
                                 <Text style={{color:'#fff',alignSelf:'center',fontSize:13,padding:12,marginRight:5}}>Okay</Text>
@@ -57,4 +54,4 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-export default RideRequestSuccess;
+export default RejectRequest;
