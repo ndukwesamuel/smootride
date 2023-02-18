@@ -30,7 +30,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import Modal from "react-native-modal";
 import requestfile from "../../assets/images/requestfile.png";
 import { useDispatch, useSelector } from "react-redux";
-import { GetRider } from "../../Slice/auth/Getrider";
+import { GetAddress, GetRider } from "../../Slice/auth/Getrider";
 import {
   AssignedDriver,
   CancelRequest,
@@ -75,7 +75,7 @@ const RiderRequest = () => {
       }
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      console.log("location gotten ",currentLocation)
+      // console.log("location gotten ",currentLocation)
       setMaplocation(false);
     };
     getPermissions();
@@ -194,10 +194,14 @@ const RiderRequest = () => {
       const userdet = {
         user_id: user_id,
       };
+      const latitude= location?.coords.latitude;
+      const longitude= location?.coords.longitude;
+      // console.log(latitude, longitude);
       setReboot(true);
       await dispatch(AssignedDriver(userdet));
       await dispatch(GetRider());
       await dispatch(LastAssignedDriver(userdet));
+      // await dispatch(GetAddress({latitude, longitude}))
       setReboot(false);
     };
 
@@ -318,7 +322,6 @@ const RiderRequest = () => {
     <div style="padding: 2em; font-family: sans-serif;">
         <p><span style="font-weight: bold;">Driver name:</span> ${onLoaddata?.driverdetails?.staffName}</p>
         <p><span style="font-weight: bold;">Driver Phone number:</span> ${onLoaddata?.driverdetails?.phone}</p>
-        <p><span style="font-weight: bold;">Pickup Location:</span> ilupeju</p>
     </div>
 </body>
   </html>`;
