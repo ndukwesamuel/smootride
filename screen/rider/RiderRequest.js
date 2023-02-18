@@ -23,7 +23,7 @@ import {
 } from "react-native";
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
-import smoothridelogo from "../../assets/images/smoothride.png"
+import smoothridelogo from "../../assets/images/smoothride.png";
 // import CardView from "react-native-cardview";
 import { GOOGLE_MAPS_APIKEYS } from "@env";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -76,6 +76,9 @@ const RiderRequest = () => {
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
       // console.log("location gotten ",currentLocation)
+      // const latitude= currentLocation?.coords.latitude;
+      // const longitude= currentLocation?.coords.longitude;
+      // await dispatch(GetAddress({latitude, longitude}))
       setMaplocation(false);
     };
     getPermissions();
@@ -316,7 +319,7 @@ const RiderRequest = () => {
     </head>
     <body>
     <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: sans-serif;">
-        <img src=${smoothridelogo} />
+        <img src="../../assets/images/smoothride.png" />
         <h2>Driver Details</h2>
     </div>
     <div style="padding: 2em; font-family: sans-serif;">
@@ -337,13 +340,12 @@ const RiderRequest = () => {
     </head>
     <body>
     <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: sans-serif;">
-        <img src=${smoothridelogo} />
+        <img src="../../assets/images/smoothride.png" />
         <h2>Driver Details</h2>
     </div>
     <div style="padding: 2em; font-family: sans-serif;">
         <p><span style="font-weight: bold;">Driver name:</span> ${assignedDet?.driverdetails?.staffName}</p>
         <p><span style="font-weight: bold;">Driver Phone number:</span> ${assignedDet?.driverdetails?.phone}</p>
-        <p><span style="font-weight: bold;">Pickup Location:</span> ilupeju</p>
     </div>
 </body>
   </html>`;
