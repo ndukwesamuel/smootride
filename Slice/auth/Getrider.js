@@ -80,7 +80,7 @@ export const GetAddress = createAsyncThunk(
     return await instance
       .get("")
       .then(async (response) => {
-        console.warn("Addresses info ", response.data?.results[0]?.formatted_address);
+        console.log("Addresses info ", response.data?.results[0]?.formatted_address);
         return response.data?.results[0]?.formatted_address;
       })
 

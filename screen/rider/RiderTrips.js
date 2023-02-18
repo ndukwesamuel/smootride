@@ -46,7 +46,7 @@ const RiderTrips = ({ navigation }) => {
 
   const trips = useSelector((state) => state?.GetRiderSlice?.trips);
   const tripslength = trips?.length;
-  // console.warn("trips length tips ", tripslength)
+  // console.log("trips length tips ", trips[0])
 
   return (
     // <PTRView onRefresh={onRefresh} style={{paddingTop: Platform.OS === 'ios'? 30: 0}}>
@@ -103,7 +103,7 @@ const RiderTrips = ({ navigation }) => {
                               {" "}
                               {item?.name}
                             </Text>
-                            <Text
+                            {/* <Text
                               style={{
                                 color: "#fff",
                                 alignSelf: "flex-start",
@@ -115,6 +115,18 @@ const RiderTrips = ({ navigation }) => {
                               {new Date(item?.travelTime * 1000)
                                 .toISOString()
                                 .slice(11, 19)}
+                            </Text> */}
+                            <Text
+                              style={{
+                                color: "#fff",
+                                alignSelf: "flex-start",
+                                fontSize: 12,
+                              }}
+                            >
+                              {" "}
+                              Trip Start Time:{" "}
+                              {new Date(item?.trip_start_time)
+                                .toLocaleTimeString()}
                             </Text>
                           </View>
 
