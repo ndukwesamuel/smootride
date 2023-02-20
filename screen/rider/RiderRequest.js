@@ -20,9 +20,8 @@ import {
   FlatList,
   Linking,
   RefreshControl,
+  Share
 } from "react-native";
-import * as Print from 'expo-print';
-import { shareAsync } from 'expo-sharing';
 import smoothridelogo from "../../assets/images/smoothride.png";
 // import CardView from "react-native-cardview";
 import { GOOGLE_MAPS_APIKEYS } from "@env";
@@ -65,6 +64,12 @@ const RiderRequest = () => {
 
   const user_id = useSelector((state) => state.LoginSlice?.data?.user?.id);
 
+  const { user, data, isError, isSuccess, isLoading } = useSelector(
+    (state) => state.LoginSlice
+  );
+
+  // console.log({data});
+
   useEffect(() => {
     const getPermissions = async () => {
       setMaplocation(true);
@@ -75,7 +80,7 @@ const RiderRequest = () => {
       }
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      console.log("location gotten ",currentLocation)
+      // console.log("location gotten ",currentLocation)
       const latitude= currentLocation?.coords.latitude;
       const longitude= currentLocation?.coords.longitude;
       await dispatch(GetAddress({latitude, longitude}))
@@ -269,13 +274,13 @@ const RiderRequest = () => {
           await dispatch(AssignedDriver(userdet));
           }
           if(onLoaddata?.driverdetails?.driverId){
-            // console.log("showing here ", tripStatus?.status)
+            console.log("showing here ", tripStatus)
             if(tripStatus?.status == "assign"){
             await dispatch(KnowTrip(onLoaddata?.data?.id));
             }
               await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
           }else if(assignedDet?.driverdetails?.driverId){
-            // console.log("showing here too", tripStatus?.status)
+            console.log("showing here too", tripStatus)
             if(tripStatus?.status == "assign"){
               await dispatch(KnowTrip(assignedDet?.data?.id));
               }
@@ -288,78 +293,39 @@ const RiderRequest = () => {
     return () => clearTimeout(interval);
   }, [counter])
 
-  const print = async () => {
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    await Print.printAsync({
-      html: createDynamicTable(),
-      printerUrl: selectedPrinter?.url, // iOS only
+ 
+  const textToShare = `
+          Hi, ${onLoaddata?.data?.name} shared their trip on Smoothride with you.
+          Driver name: ${onLoaddata?.driverdetails?.staffName},
+          Driver Phone number: ${onLoaddata?.driverdetails?.phone},
+          Driver Pickup location: ${Address}
+  `
+
+  const newtextToShare = `
+          Hi, ${assignedDet?.data?.name} shared their trip on Smoothride with you.
+          Driver name: ${assignedDet?.driverdetails?.staffName},
+          Driver Phone number: ${assignedDet?.driverdetails?.phone},
+          Driver Pickup location: ${Address}
+  `
+  const handleShare = async (text) => {
+  try {
+    const result = await Share.share({
+      message: text,
     });
-  };
-
-  const printToFile = async () => {
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    const { uri } = await Print.printToFileAsync({ html: createDynamicTable() });
-    console.log('File has been saved to:', uri);
-    await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
-  };
-
-  const newprintToFile = async () => {
-    // On iOS/android prints the given html. On web prints the HTML from the current page.
-    const { uri } = await Print.printToFileAsync({ html: newcreateDynamicTable() });
-    console.log('File has been saved to:', uri);
-    await shareAsync(uri, { UTI: '.pdf', mimeType: 'application/pdf' });
-  };
-
-  const selectPrinter = async () => {
-    const printer = await Print.selectPrinterAsync(); // iOS only
-    setSelectedPrinter(printer);
-  };
-
-  const createDynamicTable = () =>{
-    const html = `
-  <html>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-    </head>
-    <body>
-    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: sans-serif;">
-        <img src="../../assets/images/smoothride.png" />
-        <h2>Driver Details</h2>
-    </div>
-    <div style="padding: 2em; font-family: sans-serif;">
-        <p><span style="font-weight: bold;">Driver name:</span> ${onLoaddata?.driverdetails?.staffName}</p>
-        <p><span style="font-weight: bold;">Driver Phone number:</span> ${onLoaddata?.driverdetails?.phone}</p>
-        <p><span style="font-weight: bold;">Driver Pickup location:</span> ${Address}</p>
-    </div>
-</body>
-  </html>`;
-  
-      return html;
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        // Shared with activity type of result.activityType
+      } else {
+        // Shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // Dismissed
+    }
+  } catch (error) {
+    alert(error.message);
   }
+};
 
-  const newcreateDynamicTable = () =>{
-    const html = `
-  <html>
-    <head>
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
-    </head>
-    <body>
-    <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; font-family: sans-serif;">
-        <img src="../../assets/images/smoothride.png" />
-        <h2>Driver Details</h2>
-    </div>
-    <div style="padding: 2em; font-family: sans-serif;">
-        <p><span style="font-weight: bold;">Driver name:</span> ${assignedDet?.driverdetails?.staffName}</p>
-        <p><span style="font-weight: bold;">Driver Phone number:</span> ${assignedDet?.driverdetails?.phone}</p>
-        <p><span style="font-weight: bold;">Driver Pickup location:</span> ${Address}</p>
-    </div>
-</body>
-  </html>`;
-  
-      return html;
-  }
-
-  // setDriverstatus(TripStat)
 
   const username = useSelector((state) => state.LoginSlice?.data?.user?.name);
   const number = knowdata?.length;
@@ -526,7 +492,7 @@ const RiderRequest = () => {
                     {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
                     <TouchableOpacity
                         // onPress={this.oncompleted}
-                        onPress={printToFile}
+                        onPress={()=>handleShare(textToShare)}
                         style={{
                           marginTop: 7,
                           backgroundColor: "#005091",
@@ -703,7 +669,7 @@ const RiderRequest = () => {
                     {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
                     <TouchableOpacity
                         // onPress={this.oncompleted}
-                        onPress={newprintToFile}
+                        onPress={()=>handleShare(newtextToShare)}
                         style={{
                           marginTop: 7,
                           backgroundColor: "#005091",

@@ -104,6 +104,8 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
+  console.log({data});
+
   const { First_Trip_start_time } = useSelector(
     (state) => state.FristTripSlice
   );

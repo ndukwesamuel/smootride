@@ -126,7 +126,7 @@ export const RequestRide= createAsyncThunk(
           return await instance
             .get(`getdriverstate/${id}`)
             .then( async (response) => {
-              // console.log("driver status response ",response.data)
+              console.log("driver status response ",response.data)
               return response.data;
             })
              
