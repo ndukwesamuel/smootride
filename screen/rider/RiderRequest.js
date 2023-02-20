@@ -75,10 +75,10 @@ const RiderRequest = () => {
       }
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      // console.log("location gotten ",currentLocation)
-      // const latitude= currentLocation?.coords.latitude;
-      // const longitude= currentLocation?.coords.longitude;
-      // await dispatch(GetAddress({latitude, longitude}))
+      console.log("location gotten ",currentLocation)
+      const latitude= currentLocation?.coords.latitude;
+      const longitude= currentLocation?.coords.longitude;
+      await dispatch(GetAddress({latitude, longitude}))
       setMaplocation(false);
     };
     getPermissions();
@@ -242,6 +242,10 @@ const RiderRequest = () => {
     (state) => state.RequestRideSlice
   );
 
+  const Address = useSelector(
+    (state) => state.GetRiderSlice?.address
+  );
+
 
   // this must never be remove
   const [counter, setCounter] = useState(0);
@@ -325,6 +329,7 @@ const RiderRequest = () => {
     <div style="padding: 2em; font-family: sans-serif;">
         <p><span style="font-weight: bold;">Driver name:</span> ${onLoaddata?.driverdetails?.staffName}</p>
         <p><span style="font-weight: bold;">Driver Phone number:</span> ${onLoaddata?.driverdetails?.phone}</p>
+        <p><span style="font-weight: bold;">Driver Pickup location:</span> ${Address}</p>
     </div>
 </body>
   </html>`;
@@ -346,6 +351,7 @@ const RiderRequest = () => {
     <div style="padding: 2em; font-family: sans-serif;">
         <p><span style="font-weight: bold;">Driver name:</span> ${assignedDet?.driverdetails?.staffName}</p>
         <p><span style="font-weight: bold;">Driver Phone number:</span> ${assignedDet?.driverdetails?.phone}</p>
+        <p><span style="font-weight: bold;">Driver Pickup location:</span> ${Address}</p>
     </div>
 </body>
   </html>`;
