@@ -24,12 +24,11 @@ const DriverProfile = () => {
 
   const dispatch = useDispatch();
 
-  const { user, data } = useSelector((state) => state.LoginSlice);
-
-  const { drivertrip, isError, isSuccess, isLoading, message } = useSelector(
-    (state) => state.LoginSlice
+  const { drivertrip, isError, isSuccess, message, isLoading } = useSelector(
+    (state) => state.GetAllDriverTripsSlice
   );
-  console.log({ name: drivertrip });
+
+  const { user, data } = useSelector((state) => state.LoginSlice);
 
   const handleLogout = async () => {
     console.log("sdsd");
@@ -70,7 +69,9 @@ const DriverProfile = () => {
           />
         </View>
         <View style={{ width: "75%" }}>
-          <Text style={{ color: "#fff", marginTop: 10 }}>{data.user.name}</Text>
+          <Text style={{ color: "#fff", marginTop: 10 }}>
+            {data?.user.name}
+          </Text>
           <View style={{ flexDirection: "row" }}>
             <View style={{ width: "50%" }}>
               <Text style={{ color: "#fff", marginTop: 4, fontSize: 13 }}>
@@ -100,7 +101,7 @@ const DriverProfile = () => {
                   marginLeft: "40%",
                 }}
               >
-                data
+                {drivertrip?.length}
               </Text>
             </View>
           </View>

@@ -20,25 +20,31 @@ import {
   FlatList,
   Linking,
   RefreshControl,
+  Share
 } from "react-native";
+import smoothridelogo from "../../assets/images/smoothride.png";
 // import CardView from "react-native-cardview";
 import { GOOGLE_MAPS_APIKEYS } from "@env";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import Modal from "react-native-modal";
 import requestfile from "../../assets/images/requestfile.png";
 import { useDispatch, useSelector } from "react-redux";
-import { GetRider } from "../../Slice/auth/Getrider";
+import { GetAddress, GetRider } from "../../Slice/auth/Getrider";
 import {
   AssignedDriver,
   CancelRequest,
+  CloseReject,
+  KnowTrip,
   LastAssignedDriver,
   RequestRide,
+  TripStatus,
 } from "../../Slice/auth/Requestride";
 import * as Location from "expo-location";
 import { Marker } from "react-native-maps";
 import RideRequestSuccess from "../../components/rider/RideRequestSuccess";
 import CancelModalTrip from "../../components/rider/CancelModalTrip";
 import PTRView from "react-native-pull-to-refresh";
+import RejectRequest from "../../components/rider/RejectRequest";
 
 const { width, height } = Dimensions.get("window");
 const RiderRequest = () => {
@@ -53,8 +59,16 @@ const RiderRequest = () => {
   const [closedTrip, setClosedTrip] = useState(false);
   const [reboot, setReboot] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [driverStat, setDriverstatus] = useState(null)
+  const [rejTrip, setRejTrip] = useState(false)
 
   const user_id = useSelector((state) => state.LoginSlice?.data?.user?.id);
+
+  const { user, data, isError, isSuccess, isLoading } = useSelector(
+    (state) => state.LoginSlice
+  );
+
+  // console.log({data});
 
   useEffect(() => {
     const getPermissions = async () => {
@@ -66,7 +80,10 @@ const RiderRequest = () => {
       }
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
-      console.log("location gotten ",currentLocation)
+      // console.log("location gotten ",currentLocation)
+      const latitude= currentLocation?.coords.latitude;
+      const longitude= currentLocation?.coords.longitude;
+      await dispatch(GetAddress({latitude, longitude}))
       setMaplocation(false);
     };
     getPermissions();
@@ -111,6 +128,15 @@ const RiderRequest = () => {
     setClosedTrip(!closedTrip);
   };
 
+  const closeRejectTrip = () => {
+    setRejTrip(false);
+    dispatch(CloseReject())
+  };
+
+  const ListDriver = useSelector(
+    (state) => state.GetRiderSlice
+  );
+
   const handlePurpose = async () => {
     if (purpose == 0) {
       Alert.alert("Please fill the field");
@@ -126,16 +152,13 @@ const RiderRequest = () => {
       setIsModalVisible(false);
       setLoading(true);
       await dispatch(RequestRide(userdata));
-      if (requeststat == true) {
-        console.log("it works");
+      if (ListDriver?.data != null) {
+        setAccepted(true);
+        console.log("accepted value ", accepted)
         await dispatch(AssignedDriver(userdet));
       }
       setLoading(false);
       setPurpose("");
-
-      if (requeststat == true) {
-        setAccepted(true);
-      }
     }
   };
 
@@ -170,17 +193,23 @@ const RiderRequest = () => {
     }
     Linking.openURL(phoneNumber);
   };
-  const handleModal = () => setIsModalVisible(!isModalVisible);
+  const handleModal = () => {
+    setIsModalVisible(!isModalVisible)
+  };
 
   useEffect(() => {
     const initial = async () => {
       const userdet = {
         user_id: user_id,
       };
+      const latitude= location?.coords.latitude;
+      const longitude= location?.coords.longitude;
+      // console.log(latitude, longitude);
       setReboot(true);
       await dispatch(AssignedDriver(userdet));
       await dispatch(GetRider());
       await dispatch(LastAssignedDriver(userdet));
+      // await dispatch(GetAddress({latitude, longitude}))
       setReboot(false);
     };
 
@@ -195,16 +224,7 @@ const RiderRequest = () => {
   // }, 10000)
   const MINUTE_MS = 10000;
 
-useEffect(() => {
-  const interval = setInterval(async() => {
-    const userdet = {
-          user_id: user_id,
-        };
-        await dispatch(AssignedDriver(userdet));
-  }, 10000);
 
-  return () => clearInterval(interval);
-}, [])
 
   const onRefresh = async () => {
     const userdet = {
@@ -222,7 +242,91 @@ useEffect(() => {
   const onLoaddata = useSelector(
     (state) => state.RequestRideSlice?.Lastassigned
   );
-  // console.log("onLoaddata status ", requeststat)
+
+  const {tripStatus, rejectedTrip} = useSelector(
+    (state) => state.RequestRideSlice
+  );
+
+  const Address = useSelector(
+    (state) => state.GetRiderSlice?.address
+  );
+
+
+  // this must never be remove
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    
+    // if(data?.message == "Trip deleted"){
+    //   () => clearTimeout(interval);
+    // }
+        if(rejectedTrip == true){
+          setRejTrip(true)
+        }
+
+    const interval = setTimeout(async() => {
+      setCounter(counter + 1);
+      const userdet = {
+            user_id: user_id,
+          };
+          
+          if(!assignedDet?.driverdetails?.driverId){
+          await dispatch(AssignedDriver(userdet));
+          }
+          if(onLoaddata?.driverdetails?.driverId){
+            console.log("showing here ", tripStatus)
+            if(tripStatus?.status == "assign"){
+            await dispatch(KnowTrip(onLoaddata?.data?.id));
+            }
+              await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
+          }else if(assignedDet?.driverdetails?.driverId){
+            console.log("showing here too", tripStatus)
+            if(tripStatus?.status == "assign"){
+              await dispatch(KnowTrip(assignedDet?.data?.id));
+              }
+            await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
+        }
+          
+  
+    }, 15000);
+  
+    return () => clearTimeout(interval);
+  }, [counter])
+
+ 
+  const textToShare = `
+          Hi, ${onLoaddata?.data?.name} shared their trip on Smoothride with you.
+          Driver name: ${onLoaddata?.driverdetails?.staffName},
+          Driver Phone number: ${onLoaddata?.driverdetails?.phone},
+          Driver Pickup location: ${Address}
+  `
+
+  const newtextToShare = `
+          Hi, ${assignedDet?.data?.name} shared their trip on Smoothride with you.
+          Driver name: ${assignedDet?.driverdetails?.staffName},
+          Driver Phone number: ${assignedDet?.driverdetails?.phone},
+          Driver Pickup location: ${Address}
+  `
+  const handleShare = async (text) => {
+  try {
+    const result = await Share.share({
+      message: text,
+    });
+    if (result.action === Share.sharedAction) {
+      if (result.activityType) {
+        // Shared with activity type of result.activityType
+      } else {
+        // Shared
+      }
+    } else if (result.action === Share.dismissedAction) {
+      // Dismissed
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
+
   const username = useSelector((state) => state.LoginSlice?.data?.user?.name);
   const number = knowdata?.length;
 
@@ -233,6 +337,7 @@ useEffect(() => {
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
           >
+            <Text>Please wait, getting current location</Text>
             <ActivityIndicator animating={true} color="black" />
           </View>
         ) : (
@@ -384,6 +489,32 @@ useEffect(() => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
+                    {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
+                    <TouchableOpacity
+                        // onPress={this.oncompleted}
+                        onPress={()=>handleShare(textToShare)}
+                        style={{
+                          marginTop: 7,
+                          backgroundColor: "#005091",
+                          padding: 10,
+                          width: "100%",
+                          borderRadius: 10,
+                          alignSelf: "center",
+                          marginBottom: 15,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            alignSelf: "center",
+                            color: "#fff",
+                            fontSize: 13,
+                          }}
+                        >
+                          SHARE DETAILS
+                        </Text>
+                      </TouchableOpacity>
+                    </View> 
+                    :
                     <View style={{ width: "40%" }}>
                       <TouchableOpacity
                         // onPress={this.oncompleted}
@@ -408,7 +539,7 @@ useEffect(() => {
                           CANCEL REQUEST
                         </Text>
                       </TouchableOpacity>
-                    </View>
+                    </View>}
                   </View>
                 </View>
               </View>
@@ -535,7 +666,33 @@ useEffect(() => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
-                    <View style={{ width: "40%" }}>
+                    {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
+                    <TouchableOpacity
+                        // onPress={this.oncompleted}
+                        onPress={()=>handleShare(newtextToShare)}
+                        style={{
+                          marginTop: 7,
+                          backgroundColor: "#005091",
+                          padding: 10,
+                          width: "100%",
+                          borderRadius: 10,
+                          alignSelf: "center",
+                          marginBottom: 15,
+                        }}
+                      >
+                        <Text
+                          style={{
+                            alignSelf: "center",
+                            color: "#fff",
+                            fontSize: 13,
+                          }}
+                        >
+                          SHARE DETAILS
+                        </Text>
+                      </TouchableOpacity>
+                    </View> 
+                     : 
+                     <View style={{ width: "40%" }}>
                       <TouchableOpacity
                         // onPress={this.oncompleted}
                         onPress={handleCloseModeTrip}
@@ -559,14 +716,14 @@ useEffect(() => {
                           CANCEL REQUEST
                         </Text>
                       </TouchableOpacity>
-                    </View>
+                    </View>}
                   </View>
                 </View>
               </View>
             </View>
           )}
 
-          {onLoaddata?.data == null && requeststat == false && (
+          {onLoaddata?.data == null && requeststat == false && tripStatus == null && (
             <View>
               {number == 0 ? (
                 <View
@@ -836,45 +993,7 @@ useEffect(() => {
                   }}
                 />
 
-                // <View style={{flexDirection:"column"}}>
-                //   {knowdata.map((each)=>(
-                //   <View
-                //         style={{
-                //           flexDirection: "row",
-                //           borderBottomWidth: 1,
-                //           borderBottomColor: "#EDEDED",
-                //           flexDirection: "row",
-                //           alignItems: "center",
-                //         }}
-                //       >
-                //         <View style={{ width: "15%", marginStart: 10 }}>
-                //           <Image
-                //             source={clientimg}
-                //             style={{
-                //               width: 50,
-                //               height: 50,
-                //               borderRadius: 20,
-                //               alignSelf: "center",
-                //               margin: 5,
-                //             }}
-                //           />
-                //         </View>
-                //         <View style={{ width: "60%", marginLeft: 5 }}>
-                //           <Text
-                //             style={{
-                //               fontSize: 17,
-                //               marginTop: 10,
-                //               color: "#877A80",
-                //               fontWeight: "400",
-                //             }}
-                //           >
-                //             {" "}
-                //             {each?.name}{" "}
-                //           </Text>
-                //         </View>
-                //       </View>
-                //       ))}
-                // </View>
+                
               )}
             </View>
           )}
@@ -979,6 +1098,7 @@ useEffect(() => {
         </View>
       </Modal>
       <RideRequestSuccess accepted={accepted} handleAccept={handleAccept} />
+      <RejectRequest accepted={rejTrip} handleAccept={closeRejectTrip} />
       <CancelModalTrip
         closedTrip={closedTrip}
         handleCloseModeTrip={handleCloseModeTrip}

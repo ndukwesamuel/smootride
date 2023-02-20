@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { reset as resetUpdateDriverStatusSlice } from "../../../Slice/Driver/UpdateDriverStatusSlice";
@@ -30,32 +30,42 @@ import { resetholdriderdata } from "../../../Slice/Driver/HoldTripDataSlice";
 const LogoutComponent = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-
   const { AcceptTrip } = useSelector((state) => state.DriverAcceptTripSlice);
-
   const handleLogout = async () => {
-    // if (AcceptTrip) {
-    //   console.log("still on trip");
-    // } else {
-    console.log("working");
-    dispatch(resetGetLastAssignTripSlice());
-    dispatch(resetRejectTripSlice());
-    dispatch(resetCompleteDriverTripSlice());
-    dispatch(resetExitTripSlice());
-    dispatch(resetLoginSlice());
-    dispatch(resetGetrider());
-    dispatch(resetPassowrdReset());
-    dispatch(resetAll_Excerpt_startTripdata());
-    dispatch(resetALLStartTrip());
-    dispatch(resetUpdateDriverStatusSlice());
-    dispatch(resetGetAllDriverTripsSlice());
-    dispatch(AcceptReset());
-    dispatch(resetholdriderdata());
+    if (AcceptTrip) {
+      console.log("Sdsdsdsd");
 
-    await AsyncStorage.removeItem("token");
-
-    navigation.navigate("Login");
-    // }
+      Alert.alert(
+        "Logout Message",
+        "You can't Log out of the app since you're still on a trip.",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") },
+        ]
+      );
+    } else {
+      console.log("working");
+      dispatch(resetGetLastAssignTripSlice());
+      dispatch(resetRejectTripSlice());
+      dispatch(resetCompleteDriverTripSlice());
+      dispatch(resetExitTripSlice());
+      dispatch(resetLoginSlice());
+      dispatch(resetGetrider());
+      dispatch(resetPassowrdReset());
+      dispatch(resetAll_Excerpt_startTripdata());
+      dispatch(resetALLStartTrip());
+      dispatch(resetUpdateDriverStatusSlice());
+      dispatch(resetGetAllDriverTripsSlice());
+      dispatch(AcceptReset());
+      dispatch(resetholdriderdata());
+      await AsyncStorage.removeItem("token");
+      await AsyncStorage.removeItem("userdata");
+      navigation.navigate("Login");
+    }
   };
   return (
     <TouchableOpacity
@@ -66,7 +76,7 @@ const LogoutComponent = () => {
         <IonIcon name="md-log-out" size={20} color="#000000"></IonIcon>
       </View>
       <View style={{ flexDirection: "row", width: "90%", marginTop: 30 }}>
-        <Text style={{ fontSize: 12, width: "90%" }}>Log Out</Text>
+        <Text style={{ fontSize: 12, width: "90%" }}>Log out</Text>
       </View>
     </TouchableOpacity>
   );

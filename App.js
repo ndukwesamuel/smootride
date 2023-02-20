@@ -19,10 +19,14 @@ import DriverTabNavigation from "./screen/Drive/DriverTabNavigation";
 import { PersistGate } from "redux-persist/integration/react";
 import RiderPaths from "./screen/rider/RiderPath";
 import ExitDriverScreen from "./screen/Drive/ExitDriverScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Device from "expo-device";
+
 // import messaging from '@react-native-firebase/messaging';
 // import messaging from "@react-native-firebase/messaging";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
+import * as Notifications from "expo-notifications";
+import { useState } from "react";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -93,8 +97,67 @@ export function TabNavigation() {
   );
 }
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+    };
+  },
+});
 export default function App() {
-  let user = false;
+  const [pushToken, setPushToken] = useState();
+
+  console.log({ Device });
+
+  useEffect(() => {
+    async function getNotificationPermission() {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+      }
+      if (status !== "granted") {
+        // Handle the case where the user declines permission
+        console.log("Failed to get push token for push notification!");
+        return;
+      }
+
+      let token;
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+      // Permission granted, handle accordingly
+      await AsyncStorage.setItem("PushToken", token);
+      const value = await AsyncStorage.getItem("PushToken");
+
+      console.log({ value });
+      setPushToken(value);
+    }
+
+    getNotificationPermission();
+    // getNotificationPermission();
+  }, []);
+
+  useEffect(() => {
+    const backgroundSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log({ response });
+      });
+
+    const foregroundSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log({ notification });
+        // let data = notification;
+        // console.log({ data });
+        // GetAddress_OF_Location(notification);
+
+        return;
+      });
+
+    return () => {
+      backgroundSubscription.remove();
+      foregroundSubscription.remove();
+    };
+  }, []);
+
+  console.log({ pushToken });
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>

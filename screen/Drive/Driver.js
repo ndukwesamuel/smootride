@@ -42,11 +42,19 @@ import StartTrip from "../../components/Driver/DriverTrip/StartTrip";
 import EndTripButtton from "../../components/Driver/DriverTrip/EndTripButtton";
 import ExitDriverTrip from "../../components/Driver/DriverTrip/ExitDriverTrip";
 import { ExitTripFunc } from "../../Slice/Driver/ExitTripSlice";
-import { resetALLStartTrip } from "../../Slice/Driver/StartTripSlice";
+import {
+  ActivateStartTrip,
+  PickUpAddressFun,
+  resetALLStartTrip,
+} from "../../Slice/Driver/StartTripSlice";
 import { useNavigation } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import TakeAnotherStartTrip from "../../components/Driver/DriverTrip/TakeAnotherStartTrip";
 import TakeAnotherDriverMap from "../../components/Driver/DriverTrip/TakeAnotherDriverMap";
+import {
+  GetAddress_OF_Location,
+  Get_Location_Way_Point,
+} from "../../Config/GoogleLocationAPi";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -96,12 +104,6 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
-  // const u = useSelector((state) => state);
-  // console.log(
-  //   "lllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll"
-  // );
-  // console.log({ u });
-
   const { First_Trip_start_time } = useSelector(
     (state) => state.FristTripSlice
   );
@@ -116,7 +118,7 @@ const Driver = () => {
 
   console.log("Driver");
 
-  const { startTripdata, completedTripdata } = useSelector(
+  const { startTripdata, completedTripdata, totalpointData } = useSelector(
     (state) => state.StartTripSlice
   );
 
@@ -134,6 +136,10 @@ const Driver = () => {
     (state) => state.StartTripSlice
   );
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
+
+  // const holdriderdat = useSelector((state) => state);
+
+  // console.log({ holdriderdat });
 
   const toggleDialog_toChange_status = () => {
     setDriver_request_Status(true);
@@ -158,17 +164,22 @@ const Driver = () => {
       // dispatch(reset());
     };
   }, [reload]);
+
+  // this must never be remove
   const [counter, setCounter] = useState(0);
   useEffect(() => {
-    const interval = setTimeout(() => {
-      setCounter(counter + 1);
-      dispatch(
-        GetLastAssignTrip({
-          user_id: 1,
-        })
-      );
-    }, 10000);
-    return () => clearTimeout(interval);
+    if (!startTripdata) {
+      const interval = setTimeout(() => {
+        setCounter(counter + 1);
+        dispatch(
+          GetLastAssignTrip({
+            user_id: 1,
+          })
+        );
+      }, 5000);
+
+      return () => clearTimeout(interval);
+    }
   }, [counter]);
 
   console.log({ counter });
@@ -226,13 +237,6 @@ const Driver = () => {
       <StatusBar style="light" backgroundColor="#005091" />
       <PTRView onRefresh={refresh}>
         <View classname="flex-1 bg-red-600 ">
-          {/* {
-                     this.props.drivertrip.IsjustSubmittedTrip == true &&
-                     <View>
-                      {this.ff()}
-                     </View>
-                 }  */}
-
           <ScrollView keyboardShouldPersistTaps="always">
             <ProgressDialog
               // visible={this.state.isSavingAvailability}
@@ -242,7 +246,7 @@ const Driver = () => {
             />
 
             <View style={styles.header}>
-              <Text style={styles.headerText}>
+              <Text style={styles.headerText} className="">
                 Trip Request <Text style={{ fontSize: 12 }}>{driver_mode}</Text>
               </Text>
               <Text
@@ -259,7 +263,6 @@ const Driver = () => {
                 Status
               </Text>
             </View>
-
             <ChangeDriveStatus
               data1={driver_request_Status}
               data2={setDriver_request_Status}
@@ -809,7 +812,6 @@ const Driver = () => {
 
             {completedTripdata && startTripdata && (
               <View>
-                <Text>kdjsdkjsd</Text>
                 <TakeAnotherDriverMap />
               </View>
             )}
@@ -862,7 +864,7 @@ const Driver = () => {
                 </View>
               )}
 
-              {dataforDriverRequest.drivertrip.isReady == false &&
+              {/* {dataforDriverRequest.drivertrip.isReady == false &&
                 dataforDriverRequest.drivertrip.isStarted == true && (
                   <View style={{ textAlign: "center" }}>
                     <Text style={{ color: "#877A80", alignSelf: "center" }}>
@@ -870,14 +872,14 @@ const Driver = () => {
                     </Text>
                     <ActivityIndicator color="#007cc2" size="large" />
                   </View>
-                )}
+                )} */}
 
               <View>
-                {dataforDriverRequest.isFetching == true && (
+                {/* {dataforDriverRequest.isFetching == true && (
                   <ActivityIndicator color="#007cc2" size="large" />
-                )}
+                )} */}
 
-                {dataforDriverRequest.drivertrip.isStarted == false &&
+                {/* {dataforDriverRequest.drivertrip.isStarted == false &&
                   dataforDriverRequest.rider.rider_id !== "" &&
                   dataforDriverRequest.rider.accept == true && (
                     <View style={{ padding: 10, marginBottom: 50 }}>
@@ -1122,7 +1124,7 @@ const Driver = () => {
                         </View>
                       </Card>
                     </View>
-                  )}
+                  )} */}
 
                 {/* surposet to be end */}
               </View>

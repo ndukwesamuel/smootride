@@ -93,7 +93,6 @@ const ExitDriverModal = () => {
     dispatch(resetUpdateDriverStatusSlice());
     dispatch(resetAll_Excerpt_startTripdata());
     dispatch(CompleteDriverReset());
-
     setModalVisible(false);
   }
 
@@ -108,18 +107,175 @@ const ExitDriverModal = () => {
           setModalVisible(!modalVisible);
         }}
       >
-        {CompleteDriverTripData?.message ? (
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>
+        <View style={styles.modalView}>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              width: "98%",
+              height: "auto",
+              padding: 15,
+              paddingTop: 5,
+              marginRight: 0,
+              alignSelf: "center",
+            }}
+          >
+            <Image
+              source={require("../../../assets/images/request.png")}
+              style={{
+                width: 40,
+                height: 40,
+                alignSelf: "center",
+                marginTop: 20,
+                marginBottom: 15,
+              }}
+            />
+
+            <Text
+              style={{
+                color: "#000",
+                fontSize: 15,
+                // fontFamily: "Roboto-Bold",
+                textAlign: "center",
+              }}
+            >
+              Trip Information
+            </Text>
+
+            <Text
+              style={{
+                color: "#000",
+                alignSelf: "center",
+                fontSize: 13,
+                padding: 12,
+                marginRight: 5,
+                // fontFamily: "Roboto-Regular",
+              }}
+            >
+              {CompleteDriverTripData?.message}
+            </Text>
+
+            <View
+              style={{
+                padding: 10,
+                alignSelf: "center",
+                marginTop: 5,
+                width: "100%",
+              }}
+            >
+              <TouchableOpacity
+                onPress={onPressLearnMore}
+                style={{
+                  width: "100%",
+                  backgroundColor: "#fff",
+                  borderWidth: 1,
+                  borderColor: "#005091",
+                  backgroundColor: "#005091",
+                  borderRadius: 5,
+                }}
+              >
+                <Text
+                  style={{
+                    color: "#fff",
+                    alignSelf: "center",
+                    fontSize: 13,
+                    padding: 12,
+                    marginRight: 5,
+                    // fontFamily: "Roboto-Regular",
+                  }}
+                >
+                  Okay
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <Text style={styles.modalText}>The trip has been updated</Text>
+          </View>
+        </View>
+
+        {/* {CompleteDriverTripData?.message ? (
+          <View style={styles.modalView}>
+            <View
+              style={{
+                backgroundColor: "#fff",
+                width: "98%",
+                height: "auto",
+                padding: 15,
+                paddingTop: 5,
+                marginRight: 0,
+                alignSelf: "center",
+              }}
+            >
+              <Image
+                source={require("../../../assets/images/request.png")}
+                style={{
+                  width: 40,  
+                  height: 40,
+                  alignSelf: "center",
+                  marginTop: 20,
+                  marginBottom: 15,
+                }}
+              />
+
+              <Text
+                style={{
+                  color: "#000",
+                  fontSize: 15,
+                  // fontFamily: "Roboto-Bold",
+                  textAlign: "center",
+                }}
+              >
+                Trip Information
+              </Text>
+
+              <Text
+                style={{
+                  color: "#000",
+                  alignSelf: "center",
+                  fontSize: 13,
+                  padding: 12,
+                  marginRight: 5,
+                  // fontFamily: "Roboto-Regular",
+                }}
+              >
                 {CompleteDriverTripData?.message}
               </Text>
 
-              <Button
-                onPress={onPressLearnMore}
-                title="Click "
-                color="#841584"
-              />
+              <View
+                style={{
+                  padding: 10,
+                  alignSelf: "center",
+                  marginTop: 5,
+                  width: "100%",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={onPressLearnMore}
+                  style={{
+                    width: "100%",
+                    backgroundColor: "#fff",
+                    borderWidth: 1,
+                    borderColor: "#005091",
+                    backgroundColor: "#005091",
+                    marginTop: 2,
+                    borderRadius: 5,
+                  }}
+                >
+                  <Text
+                    style={{
+                      color: "#fff",
+                      alignSelf: "center",
+                      fontSize: 13,
+                      padding: 12,
+                      marginRight: 5,
+                      // fontFamily: "Roboto-Regular",
+                    }}
+                  >
+                    Okay
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              <Text style={styles.modalText}>The trip has been updated</Text>
             </View>
           </View>
         ) : (
@@ -206,15 +362,9 @@ const ExitDriverModal = () => {
               </View>
 
               <Text style={styles.modalText}>The trip has been updated</Text>
-              {/* 
-              <Button
-                onPress={onPressLearnMore}
-                title="Click Me"
-                color="#841584"
-              /> */}
             </View>
           </View>
-        )}
+        )} */}
       </Modal>
     </View>
   );

@@ -19,12 +19,14 @@ import {
   ActivateStartTrip,
   CompletedTripActivated,
   CurrentLocationActivated,
+  DestAddressDataFun,
   EndTimeLastDestinationLocationActivated,
   LastDestinationLocationActivated,
   MapLocationActivated,
   resetAll_Excerpt_startTripdata,
   StartTimeCurrentLocationActivated,
   TotalDistanceCoveredFun,
+  TotalpointActivated,
   TotalTripAmountFun,
 } from "../../../Slice/Driver/StartTripSlice";
 import { CompleteDriverTripFunc } from "../../../Slice/Driver/CompleteDriverTripSlice";
@@ -34,6 +36,12 @@ import { reset as resetGetLastAssignTripSlice } from "../../../Slice/Driver/GetL
 import { First_Trip_StartTime } from "../../../Slice/Driver/FristTripSlice";
 import { GetUserConfigFun } from "../../../Slice/Driver/GetUserConfig";
 import { getType } from "@reduxjs/toolkit";
+import {
+  GetAddress_OF_Location,
+  Get_Location_Way_Point,
+  Pick_Place_Function,
+  thisFun,
+} from "../../../Config/GoogleLocationAPi";
 
 const EndTripButtton = () => {
   const dispatch = useDispatch();
@@ -50,12 +58,14 @@ const EndTripButtton = () => {
     maplocationdata,
     totalTripAmount,
     total_distance_covered,
+    pickUpAddressData,
+    destAddressData,
+    totalpointData,
   } = useSelector((state) => state.StartTripSlice);
 
-  const { First_Trip_start_time } = useSelector(
+  const { First_Trip_start_time, First_Trip_Location } = useSelector(
     (state) => state.FristTripSlice
   );
-  ``;
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
@@ -89,22 +99,25 @@ const EndTripButtton = () => {
     }
     let currentLocation = await Location.getCurrentPositionAsync({});
 
-    // dispatch(CurrentLocationActivated(currentLocation))
-
+    // Get_Location_Way_Point(currentLocation);
     const startCoords = {
-      latitude: currentLocation.coords.latitude,
-      longitude: currentLocation.coords.longitude,
-    };
-    const endCoords = {
       latitude: currentLocationData?.coords.latitude,
       longitude: currentLocationData?.coords.longitude,
     };
+
+    const endCoords = {
+      latitude: currentLocation.coords.latitude,
+      longitude: currentLocation.coords.longitude,
+    };
+
+    dispatch(TotalpointActivated(endCoords));
 
     let Result_Of_Meters_Corverd = haversine(startCoords, endCoords);
 
     let distance__ =
       parseFloat(Result_Of_Meters_Corverd) + parseFloat(total_distance_covered);
 
+    dispatch(CurrentLocationActivated(currentLocation));
     dispatch(TotalDistanceCoveredFun(distance__));
   };
 
@@ -112,19 +125,9 @@ const EndTripButtton = () => {
     const interval = setTimeout(() => {
       getPermissions();
       setCounter(counter + 1);
-      // setCounter(counter + 1);
-      // dispatch(
-      //   GetLastAssignTrip({
-      //     user_id: 1,
-      //   })
-      // );
-    }, 5000);
+    }, 10000);
     return () => clearTimeout(interval);
   }, [counter]);
-
-  // useEffect(() => {
-  //   getPermissions();
-  // }, []);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -143,6 +146,9 @@ const EndTripButtton = () => {
     }
     let destination = await Location.getCurrentPositionAsync({});
     let EndTime = new Date().toISOString();
+
+    let adddressResult = await GetAddress_OF_Location(destination);
+    dispatch(DestAddressDataFun(adddressResult));
 
     if (
       currentLocationData &&
@@ -176,15 +182,16 @@ const EndTripButtton = () => {
       const date1 = new Date(timestamp1);
       const date2 = new Date(timestamp2);
       const diffInMs = date2 - date1;
-      const diffInMinutes = diffInMs / 1000 / 60;
-      let travelTime = diffInMinutes * getuserDATA?.config.permin;
-      let Amount_without_Base_fare = travelTime + km;
+      const travelTime = diffInMs / 1000 / 60;
+
+      let travelTimeCost = travelTime * getuserDATA?.config.permin;
+      let Amount_without_Base_fare = travelTimeCost + km;
 
       console.log({ Amount_without_Base_fare });
 
       let TripSummaryData = {
-        srcLat: start_lat,
-        srcLong: start_log,
+        srcLat: First_Trip_Location.coords.latitude,
+        srcLong: First_Trip_Location.coords.longitude,
         destLat: end_lat,
         destLong: end_log,
         trip_start_time: First_Trip_start_time,
@@ -193,6 +200,8 @@ const EndTripButtton = () => {
         WaitedTime: "this is the time they waite",
         Cost_of_waiting: "this iw the waiting period",
         Distant_Covered: total_distance_covered,
+        travelTime: travelTime,
+        tripPoints: JSON.stringify(totalpointData),
       };
 
       dispatch(CompletedTripActivated(TripSummaryData));

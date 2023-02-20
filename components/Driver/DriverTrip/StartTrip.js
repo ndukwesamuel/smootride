@@ -1,20 +1,49 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useEffect } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  Linking,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import React, { useEffect, useState } from "react";
 import { Card } from "react-native-shadow-cards";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useDispatch, useSelector } from "react-redux";
+
+import { GOOGLE_MAPS_APIKEYS } from "@env";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import * as Location from "expo-location";
+
 import {
   ActivateStartTrip,
+  CurrentLocationActivated,
+  MapLocationActivated,
+  PickUpAddressFun,
   resetAll_Excerpt_startTripdata,
 } from "../../../Slice/Driver/StartTripSlice";
 import { HoldRiderInfoActivated } from "../../../Slice/Driver/HoldTripDataSlice";
+import {
+  First_Trip_Location_Activated,
+  First_Trip_StartTime_Activated,
+} from "../../../Slice/Driver/FristTripSlice";
+import { GetAddress_OF_Location } from "../../../Config/GoogleLocationAPi";
 let driverIcon = require("../../../assets/images/profile.jpg");
 
 const StartTrip = () => {
   const dispatch = useDispatch();
-  const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
-  const { startTripdata } = useSelector((state) => state.StartTripSlice);
+  const [maplocation, setMaplocation] = useState(false);
+  const [location, setLocation] = useState(null);
 
+  const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
+  const {
+    pickUpAddressData,
+    destAddressData,
+    currentLocationData,
+    startTripdata,
+    maplocationdata,
+  } = useSelector((state) => state.StartTripSlice);
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
   useEffect(() => {
@@ -45,8 +74,67 @@ const StartTrip = () => {
     },
   };
 
+  const getPermissions = async () => {
+    setMaplocation(true);
+    let pickUpAddress = "pickUpAddress";
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert(
+        "Insufficient permissions!",
+        "You need to grant location permissions to use this app.",
+        [{ text: "Okay" }]
+      );
+      return false;
+    }
+
+    let currentLocation = await Location.getCurrentPositionAsync({});
+
+    let startTime = new Date().toISOString();
+
+    // setLocation(currentLocation);
+
+    let adddressResult = await GetAddress_OF_Location(currentLocation);
+    dispatch(PickUpAddressFun(adddressResult));
+    setMaplocation(false);
+
+    console.log({ maplocation });
+    dispatch(MapLocationActivated(maplocation));
+    dispatch(First_Trip_Location_Activated(currentLocation));
+    dispatch(CurrentLocationActivated(currentLocation));
+    dispatch(First_Trip_StartTime_Activated(startTime));
+  };
+
+  const { First_Trip_Location } = useSelector((state) => state.FristTripSlice);
+
+  // useEffect(() => {
+  //   getPermissions();
+  // }, []);
+
+  const [startLoading, setStartLoading] = useState(false);
+
   const startTrip = () => {
+    setStartLoading(true);
+    // if (First_Trip_Location) {
+    //   dispatch(ActivateStartTrip());
+    // }
+    getPermissions();
     dispatch(ActivateStartTrip());
+    // setStartLoading(true);
+    // console.log();
+    setTimeout(() => {
+      setStartLoading(false);
+    }, 10000);
+  };
+
+  const call = (data) => {
+    console.log("this is f");
+    let phoneNumber = "";
+    if (Platform.OS === "android") {
+      phoneNumber = `tel:${data}`;
+    } else {
+      phoneNumber = `telprompt:${data}`;
+    }
+    Linking.openURL(phoneNumber);
   };
 
   return (
@@ -131,6 +219,7 @@ const StartTrip = () => {
               }}
             >
               <Ionicons
+                onPress={() => call(holdriderdata?.data.phone)}
                 name="md-call"
                 size={20}
                 style={{
@@ -189,16 +278,22 @@ const StartTrip = () => {
                       // opacity:this.state.opacity
                     }}
                   >
-                    <Text
-                      style={{
-                        alignSelf: "center",
-                        color: "#fff",
-                        fontSize: 15,
-                        // fontFamily: "Roboto-Regular",
-                      }}
-                    >
-                      Start Trip
-                    </Text>
+                    {!startLoading && (
+                      <Text
+                        style={{
+                          alignSelf: "center",
+                          color: "#fff",
+                          fontSize: 15,
+                          // fontFamily: "Roboto-Regular",
+                        }}
+                      >
+                        Start Trip
+                      </Text>
+                    )}
+
+                    {startLoading && (
+                      <ActivityIndicator size="small" color="#FFFFFF" />
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>

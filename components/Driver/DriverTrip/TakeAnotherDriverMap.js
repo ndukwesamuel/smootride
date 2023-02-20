@@ -25,7 +25,7 @@ import EndTripButtton from "./EndTripButtton";
 const TakeAnotherDriverMap = () => {
   const { width, height } = Dimensions.get("window");
 
-  const { currentLocationData, startTripdata } = useSelector(
+  const { currentLocationData, startTripdata, maplocationdata } = useSelector(
     (state) => state.StartTripSlice
   );
 
@@ -45,43 +45,12 @@ const TakeAnotherDriverMap = () => {
   const [closedTrip, setClosedTrip] = useState(false);
   // const [startTime, setStartTime] = useState(null);
 
-  const getPermissions = async () => {
-    setMaplocation(true);
-
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      console.log("Please grant Location permissions");
-      return;
-    }
-    // let currentLocation = await Location.getCurrentPositionAsync({});
-
-    let currentLocation = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.High,
-      allowsBackgroundLocationUpdates: true,
-      showsBackgroundLocationIndicator: true,
-    });
-    let startTime = await new Date().toISOString();
-
-    console.log(startTime);
-    setLocation(currentLocation);
-    // console.log("location gotten ",currentLocation)
-    setMaplocation(false);
-    dispatch(MapLocationActivated(maplocation));
-    dispatch(CurrentLocationActivated(currentLocation));
-    dispatch(StartTimeCurrentLocationActivated(startTime));
-  };
-
-  useEffect(() => {
-    getPermissions();
-  }, []);
-
   const ASPECT_RATIO = width / height;
 
   const LATITUDE_DELTA = 0.006339428281933124;
   const LONGITUDE_DELTA = ASPECT_RATIO * LATITUDE_DELTA;
 
   const MainMAP = ({ locationdata }) => {
-    console.log({ iiii: locationdata });
     return (
       <>
         <MapView
@@ -132,7 +101,7 @@ const TakeAnotherDriverMap = () => {
 
   return (
     <View style={{ height: mapHeight }} className="">
-      {maplocation ? (
+      {maplocationdata && (
         <View className="pt-10 ">
           <View className="  items-center">
             <Card className=" items-center py-5">
@@ -141,21 +110,25 @@ const TakeAnotherDriverMap = () => {
             </Card>
           </View>
         </View>
-      ) : (
+      )}
+
+      {!maplocationdata && currentLocationData && (
         <>
-          {location ? (
-            <>{holdriderdata?.data && <MainMAP locationdata={location} />}</>
-          ) : (
-            <View className="pt-10 ">
-              <View className="  items-center">
-                <Card className=" items-center py-5">
-                  <Text>Location is Loading </Text>
-                  <ActivityIndicator animating={true} color="black" />
-                </Card>
-              </View>
-            </View>
+          {holdriderdata?.data && (
+            <MainMAP locationdata={currentLocationData} />
           )}
         </>
+      )}
+
+      {!maplocationdata && !currentLocationData && (
+        <View className="pt-10 ">
+          <View className="  items-center">
+            <Card className=" items-center py-5">
+              <Text>Cant Find Location </Text>
+              <ActivityIndicator animating={true} color="black" />
+            </Card>
+          </View>
+        </View>
       )}
     </View>
   );
