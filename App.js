@@ -19,6 +19,8 @@ import DriverTabNavigation from "./screen/Drive/DriverTabNavigation";
 import { PersistGate } from "redux-persist/integration/react";
 import RiderPaths from "./screen/rider/RiderPath";
 import ExitDriverScreen from "./screen/Drive/ExitDriverScreen";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 // import messaging from '@react-native-firebase/messaging';
 // import messaging from "@react-native-firebase/messaging";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -119,7 +121,11 @@ export default function App() {
       let token;
       token = (await Notifications.getExpoPushTokenAsync()).data;
       // Permission granted, handle accordingly
-      setPushToken(token);
+      await AsyncStorage.setItem("PushToken", token);
+      const value = await AsyncStorage.getItem("PushToken");
+
+      console.log({ value });
+      setPushToken(value);
     }
 
     getNotificationPermission();
