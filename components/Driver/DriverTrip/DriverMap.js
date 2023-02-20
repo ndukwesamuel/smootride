@@ -45,6 +45,10 @@ const DriverMap = () => {
   const [closedTrip, setClosedTrip] = useState(false);
   // const [startTime, setStartTime] = useState(null);
 
+  console.log(
+    "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+  );
+
   const getPermissions = async () => {
     setMaplocation(true);
 
@@ -63,6 +67,8 @@ const DriverMap = () => {
     let startTime = await new Date().toISOString();
 
     setLocation(currentLocation);
+
+    console.log({ location });
     // console.log("location gotten ",currentLocation)
     setMaplocation(false);
     dispatch(MapLocationActivated(maplocation));
@@ -71,6 +77,7 @@ const DriverMap = () => {
   };
 
   useEffect(() => {
+    console.log("skdjsdkj");
     getPermissions();
   }, []);
 
