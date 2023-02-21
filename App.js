@@ -20,7 +20,6 @@ import { PersistGate } from "redux-persist/integration/react";
 import RiderPaths from "./screen/rider/RiderPath";
 import ExitDriverScreen from "./screen/Drive/ExitDriverScreen";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Device from "expo-device";
 
 // import messaging from '@react-native-firebase/messaging';
 // import messaging from "@react-native-firebase/messaging";
@@ -107,8 +106,6 @@ Notifications.setNotificationHandler({
 export default function App() {
   const [pushToken, setPushToken] = useState();
 
-  console.log({ Device });
-
   useEffect(() => {
     async function getNotificationPermission() {
       const { status } = await Notifications.getPermissionsAsync();
@@ -123,6 +120,8 @@ export default function App() {
 
       let token;
       token = (await Notifications.getExpoPushTokenAsync()).data;
+
+      console.log({ first_token: token });
       // Permission granted, handle accordingly
       await AsyncStorage.setItem("PushToken", token);
       const value = await AsyncStorage.getItem("PushToken");

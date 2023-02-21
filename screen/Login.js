@@ -24,6 +24,8 @@ import { selectOrigin } from "../Slice/navSlice";
 import { login, reset } from "../Slice/auth/LoginSlice";
 import { StatusBar } from "expo-status-bar";
 import Checkbox from "expo-checkbox";
+import * as Notifications from "expo-notifications";
+import { Updateuserexpotoken_Fun } from "../Slice/auth/UpdateuserexpotokenSlice";
 
 const image = { uri: "https://reactjs.org/logo-og.png" };
 
@@ -41,14 +43,46 @@ const Login = () => {
     (state) => state.LoginSlice
   );
 
-  useEffect(() => {
-    if (user == true) {
-      if (data?.user.userType == "staff") {
-        navigation.navigate("TabNavigation", { screen: "RiderRequest" });
-      } else if (data?.user.userType == "driver") {
-        navigation.navigate("DriverTabNavigation", { screen: "Driver" });
-      }
+  const SwitchUserType = () => {
+    if (data?.user.userType == "staff") {
+      navigation.navigate("TabNavigation", { screen: "RiderRequest" });
+    } else if (data?.user.userType == "driver") {
+      navigation.navigate("DriverTabNavigation", { screen: "Driver" });
     }
+
+    return;
+  };
+
+  useEffect(() => {
+    const AutheticationFun = async () => {
+      const value = await AsyncStorage.getItem("PushToken");
+      let valuew = "dkfjdfkjdfkdfj";
+      if (user == true) {
+        if (data?.user) {
+          let databaseToken = data?.user.pushToken;
+
+          if (databaseToken === value) {
+            SwitchUserType();
+            return;
+          } else if (databaseToken === null) {
+            console.log({ value });
+            let userobj = {
+              pushToken: value,
+            };
+            dispatch(Updateuserexpotoken_Fun(userobj));
+          } else if (databaseToken != value) {
+            let userobj = {
+              pushToken: value,
+            };
+            dispatch(Updateuserexpotoken_Fun(userobj));
+          }
+
+          return;
+        }
+      }
+    };
+
+    AutheticationFun();
   }, [user, data, isLoading, isError]);
 
   const handleLogin = () => {
@@ -75,28 +109,12 @@ const Login = () => {
   };
 
   const retrieveData = async () => {
-    console.log("skjdskdjskj");
-    // try {
-
-    //   console.log({ storedUsername });
-    //   console.log({ storedPassword });
-
-    //   if (storedUsername && storedPassword) {
-    //     const [email, setEmail] = useState("");
-    //     const [password, setPassword] = useState("");
-    //     setEmail(storedUsername);
-    //     setPassword(storedPassword);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-
     try {
       const storedData = await AsyncStorage.getItem("rememberData");
 
       const obj = JSON.parse(storedData);
 
-      if (obj.rememberMe) {
+      if (obj?.rememberMe) {
         setEmail(obj.email);
         setPassword(obj.password);
       }

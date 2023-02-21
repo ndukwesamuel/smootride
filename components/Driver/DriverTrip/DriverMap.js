@@ -128,7 +128,7 @@ const DriverMap = () => {
   };
 
   useEffect(() => {
-    console.log("skdjsdkj");
+    console.log("mememe");
     getPermissions();
   }, []);
 

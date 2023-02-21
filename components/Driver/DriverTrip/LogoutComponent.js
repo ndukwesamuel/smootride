@@ -26,6 +26,7 @@ import {
 } from "../../../Slice/Driver/DriverAcceptTripSlice";
 import { useNavigation } from "@react-navigation/native";
 import { resetholdriderdata } from "../../../Slice/Driver/HoldTripDataSlice";
+import { Logout_fuc } from "../../../Slice/auth/LogoutSlice";
 
 const LogoutComponent = () => {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const LogoutComponent = () => {
       );
     } else {
       console.log("working");
+      dispatch(Logout_fuc());
       dispatch(resetGetLastAssignTripSlice());
       dispatch(resetRejectTripSlice());
       dispatch(resetCompleteDriverTripSlice());
@@ -67,6 +69,7 @@ const LogoutComponent = () => {
       navigation.navigate("Login");
     }
   };
+
   return (
     <TouchableOpacity
       style={{ flexDirection: "row", marginTop: 50 }}

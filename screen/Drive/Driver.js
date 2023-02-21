@@ -104,6 +104,7 @@ const Driver = () => {
     (state) => state.LoginSlice
   );
 
+  console.log({ thengame: data?.user.pushToken });
   const { First_Trip_start_time } = useSelector(
     (state) => state.FristTripSlice
   );
@@ -166,23 +167,23 @@ const Driver = () => {
   }, [reload]);
 
   // this must never be remove
-  const [counter, setCounter] = useState(0);
-  useEffect(() => {
-    if (!startTripdata) {
-      const interval = setTimeout(() => {
-        setCounter(counter + 1);
-        dispatch(
-          GetLastAssignTrip({
-            user_id: 1,
-          })
-        );
-      }, 5000);
+  // const [counter, setCounter] = useState(0);
+  // useEffect(() => {
+  //   if (!startTripdata) {
+  //     const interval = setTimeout(() => {
+  //       setCounter(counter + 1);
+  //       dispatch(
+  //         GetLastAssignTrip({
+  //           user_id: 1,
+  //         })
+  //       );
+  //     }, 5000);
 
-      return () => clearTimeout(interval);
-    }
-  }, [counter]);
+  //     return () => clearTimeout(interval);
+  //   }
+  // }, [counter]);
 
-  console.log({ counter });
+  // console.log({ counter });
 
   let dataforDriverRequest = {
     isrequesting: false,

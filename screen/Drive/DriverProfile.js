@@ -18,6 +18,7 @@ import { persistStore } from "redux-persist";
 import { store } from "../../store";
 import LogoutComponent from "../../components/Driver/DriverTrip/LogoutComponent";
 import { GetAllDriverTrips } from "../../Slice/Driver/GetAllDriverTripsSlice";
+import { Logout_fuc } from "../../Slice/auth/LogoutSlice";
 
 const DriverProfile = () => {
   const navigation = useNavigation();
@@ -329,7 +330,9 @@ const DriverProfile = () => {
           </View>
         </TouchableOpacity> */}
 
-        <LogoutComponent />
+        <View>
+          <LogoutComponent />
+        </View>
       </View>
     </ScrollView>
   );

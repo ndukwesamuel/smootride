@@ -59,7 +59,7 @@ const ExitDriverTrip = () => {
   const { user, data, isError, isSuccess, isLoading } = useSelector(
     (state) => state.LoginSlice
   );
-  console.log({ log: data.user.id });
+  console.log({ log: data?.user.id });
 
   // console.log(holdriderdata.driverdetails);
   const { CompleteDriverTripData } = useSelector(
@@ -118,8 +118,6 @@ const ExitDriverTrip = () => {
     travelTime: completedTripdata.travelTime,
     tripDist: completedTripdata.Distant_Covered,
   };
-
-  console.log({ data22 });
 
   const [startTime, setStartTime] = useState(null);
   const [timeSpent, setTimeSpent] = useState(0);
