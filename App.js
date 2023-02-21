@@ -142,7 +142,7 @@ export default function App() {
         Alert.alert(
           "Alert",
 
-          `${response}`,
+          `${response} `,
           [{ text: "Yes" }, { text: "No" }],
           { cancelable: false }
         );
