@@ -138,11 +138,28 @@ export default function App() {
     const backgroundSubscription =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log({ response });
+
+        Alert.alert(
+          "Alert",
+
+          `${response}`,
+          [{ text: "Yes" }, { text: "No" }],
+          { cancelable: false }
+        );
       });
 
     const foregroundSubscription =
       Notifications.addNotificationReceivedListener((notification) => {
         console.log({ notification });
+
+        Alert.alert(
+          "Alert",
+
+          `${notification}`,
+          [{ text: "Yes" }, { text: "No" }],
+          { cancelable: false }
+        );
+        //}
         // let data = notification;
         // console.log({ data });
         // GetAddress_OF_Location(notification);
