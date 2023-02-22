@@ -31,8 +31,6 @@ const TakeAnotherStartTrip = () => {
 
   const { holdriderdata } = useSelector((state) => state.HoldTripDataSlice);
 
-  console.log({ name2: startTripdata });
-
   let dataforDriverRequest = {
     isrequesting: false,
     FetchingisTripValid: false,
