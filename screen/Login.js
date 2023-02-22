@@ -43,6 +43,8 @@ const Login = () => {
     (state) => state.LoginSlice
   );
 
+  console.log({ userlog: data?.user.email });
+
   const SwitchUserType = () => {
     if (data?.user.userType == "staff") {
       navigation.navigate("TabNavigation", { screen: "RiderRequest" });
