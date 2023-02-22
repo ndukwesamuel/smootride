@@ -139,10 +139,12 @@ export default function App() {
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log({ response });
 
+        let info = response.request.trigger.remoteMessage.data.message;
+        let title = response.request.trigger.remoteMessage.data.title;
+
         Alert.alert(
           "Alert",
-
-          `${response} `,
+          `${info}  ${title}`,
           [{ text: "Yes" }, { text: "No" }],
           { cancelable: false }
         );
@@ -152,10 +154,17 @@ export default function App() {
       Notifications.addNotificationReceivedListener((notification) => {
         console.log({ notification });
 
+        console.log({
+          fire: notification.request.trigger.remoteMessage.data.message,
+        });
+
+        let info = notification.request.trigger.remoteMessage.data.message;
+        let title = notification.request.trigger.remoteMessage.data.title;
+
         Alert.alert(
           "Alert",
 
-          `${notification}`,
+          `${info}  ${title}`,
           [{ text: "Yes" }, { text: "No" }],
           { cancelable: false }
         );

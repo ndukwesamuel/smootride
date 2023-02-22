@@ -61,6 +61,8 @@ const Login = () => {
         if (data?.user) {
           let databaseToken = data?.user.pushToken;
 
+          console.log({ databaseToken });
+
           if (databaseToken === value) {
             SwitchUserType();
             return;
