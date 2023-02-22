@@ -71,7 +71,7 @@ const DriversTripcomponent = ({ driverTripData }) => {
     });
 
   // Output the resulting array
-  console.log(mappedAndSortedArray);
+  // console.log(mappedAndSortedArray);
 
   return (
     <ScrollView>

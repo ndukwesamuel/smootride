@@ -120,6 +120,8 @@ export default function App() {
 
       let token;
       token = (await Notifications.getExpoPushTokenAsync()).data;
+
+      console.log({ first_token: token });
       // Permission granted, handle accordingly
       await AsyncStorage.setItem("PushToken", token);
       const value = await AsyncStorage.getItem("PushToken");
@@ -136,11 +138,37 @@ export default function App() {
     const backgroundSubscription =
       Notifications.addNotificationResponseReceivedListener((response) => {
         console.log({ response });
+
+        let info = response.request.trigger.remoteMessage.data.message;
+        let title = response.request.trigger.remoteMessage.data.title;
+
+        Alert.alert(
+          "Alert",
+          `${info}  ${title}`,
+          [{ text: "Yes" }, { text: "No" }],
+          { cancelable: false }
+        );
       });
 
     const foregroundSubscription =
       Notifications.addNotificationReceivedListener((notification) => {
         console.log({ notification });
+
+        console.log({
+          fire: notification.request.trigger.remoteMessage.data.message,
+        });
+
+        let info = notification.request.trigger.remoteMessage.data.message;
+        let title = notification.request.trigger.remoteMessage.data.title;
+
+        Alert.alert(
+          "Alert",
+
+          `${info}  ${title}`,
+          [{ text: "Yes" }, { text: "No" }],
+          { cancelable: false }
+        );
+        //}
         // let data = notification;
         // console.log({ data });
         // GetAddress_OF_Location(notification);

@@ -22,10 +22,6 @@ const initialState = {
 };
 
 const loginfetchDatahandle = async (userData) => {
-  const value = await AsyncStorage.getItem("PushToken");
-
-  userData.pushToken = value;
-  console.log({ userData });
   try {
     const response = await axios.post(userAPi, userData);
     if (response.data) {

@@ -128,6 +128,7 @@ const DriverMap = () => {
   };
 
   useEffect(() => {
+    console.log("mememe");
     getPermissions();
   }, []);
 
