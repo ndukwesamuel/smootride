@@ -26,6 +26,7 @@ import { StatusBar } from "expo-status-bar";
 import Checkbox from "expo-checkbox";
 import * as Notifications from "expo-notifications";
 import { Updateuserexpotoken_Fun } from "../Slice/auth/UpdateuserexpotokenSlice";
+import { GetLastAssignTrip } from "../Slice/Driver/GetLastAssignTripSlice";
 
 const image = { uri: "https://reactjs.org/logo-og.png" };
 
@@ -44,6 +45,15 @@ const Login = () => {
   );
 
   console.log({ userlog: data?.user.email });
+  console.log({ userlog: data?.user.id });
+
+  const ActivateGetLastAssignTrip = () => {
+    dispatch(
+      GetLastAssignTrip({
+        user_id: data?.user.id,
+      })
+    );
+  };
 
   const SwitchUserType = () => {
     if (data?.user.userType == "staff") {
@@ -130,6 +140,175 @@ const Login = () => {
   useEffect(() => {
     retrieveData();
   }, []);
+
+  // start here
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => {
+      return {
+        shouldShowAlert: true,
+      };
+    },
+  });
+
+  const [pushToken, setPushToken] = useState();
+
+  useEffect(() => {
+    async function getNotificationPermission() {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+      }
+      if (status !== "granted") {
+        // Handle the case where the user declines permission
+        console.log("Failed to get push token for push notification!");
+        return;
+      }
+
+      let token;
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+
+      console.log({ first_token: token });
+      // Permission granted, handle accordingly
+      await AsyncStorage.setItem("PushToken", token);
+      const value = await AsyncStorage.getItem("PushToken");
+
+      console.log({ value });
+      setPushToken(value);
+    }
+
+    getNotificationPermission();
+    // getNotificationPermission();
+  }, []);
+
+  useEffect(() => {
+    const backgroundSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log({ response });
+
+        const data = response.notification.request.content.data;
+
+        // Check if the app is in the background
+        if (AppState.currentState !== "active") {
+          // If the app is in the background, bring it to the foreground
+          // and pass the data from the notification response to the appropriate screen.
+          // For example:
+          // const navigation = response.notification.request.content.navigation;
+          // navigation.navigate("SomeScreen", { data });
+
+          navigation.navigate("DriverTabNavigation", { screen: "Driver" });
+        } else {
+          // If the app is already in the foreground, handle the notification response
+          // appropriately. For example:
+          handleNotificationResponse(data);
+        }
+
+        // let info = response.request.trigger.remoteMessage.data.message;
+        // let title = response.request.trigger.remoteMessage.data.title;
+
+        Alert.alert(
+          "Alert",
+          // `${info}  ${title}`,
+          [{ text: "Yes" }, { text: "No" }],
+          { cancelable: false }
+        );
+      });
+
+    const foregroundSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        // console.log({ notification });
+
+        console.log({
+          fire: notification.request.trigger.remoteMessage.data.message,
+        });
+
+        let info = notification.request.trigger.remoteMessage.data.message;
+        let title = notification.request.trigger.remoteMessage.data.title;
+
+        let data = notification.request.content;
+
+        console.log({ data });
+
+        if (data.data.type === "trip-request") {
+          info = data.data.type;
+
+          Alert.alert(
+            `${data?.body} `,
+            "",
+            [
+              {
+                text: "Yes",
+                onPress: () => ActivateGetLastAssignTrip(),
+
+                style: "default",
+              },
+            ],
+            { cancelable: false }
+          );
+
+          // Alert.alert(
+          //   "Alert",
+
+          //   `${info}  ${title}`,
+          //   [{ text: "Yes" }, { text: "No" }],
+          //   { cancelable: false }
+          // );
+        } else if (data.data.type === "trip-cancel") {
+          Alert.alert(
+            "Alert",
+            `${data?.body} `,
+
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+            { cancelable: false }
+          );
+        } else if (data.data.type === "trip-complete") {
+          Alert.alert(
+            "Alert",
+            `${data?.body} `,
+
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+            { cancelable: false }
+          );
+        } else if (data.data.type === "trip-subsequent") {
+          Alert.alert(
+            "Alert",
+            `${data?.body} `,
+
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+            { cancelable: false }
+          );
+        } else if (data.data.type === "trip-reassign") {
+          Alert.alert(
+            "Alert",
+            `${data?.body} `,
+
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+            { cancelable: false }
+          );
+        } else {
+          // console.log({ data });
+          Alert.alert(
+            "Alert",
+            `  ${data?.body} ${info}  ${title}`,
+
+            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+            { cancelable: false }
+          );
+          //}
+          // let data = notification;
+          // console.log({ data });
+          // GetAddress_OF_Location(notification);
+          // return;
+        }
+      });
+
+    return () => {
+      backgroundSubscription.remove();
+      foregroundSubscription.remove();
+    };
+  }, []);
+
+  console.log({ pushToken });
 
   return (
     <View>

@@ -15,6 +15,7 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  notificationData: null,
 };
 
 const Updateuserexpotoken_Service = async (usertoken, userdata) => {
