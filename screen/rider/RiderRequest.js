@@ -20,7 +20,7 @@ import {
   FlatList,
   Linking,
   RefreshControl,
-  Share
+  Share,
 } from "react-native";
 import smoothridelogo from "../../assets/images/smoothride.png";
 // import CardView from "react-native-cardview";
@@ -59,8 +59,8 @@ const RiderRequest = () => {
   const [closedTrip, setClosedTrip] = useState(false);
   const [reboot, setReboot] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [driverStat, setDriverstatus] = useState(null)
-  const [rejTrip, setRejTrip] = useState(false)
+  const [driverStat, setDriverstatus] = useState(null);
+  const [rejTrip, setRejTrip] = useState(false);
 
   const user_id = useSelector((state) => state.LoginSlice?.data?.user?.id);
 
@@ -81,9 +81,9 @@ const RiderRequest = () => {
       let currentLocation = await Location.getCurrentPositionAsync({});
       setLocation(currentLocation);
       // console.log("location gotten ",currentLocation)
-      const latitude= currentLocation?.coords.latitude;
-      const longitude= currentLocation?.coords.longitude;
-      await dispatch(GetAddress({latitude, longitude}))
+      const latitude = currentLocation?.coords.latitude;
+      const longitude = currentLocation?.coords.longitude;
+      await dispatch(GetAddress({ latitude, longitude }));
       setMaplocation(false);
     };
     getPermissions();
@@ -130,12 +130,10 @@ const RiderRequest = () => {
 
   const closeRejectTrip = () => {
     setRejTrip(false);
-    dispatch(CloseReject())
+    dispatch(CloseReject());
   };
 
-  const ListDriver = useSelector(
-    (state) => state.GetRiderSlice
-  );
+  const ListDriver = useSelector((state) => state.GetRiderSlice);
 
   const handlePurpose = async () => {
     if (purpose == 0) {
@@ -154,7 +152,7 @@ const RiderRequest = () => {
       await dispatch(RequestRide(userdata));
       if (ListDriver?.data != null) {
         setAccepted(true);
-        console.log("accepted value ", accepted)
+        console.log("accepted value ", accepted);
         await dispatch(AssignedDriver(userdet));
       }
       setLoading(false);
@@ -194,7 +192,7 @@ const RiderRequest = () => {
     Linking.openURL(phoneNumber);
   };
   const handleModal = () => {
-    setIsModalVisible(!isModalVisible)
+    setIsModalVisible(!isModalVisible);
   };
 
   useEffect(() => {
@@ -202,8 +200,8 @@ const RiderRequest = () => {
       const userdet = {
         user_id: user_id,
       };
-      const latitude= location?.coords.latitude;
-      const longitude= location?.coords.longitude;
+      const latitude = location?.coords.latitude;
+      const longitude = location?.coords.longitude;
       // console.log(latitude, longitude);
       setReboot(true);
       await dispatch(AssignedDriver(userdet));
@@ -224,8 +222,6 @@ const RiderRequest = () => {
   // }, 10000)
   const MINUTE_MS = 10000;
 
-
-
   const onRefresh = async () => {
     const userdet = {
       user_id: user_id,
@@ -243,89 +239,81 @@ const RiderRequest = () => {
     (state) => state.RequestRideSlice?.Lastassigned
   );
 
-  const {tripStatus, rejectedTrip} = useSelector(
+  const { tripStatus, rejectedTrip } = useSelector(
     (state) => state.RequestRideSlice
   );
 
-  const Address = useSelector(
-    (state) => state.GetRiderSlice?.address
-  );
-
+  const Address = useSelector((state) => state.GetRiderSlice?.address);
 
   // this must never be remove
   const [counter, setCounter] = useState(0);
 
   useEffect(() => {
-    
     // if(data?.message == "Trip deleted"){
     //   () => clearTimeout(interval);
     // }
-        if(rejectedTrip == true){
-          setRejTrip(true)
-        }
+    if (rejectedTrip == true) {
+      setRejTrip(true);
+    }
 
-    const interval = setTimeout(async() => {
+    const interval = setTimeout(async () => {
       setCounter(counter + 1);
       const userdet = {
-            user_id: user_id,
-          };
-          
-          if(!assignedDet?.driverdetails?.driverId){
-          await dispatch(AssignedDriver(userdet));
-          }
-          if(onLoaddata?.driverdetails?.driverId){
-            console.log("showing here ", tripStatus)
-            if(tripStatus?.status == "assign"){
-            await dispatch(KnowTrip(onLoaddata?.data?.id));
-            }
-              await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
-          }else if(assignedDet?.driverdetails?.driverId){
-            console.log("showing here too", tripStatus)
-            if(tripStatus?.status == "assign"){
-              await dispatch(KnowTrip(assignedDet?.data?.id));
-              }
-            await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
-        }
-          
-  
-    }, 15000);
-  
-    return () => clearTimeout(interval);
-  }, [counter])
+        user_id: user_id,
+      };
 
- 
+      if (!assignedDet?.driverdetails?.driverId) {
+        await dispatch(AssignedDriver(userdet));
+      }
+      if (onLoaddata?.driverdetails?.driverId) {
+        console.log("showing here ", tripStatus);
+        if (tripStatus?.status == "assign") {
+          await dispatch(KnowTrip(onLoaddata?.data?.id));
+        }
+        await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId));
+      } else if (assignedDet?.driverdetails?.driverId) {
+        console.log("showing here too", tripStatus);
+        if (tripStatus?.status == "assign") {
+          await dispatch(KnowTrip(assignedDet?.data?.id));
+        }
+        await dispatch(TripStatus(assignedDet?.driverdetails?.driverId));
+      }
+    }, 15000);
+
+    return () => clearTimeout(interval);
+  }, [counter]);
+
   const textToShare = `
           Hi, ${onLoaddata?.data?.name} shared their trip on Smoothride with you.
           Driver name: ${onLoaddata?.driverdetails?.staffName},
           Driver Phone number: ${onLoaddata?.driverdetails?.phone},
           Driver Pickup location: ${Address}
-  `
+  `;
 
   const newtextToShare = `
           Hi, ${assignedDet?.data?.name} shared their trip on Smoothride with you.
           Driver name: ${assignedDet?.driverdetails?.staffName},
           Driver Phone number: ${assignedDet?.driverdetails?.phone},
           Driver Pickup location: ${Address}
-  `
+  `;
   const handleShare = async (text) => {
-  try {
-    const result = await Share.share({
-      message: text,
-    });
-    if (result.action === Share.sharedAction) {
-      if (result.activityType) {
-        // Shared with activity type of result.activityType
-      } else {
-        // Shared
+    try {
+      const result = await Share.share({
+        message: text,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // Shared with activity type of result.activityType
+        } else {
+          // Shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // Dismissed
       }
-    } else if (result.action === Share.dismissedAction) {
-      // Dismissed
+    } catch (error) {
+      alert(error.message);
     }
-  } catch (error) {
-    alert(error.message);
-  }
-};
-
+  };
 
   const username = useSelector((state) => state.LoginSlice?.data?.user?.name);
   const number = knowdata?.length;
@@ -489,57 +477,59 @@ const RiderRequest = () => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
-                    {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
-                    <TouchableOpacity
-                        // onPress={this.oncompleted}
-                        onPress={()=>handleShare(textToShare)}
-                        style={{
-                          marginTop: 7,
-                          backgroundColor: "#005091",
-                          padding: 10,
-                          width: "100%",
-                          borderRadius: 10,
-                          alignSelf: "center",
-                          marginBottom: 15,
-                        }}
-                      >
-                        <Text
+                    {tripStatus?.status == "ontrip" ? (
+                      <View style={{ width: "40%" }}>
+                        <TouchableOpacity
+                          // onPress={this.oncompleted}
+                          onPress={() => handleShare(textToShare)}
                           style={{
+                            marginTop: 7,
+                            backgroundColor: "#005091",
+                            padding: 10,
+                            width: "100%",
+                            borderRadius: 10,
                             alignSelf: "center",
-                            color: "#fff",
-                            fontSize: 13,
+                            marginBottom: 15,
                           }}
                         >
-                          SHARE DETAILS
-                        </Text>
-                      </TouchableOpacity>
-                    </View> 
-                    :
-                    <View style={{ width: "40%" }}>
-                      <TouchableOpacity
-                        // onPress={this.oncompleted}
-                        onPress={handleCloseModeTrip}
-                        style={{
-                          marginTop: 7,
-                          backgroundColor: "#005091",
-                          padding: 10,
-                          width: "100%",
-                          borderRadius: 10,
-                          alignSelf: "center",
-                          marginBottom: 15,
-                        }}
-                      >
-                        <Text
+                          <Text
+                            style={{
+                              alignSelf: "center",
+                              color: "#fff",
+                              fontSize: 13,
+                            }}
+                          >
+                            SHARE DETAILS
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <View style={{ width: "40%" }}>
+                        <TouchableOpacity
+                          // onPress={this.oncompleted}
+                          onPress={handleCloseModeTrip}
                           style={{
+                            marginTop: 7,
+                            backgroundColor: "#005091",
+                            padding: 10,
+                            width: "100%",
+                            borderRadius: 10,
                             alignSelf: "center",
-                            color: "#fff",
-                            fontSize: 13,
+                            marginBottom: 15,
                           }}
                         >
-                          CANCEL REQUEST
-                        </Text>
-                      </TouchableOpacity>
-                    </View>}
+                          <Text
+                            style={{
+                              alignSelf: "center",
+                              color: "#fff",
+                              fontSize: 13,
+                            }}
+                          >
+                            CANCEL REQUEST
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
                   </View>
                 </View>
               </View>
@@ -666,174 +656,180 @@ const RiderRequest = () => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
-                    {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
-                    <TouchableOpacity
-                        // onPress={this.oncompleted}
-                        onPress={()=>handleShare(newtextToShare)}
-                        style={{
-                          marginTop: 7,
-                          backgroundColor: "#005091",
-                          padding: 10,
-                          width: "100%",
-                          borderRadius: 10,
-                          alignSelf: "center",
-                          marginBottom: 15,
-                        }}
-                      >
-                        <Text
+                    {tripStatus?.status == "ontrip" ? (
+                      <View style={{ width: "40%" }}>
+                        <TouchableOpacity
+                          // onPress={this.oncompleted}
+                          onPress={() => handleShare(newtextToShare)}
                           style={{
+                            marginTop: 7,
+                            backgroundColor: "#005091",
+                            padding: 10,
+                            width: "100%",
+                            borderRadius: 10,
                             alignSelf: "center",
-                            color: "#fff",
-                            fontSize: 13,
+                            marginBottom: 15,
                           }}
                         >
-                          SHARE DETAILS
-                        </Text>
-                      </TouchableOpacity>
-                    </View> 
-                     : 
-                     <View style={{ width: "40%" }}>
-                      <TouchableOpacity
-                        // onPress={this.oncompleted}
-                        onPress={handleCloseModeTrip}
-                        style={{
-                          marginTop: 7,
-                          backgroundColor: "#005091",
-                          padding: 10,
-                          width: "100%",
-                          borderRadius: 10,
-                          alignSelf: "center",
-                          marginBottom: 15,
-                        }}
-                      >
-                        <Text
+                          <Text
+                            style={{
+                              alignSelf: "center",
+                              color: "#fff",
+                              fontSize: 13,
+                            }}
+                          >
+                            SHARE DETAILS
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <View style={{ width: "40%" }}>
+                        <TouchableOpacity
+                          // onPress={this.oncompleted}
+                          onPress={handleCloseModeTrip}
                           style={{
+                            marginTop: 7,
+                            backgroundColor: "#005091",
+                            padding: 10,
+                            width: "100%",
+                            borderRadius: 10,
                             alignSelf: "center",
-                            color: "#fff",
-                            fontSize: 13,
+                            marginBottom: 15,
                           }}
                         >
-                          CANCEL REQUEST
-                        </Text>
-                      </TouchableOpacity>
-                    </View>}
+                          <Text
+                            style={{
+                              alignSelf: "center",
+                              color: "#fff",
+                              fontSize: 13,
+                            }}
+                          >
+                            CANCEL REQUEST
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
                   </View>
                 </View>
               </View>
             </View>
           )}
 
-          {onLoaddata?.data == null && requeststat == false && tripStatus == null && (
-            <View>
-              {number == 0 ? (
-                <View
-                  style={{
-                    backgroundColor: "white",
-                    borderTopLeftRadius: 15,
-                    borderTopRightRadius: 20,
-                  }}
-                >
-                  <Text
+          {onLoaddata?.data == null &&
+            requeststat == false &&
+            tripStatus == null && (
+              <View>
+                {number == 0 ? (
+                  <View
                     style={{
-                      color: "#007CC2",
-                      textAlign: "center",
-                      fontSize: 20,
-                      marginTop: 25,
+                      backgroundColor: "white",
+                      borderTopLeftRadius: 15,
+                      borderTopRightRadius: 20,
                     }}
                   >
-                    Hi, {username}
-                  </Text>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: "#EDEDED",
-                      padding: 1,
-                      width: "90%",
-                      marginLeft: "5%",
-                      borderRadius: 7,
-                      marginTop: 20,
-                    }}
-                  >
-                    {/* {
+                    <Text
+                      style={{
+                        color: "#007CC2",
+                        textAlign: "center",
+                        fontSize: 20,
+                        marginTop: 25,
+                      }}
+                    >
+                      Hi, {username}
+                    </Text>
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: "#EDEDED",
+                        padding: 1,
+                        width: "90%",
+                        marginLeft: "5%",
+                        borderRadius: 7,
+                        marginTop: 20,
+                      }}
+                    >
+                      {/* {
                                              this.state.isrequestingdrivers == true &&
                                              <Text style={styles.driverbtn}>Getting available drivers....</Text>
                                          } */}
-                    {/* {
+                      {/* {
                                              this.state.isrequestingdrivers == false && */}
-                    <Text
-                      style={{
-                        marginStart: 5,
-                        color: "#000",
-                        fontSize: 20,
-                        alignSelf: "center",
-                        // fontFamily:'Roboto-Regular',1
-                        color: "#C1C1C1",
-                      }}
-                    >
-                      {" "}
-                      {number} driver(s) available
-                    </Text>
-                    {/* } */}
-                  </TouchableOpacity>
-                  <View
-                    // key = {driver.id}
-                    // value = {driver.id}
-                    style={{
-                      marginTop: 20,
-                      shadowOffset: {
-                        width: 0,
-                        height: 1,
-                      },
-                      shadowOpacity: 0.22,
-                      shadowRadius: 2.22,
-                      shadowColor: "gray",
-                      elevation: 3,
-                      backgroundColor: "white",
-                      borderRadius: 10,
-                      width: "90%",
-                      marginLeft: "5%",
-                    }}
-                  >
-                    <Text>No driver available</Text>
-                  </View>
-                  <TouchableOpacity
-                    style={{
-                      marginTop: 7,
-                      backgroundColor: "#005091",
-                      padding: 10,
-                      width: "90%",
-                      borderRadius: 10,
-                      alignSelf: "center",
-                      marginBottom: 20,
-                      marginLeft: "5%",
-                    }}
-                    onPress={handleModal}
-                  >
-                    {loading ? (
-                      <ActivityIndicator animating={true} color="white" />
-                    ) : (
                       <Text
                         style={{
+                          marginStart: 5,
+                          color: "#000",
+                          fontSize: 20,
                           alignSelf: "center",
-                          color: "#fff",
-                          fontSize: 25,
+                          // fontFamily:'Roboto-Regular',1
+                          color: "#C1C1C1",
                         }}
-                        onPress={handleModal}
                       >
-                        REQUEST A RIDE
+                        {" "}
+                        {number} driver(s) available
                       </Text>
-                    )}
-                  </TouchableOpacity>
-                </View>
-              ) : (
-                <FlatList
-                  data={knowdata}
-                  refreshControl={
-                    <RefreshControl refreshing={loader} onRefresh={onRefresh} />
-                  }
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => {
-                    return (
-                      
+                      {/* } */}
+                    </TouchableOpacity>
+                    <View
+                      // key = {driver.id}
+                      // value = {driver.id}
+                      style={{
+                        marginTop: 20,
+                        shadowOffset: {
+                          width: 0,
+                          height: 1,
+                        },
+                        shadowOpacity: 0.22,
+                        shadowRadius: 2.22,
+                        shadowColor: "gray",
+                        elevation: 3,
+                        backgroundColor: "white",
+                        borderRadius: 10,
+                        width: "90%",
+                        marginLeft: "5%",
+                      }}
+                    >
+                      <Text>No driver available</Text>
+                    </View>
+                    <TouchableOpacity
+                      style={{
+                        marginTop: 7,
+                        backgroundColor: "#005091",
+                        padding: 10,
+                        width: "90%",
+                        borderRadius: 10,
+                        alignSelf: "center",
+                        marginBottom: 20,
+                        marginLeft: "5%",
+                      }}
+                      onPress={handleModal}
+                    >
+                      {loading ? (
+                        <ActivityIndicator animating={true} color="white" />
+                      ) : (
+                        <Text
+                          style={{
+                            alignSelf: "center",
+                            color: "#fff",
+                            fontSize: 25,
+                          }}
+                          onPress={handleModal}
+                        >
+                          REQUEST A RIDE
+                        </Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <FlatList
+                    data={knowdata}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={loader}
+                        onRefresh={onRefresh}
+                      />
+                    }
+                    keyExtractor={(item) => item.id}
+                    renderItem={({ item }) => {
+                      return (
                         <View
                           // key = {driver.id}
                           // value = {driver.id}
@@ -988,15 +984,12 @@ const RiderRequest = () => {
                             </TouchableOpacity>
                           </View>
                         </View>
-                        
-                    );
-                  }}
-                />
-
-                
-              )}
-            </View>
-          )}
+                      );
+                    }}
+                  />
+                )}
+              </View>
+            )}
         </View>
       )}
       {/* </PTRView> */}

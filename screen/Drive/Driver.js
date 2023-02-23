@@ -1148,7 +1148,7 @@ const Driver = () => {
                             color: "#007cc2",
                           }}
                         >
-                          Hi, {riderdata?.driverdetails.name}
+                          Hi, {riderdata?.driverdetails?.name}
                         </Text>
                         <Text
                           style={{

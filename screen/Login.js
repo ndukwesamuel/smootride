@@ -53,9 +53,9 @@ const Login = () => {
     (state) => state.LoginSlice
   );
 
-  const GAme = useSelector((state) => state);
+  // const GAme = useSelector((state) => state);
 
-  console.log({ GetAllDriverTripsSlice: GAme });
+  // console.log({ GetAllDriverTripsSlice: GAme });
 
   console.log({ userlog: data?.user.email });
   console.log({ userlog: data?.user.id });
@@ -123,6 +123,9 @@ const Login = () => {
   }, [user, data, isLoading, isError]);
 
   const handleLogin = () => {
+    dispatch(resetGetAllDriverTripsSlice());
+    dispatch(resetLoginSlice());
+
     if (email == "" || password == "") {
       Alert.alert(
         "Alert",
