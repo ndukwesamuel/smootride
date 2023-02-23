@@ -19,6 +19,7 @@ import { store } from "../../store";
 import LogoutComponent from "../../components/Driver/DriverTrip/LogoutComponent";
 import { GetAllDriverTrips } from "../../Slice/Driver/GetAllDriverTripsSlice";
 import { Logout_fuc } from "../../Slice/auth/LogoutSlice";
+import { reset as resetGetAllDriverTripsSlice } from "../../Slice/Driver/GetAllDriverTripsSlice";
 
 const DriverProfile = () => {
   const navigation = useNavigation();
@@ -47,7 +48,9 @@ const DriverProfile = () => {
   useEffect(() => {
     dispatch(GetAllDriverTrips());
 
-    return () => {};
+    return () => {
+      dispatch(resetGetAllDriverTripsSlice());
+    };
   }, []);
 
   return (

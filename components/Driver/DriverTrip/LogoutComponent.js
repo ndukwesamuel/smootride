@@ -54,6 +54,7 @@ const LogoutComponent = () => {
       dispatch(Logout_fuc());
       dispatch(UpdateuserexpotokenReset());
       dispatch(resetGetLastAssignTripSlice());
+      dispatch(resetGetAllDriverTripsSlice());
       dispatch(resetRejectTripSlice());
       dispatch(resetCompleteDriverTripSlice());
       dispatch(resetExitTripSlice());
@@ -63,7 +64,6 @@ const LogoutComponent = () => {
       dispatch(resetAll_Excerpt_startTripdata());
       dispatch(resetALLStartTrip());
       dispatch(resetUpdateDriverStatusSlice());
-      dispatch(resetGetAllDriverTripsSlice());
       dispatch(AcceptReset());
       dispatch(resetholdriderdata());
       await AsyncStorage.removeItem("token");

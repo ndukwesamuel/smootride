@@ -20,21 +20,25 @@ const initialState = {
 };
 
 const Updateuserexpotoken_Service = async (usertoken, userdata) => {
-  let url = process.env.SMOOTHRIDE_NEWAPI + "updateuserexpotoken";
+  try {
+    let url = process.env.SMOOTHRIDE_NEWAPI + "updateuserexpotoken";
 
-  console.log({ userdata });
+    console.log({ userdata });
 
-  console.log({ usertoken });
+    console.log({ usertoken });
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${usertoken}`,
-    },
-  };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${usertoken}`,
+      },
+    };
 
-  const response = await axios.put(url, userdata, config);
-  console.log(response.data);
-  return response.data;
+    const response = await axios.put(url, userdata, config);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const Updateuserexpotoken_Fun = createAsyncThunk(
