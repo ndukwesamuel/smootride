@@ -26,75 +26,76 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import * as Notifications from "expo-notifications";
 import { useState } from "react";
+import { RiderTabNavigation } from "./screen/rider/RiderTabnavigation";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-export function TabNavigation() {
-  return (
-    <Tab.Navigator
-      initialRouteName="Eventhome"
-      screenOptions={{
-        tabBarActiveTintColor: "rgba(72, 130, 101, 0.5)",
-        tabBarShowLabel: true,
-      }}
-    >
-      <Tab.Screen
-        name="RiderRequest"
-        component={RiderRequest}
-        options={{
-          title: "Request",
-          tabBarActiveTintColor: "#005091",
-          headerShown: false,
-          tabBarIcon: ({ focused }) => {
-            return (
-              <FontAwesome
-                name="car"
-                size={30}
-                color={focused ? "#005091" : "gray"}
-              />
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name="RiderTrips"
-        component={RiderTrips}
-        options={{
-          title: "Trips",
-          tabBarActiveTintColor: "#005091",
-          headerShown: false,
-          tabBarIcon: ({ focused }) => {
-            return (
-              <FontAwesome
-                name="car"
-                size={30}
-                color={focused ? "#005091" : "gray"}
-              />
-            );
-          },
-        }}
-      />
-      <Tab.Screen
-        name="RiderProfile"
-        component={RiderProfile}
-        options={{
-          title: "Profile",
-          tabBarActiveTintColor: "#005091",
-          headerShown: false,
-          tabBarIcon: ({ focused }) => {
-            return (
-              <Ionicons
-                name="person"
-                size={30}
-                color={focused ? "#005091" : "gray"}
-              />
-            );
-          },
-        }}
-      />
-    </Tab.Navigator>
-  );
-}
+// export function TabNavigation() {
+//   return (
+//     <Tab.Navigator
+//       initialRouteName="Eventhome"
+//       screenOptions={{
+//         tabBarActiveTintColor: "rgba(72, 130, 101, 0.5)",
+//         tabBarShowLabel: true,
+//       }}
+//     >
+//       <Tab.Screen
+//         name="RiderRequest"
+//         component={RiderRequest}
+//         options={{
+//           title: "Request",
+//           tabBarActiveTintColor: "#005091",
+//           headerShown: false,
+//           tabBarIcon: ({ focused }) => {
+//             return (
+//               <FontAwesome
+//                 name="car"
+//                 size={30}
+//                 color={focused ? "#005091" : "gray"}
+//               />
+//             );
+//           },
+//         }}
+//       />
+//       <Tab.Screen
+//         name="RiderTrips"
+//         component={RiderTrips}
+//         options={{
+//           title: "Trips",
+//           tabBarActiveTintColor: "#005091",
+//           headerShown: false,
+//           tabBarIcon: ({ focused }) => {
+//             return (
+//               <FontAwesome
+//                 name="car"
+//                 size={30}
+//                 color={focused ? "#005091" : "gray"}
+//               />
+//             );
+//           },
+//         }}
+//       />
+//       <Tab.Screen
+//         name="RiderProfile"
+//         component={RiderProfile}
+//         options={{
+//           title: "Profile",
+//           tabBarActiveTintColor: "#005091",
+//           headerShown: false,
+//           tabBarIcon: ({ focused }) => {
+//             return (
+//               <Ionicons
+//                 name="person"
+//                 size={30}
+//                 color={focused ? "#005091" : "gray"}
+//               />
+//             );
+//           },
+//         }}
+//       />
+//     </Tab.Navigator>
+//   );
+// }
 
 export default function App() {
   return (
@@ -115,7 +116,7 @@ export default function App() {
 
             <Stack.Screen
               name="TabNavigation"
-              component={TabNavigation}
+              component={RiderTabNavigation}
               options={{
                 headerShown: false,
               }}
