@@ -160,7 +160,7 @@ export const RequestRide= createAsyncThunk(
             .then( async (response) => {
               // console.log("Know Trip response ",response.data)
               if(response.data?.success == false ){
-                Alert.alert("Trip rejected");
+                // Alert.alert("Trip rejected");
               }
               return response.data;
             })

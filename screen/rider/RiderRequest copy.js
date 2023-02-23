@@ -45,8 +45,6 @@ import RideRequestSuccess from "../../components/rider/RideRequestSuccess";
 import CancelModalTrip from "../../components/rider/CancelModalTrip";
 import PTRView from "react-native-pull-to-refresh";
 import RejectRequest from "../../components/rider/RejectRequest";
-import StaffOntrip from "../../components/rider/StaffOntrip";
-import { NotificationDataModalFunC, NotificationDatasReset } from "../../Slice/auth/UpdateuserexpotokenSlice";
 
 const { width, height } = Dimensions.get("window");
 const RiderRequest = () => {
@@ -61,7 +59,7 @@ const RiderRequest = () => {
   const [closedTrip, setClosedTrip] = useState(false);
   const [reboot, setReboot] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [driverStat, setDriverstatus] = useState(false)
+  const [driverStat, setDriverstatus] = useState(null)
   const [rejTrip, setRejTrip] = useState(false)
 
   const user_id = useSelector((state) => state.LoginSlice?.data?.user?.id);
@@ -120,7 +118,6 @@ const RiderRequest = () => {
     setAccepted(false);
   };
 
-
   const cancelRequest = async () => {
     await dispatch(CancelRequest());
     await dispatch(GetRider());
@@ -154,7 +151,6 @@ const RiderRequest = () => {
 
       setIsModalVisible(false);
       setLoading(true);
-      await dispatch(NotificationDatasReset());
       await dispatch(RequestRide(userdata));
       if (ListDriver?.data != null) {
         setAccepted(true);
@@ -255,25 +251,6 @@ const RiderRequest = () => {
     (state) => state.GetRiderSlice?.address
   );
 
-  const { notificationDataModal, notificationData } = useSelector(
-        (state) => state.UpdateuserexpotokenSlice
-      );
-
-      console.log("driver on trip ", notificationData?.request?.content?.data?.type)
-
-const handleOntrip = async () => {
-  if(notificationData?.request?.content?.data?.type== "trip-start"){
-  dispatch(NotificationDataModalFunC());
-  }
-  else if(notificationData?.request?.content?.data?.type == "trip-reject"){
-    await dispatch(NotificationDatasReset());
-    if(onLoaddata?.driverdetails?.driverId){
-        await dispatch(KnowTrip(onLoaddata?.data?.id));
-    } else if (assignedDet?.driverdetails?.driverId){
-        await dispatch(KnowTrip(onLoaddata?.data?.id));
-    }
-  }
-    };
 
   // this must never be remove
   const [counter, setCounter] = useState(0);
@@ -298,9 +275,15 @@ const handleOntrip = async () => {
           }
           if(onLoaddata?.driverdetails?.driverId){
             console.log("showing here ", tripStatus)
+            if(tripStatus?.status == "assign"){
+            await dispatch(KnowTrip(onLoaddata?.data?.id));
+            }
               await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
           }else if(assignedDet?.driverdetails?.driverId){
             console.log("showing here too", tripStatus)
+            if(tripStatus?.status == "assign"){
+              await dispatch(KnowTrip(assignedDet?.data?.id));
+              }
             await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
         }
           
@@ -506,7 +489,7 @@ const handleOntrip = async () => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
-                    {notificationData?.request?.content?.data?.type == "trip-start"? <View style={{ width: "40%" }}>
+                    {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
                     <TouchableOpacity
                         // onPress={this.oncompleted}
                         onPress={()=>handleShare(textToShare)}
@@ -683,7 +666,7 @@ const handleOntrip = async () => {
                     <View
                       style={{ width: "60%", justifyContent: "center" }}
                     ></View>
-                    {notificationData?.request?.content?.data?.type == "trip-start"? <View style={{ width: "40%" }}>
+                    {tripStatus?.status == "ontrip"? <View style={{ width: "40%" }}>
                     <TouchableOpacity
                         // onPress={this.oncompleted}
                         onPress={()=>handleShare(newtextToShare)}
@@ -1114,10 +1097,8 @@ const handleOntrip = async () => {
           </View>
         </View>
       </Modal>
-      
-      <StaffOntrip accepted={notificationDataModal} notificationData={notificationData} handleOntrip={handleOntrip} />
       <RideRequestSuccess accepted={accepted} handleAccept={handleAccept} />
-      {/* <RejectRequest accepted={rejTrip} handleAccept={closeRejectTrip} /> */}
+      <RejectRequest accepted={rejTrip} handleAccept={closeRejectTrip} />
       <CancelModalTrip
         closedTrip={closedTrip}
         handleCloseModeTrip={handleCloseModeTrip}
