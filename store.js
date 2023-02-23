@@ -65,7 +65,7 @@ const reducers = combineReducers({
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: ["RejectTripSlice"],
+  blacklist: ["RejectTripSlice", "GetAllDriverTripsSlice"],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);
