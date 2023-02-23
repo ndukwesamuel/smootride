@@ -27,6 +27,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { resetholdriderdata } from "../../../Slice/Driver/HoldTripDataSlice";
 import { Logout_fuc } from "../../../Slice/auth/LogoutSlice";
+import { UpdateuserexpotokenReset } from "../../../Slice/auth/UpdateuserexpotokenSlice";
 
 const LogoutComponent = () => {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const LogoutComponent = () => {
     } else {
       console.log("working");
       dispatch(Logout_fuc());
+      dispatch(UpdateuserexpotokenReset());
       dispatch(resetGetLastAssignTripSlice());
       dispatch(resetRejectTripSlice());
       dispatch(resetCompleteDriverTripSlice());

@@ -1,10 +1,12 @@
 import {
   ActivityIndicator,
   Alert,
+  AppState,
   Button,
   Image,
   ImageBackground,
   KeyboardAvoidingView,
+  Modal,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -25,7 +27,11 @@ import { login, reset } from "../Slice/auth/LoginSlice";
 import { StatusBar } from "expo-status-bar";
 import Checkbox from "expo-checkbox";
 import * as Notifications from "expo-notifications";
-import { Updateuserexpotoken_Fun } from "../Slice/auth/UpdateuserexpotokenSlice";
+import {
+  NotificationDataFunC,
+  NotificationDataModalFunC,
+  Updateuserexpotoken_Fun,
+} from "../Slice/auth/UpdateuserexpotokenSlice";
 import { GetLastAssignTrip } from "../Slice/Driver/GetLastAssignTripSlice";
 
 const image = { uri: "https://reactjs.org/logo-og.png" };
@@ -187,119 +193,17 @@ const Login = () => {
         console.log({ response });
 
         const data = response.notification.request.content.data;
+        dispatch(NotificationDataModalFunC(true));
 
-        // Check if the app is in the background
-        if (AppState.currentState !== "active") {
-          // If the app is in the background, bring it to the foreground
-          // and pass the data from the notification response to the appropriate screen.
-          // For example:
-          // const navigation = response.notification.request.content.navigation;
-          // navigation.navigate("SomeScreen", { data });
-
-          navigation.navigate("DriverTabNavigation", { screen: "Driver" });
-        } else {
-          // If the app is already in the foreground, handle the notification response
-          // appropriately. For example:
-          handleNotificationResponse(data);
-        }
-
-        // let info = response.request.trigger.remoteMessage.data.message;
-        // let title = response.request.trigger.remoteMessage.data.title;
-
-        Alert.alert(
-          "Alert",
-          // `${info}  ${title}`,
-          [{ text: "Yes" }, { text: "No" }],
-          { cancelable: false }
-        );
+        dispatch(NotificationDataFunC(response));
       });
 
     const foregroundSubscription =
       Notifications.addNotificationReceivedListener((notification) => {
-        // console.log({ notification });
+        console.log({ notification });
 
-        console.log({
-          fire: notification.request.trigger.remoteMessage.data.message,
-        });
-
-        let info = notification.request.trigger.remoteMessage.data.message;
-        let title = notification.request.trigger.remoteMessage.data.title;
-
-        let data = notification.request.content;
-
-        console.log({ data });
-
-        if (data.data.type === "trip-request") {
-          info = data.data.type;
-
-          Alert.alert(
-            `${data?.body} `,
-            "",
-            [
-              {
-                text: "Yes",
-                onPress: () => ActivateGetLastAssignTrip(),
-
-                style: "default",
-              },
-            ],
-            { cancelable: false }
-          );
-
-          // Alert.alert(
-          //   "Alert",
-
-          //   `${info}  ${title}`,
-          //   [{ text: "Yes" }, { text: "No" }],
-          //   { cancelable: false }
-          // );
-        } else if (data.data.type === "trip-cancel") {
-          Alert.alert(
-            "Alert",
-            `${data?.body} `,
-
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-            { cancelable: false }
-          );
-        } else if (data.data.type === "trip-complete") {
-          Alert.alert(
-            "Alert",
-            `${data?.body} `,
-
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-            { cancelable: false }
-          );
-        } else if (data.data.type === "trip-subsequent") {
-          Alert.alert(
-            "Alert",
-            `${data?.body} `,
-
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-            { cancelable: false }
-          );
-        } else if (data.data.type === "trip-reassign") {
-          Alert.alert(
-            "Alert",
-            `${data?.body} `,
-
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-            { cancelable: false }
-          );
-        } else {
-          // console.log({ data });
-          Alert.alert(
-            "Alert",
-            `  ${data?.body} ${info}  ${title}`,
-
-            [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-            { cancelable: false }
-          );
-          //}
-          // let data = notification;
-          // console.log({ data });
-          // GetAddress_OF_Location(notification);
-          // return;
-        }
+        dispatch(NotificationDataModalFunC(true));
+        dispatch(NotificationDataFunC(notification));
       });
 
     return () => {

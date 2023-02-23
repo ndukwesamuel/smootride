@@ -16,6 +16,7 @@ const initialState = {
   isLoading: false,
   message: "",
   notificationData: null,
+  notificationDataModal: false,
 };
 
 const Updateuserexpotoken_Service = async (usertoken, userdata) => {
@@ -37,7 +38,7 @@ const Updateuserexpotoken_Service = async (usertoken, userdata) => {
 };
 
 export const Updateuserexpotoken_Fun = createAsyncThunk(
-  "auth/logout",
+  "auth/Updateuserexpotoken",
   async (userdata, thunkAPI) => {
     try {
       const token = thunkAPI.getState().LoginSlice.data.access_token;
@@ -62,12 +63,18 @@ export const UpdateuserexpotokenSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.message = "";
-      state.ResetUser = null;
+    UpdateuserexpotokenReset: (state) => initialState,
+    NotificationDatasReset: (state) => {
+      state.notificationData = null;
+      state.notificationDataModal = false;
+    },
+
+    NotificationDataModalFunC: (state) => {
+      state.notificationDataModal = !state.notificationDataModal;
+    },
+
+    NotificationDataFunC: (state, action) => {
+      state.notificationData = action.payload;
     },
   },
 
@@ -90,5 +97,10 @@ export const UpdateuserexpotokenSlice = createSlice({
   },
 });
 
-export const { reset } = UpdateuserexpotokenSlice.actions;
+export const {
+  NotificationDataFunC,
+  UpdateuserexpotokenReset,
+  NotificationDataModalFunC,
+  NotificationDatasReset,
+} = UpdateuserexpotokenSlice.actions;
 export default UpdateuserexpotokenSlice.reducer;
