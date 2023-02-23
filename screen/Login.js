@@ -233,7 +233,7 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(resetGetAllDriverTripsSlice());
-    // dispatch(resetLoginSlice());
+    dispatch(resetLoginSlice());
 
     return () => {};
   }, []);
