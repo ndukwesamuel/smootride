@@ -21,7 +21,10 @@ import {
   reset as CompleteDriverReset,
 } from "../../../Slice/Driver/CompleteDriverTripSlice";
 
-import { reset as resetGetLastAssignTripSlice } from "../../../Slice/Driver/GetLastAssignTripSlice";
+import {
+  GetLastAssignTrip,
+  reset as resetGetLastAssignTripSlice,
+} from "../../../Slice/Driver/GetLastAssignTripSlice";
 
 import { reset as resetGetAllDriverTripsSlice } from "../../../Slice/Driver/GetAllDriverTripsSlice";
 import { reset as resetUpdateDriverStatusSlice } from "../../../Slice/Driver/UpdateDriverStatusSlice";
@@ -63,6 +66,17 @@ const ExitDriverModal = () => {
 
   console.log({ f: CompleteDriverTripData });
 
+  const { user, data, isError, isSuccess, isLoading } = useSelector(
+    (state) => state.LoginSlice
+  );
+  const ActivateGetLastAssignTrip = () => {
+    dispatch(
+      GetLastAssignTrip({
+        user_id: data?.user.id,
+      })
+    );
+  };
+
   const onPressLearnMore = () => {
     console.log("click");
     dispatch(ExitTripFunc(holdriderdata?.data.id));
@@ -72,10 +86,6 @@ const ExitDriverModal = () => {
   console.log({ hdf: ExittripData });
 
   if (ExittripData?.success) {
-    Alert.alert("Alert", `Congrat Trip Done and Exited`, [{ text: "OK" }], {
-      cancelable: false,
-    });
-
     dispatch(resetALLFristTripSlice());
     dispatch(GetUserConfigreset());
     dispatch(resetGetLastAssignTripSlice());
@@ -94,6 +104,23 @@ const ExitDriverModal = () => {
     dispatch(resetAll_Excerpt_startTripdata());
     dispatch(CompleteDriverReset());
     setModalVisible(false);
+
+    Alert.alert(
+      "Alert",
+      `Congrat Trip Done and Exited`,
+
+      [
+        {
+          text: "OK",
+
+          onPress: () => ActivateGetLastAssignTrip(),
+          style: "default",
+        },
+      ],
+      {
+        cancelable: false,
+      }
+    );
   }
 
   return (

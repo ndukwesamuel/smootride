@@ -58,7 +58,6 @@ const reducers = combineReducers({
   HoldTripDataSlice: HoldTripDataSlice,
   FristTripSlice: FristTripSlice,
   GetUserConfigSlice: GetUserConfigSlice,
-
   logoutSlice: logoutSlice,
   UpdateuserexpotokenSlice: UpdateuserexpotokenSlice,
 });

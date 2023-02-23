@@ -1,11 +1,13 @@
 import {
   ActivityIndicator,
   Alert,
+  Button,
   Dimensions,
   Image,
   KeyboardAvoidingView,
   Linking,
   Modal,
+  Pressable,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -55,6 +57,7 @@ import {
   GetAddress_OF_Location,
   Get_Location_Way_Point,
 } from "../../Config/GoogleLocationAPi";
+import { NotificationDataModalFunC } from "../../Slice/auth/UpdateuserexpotokenSlice";
 
 let driverIcon = require("../../assets/images/profile.jpg");
 const { width, height } = Dimensions.get("window");
@@ -103,8 +106,6 @@ const Driver = () => {
   const { user, data, isError, isSuccess, isLoading } = useSelector(
     (state) => state.LoginSlice
   );
-
-  console.log({ name: data.user });
 
   console.log({ thengame: data?.user.pushToken });
   const { First_Trip_start_time } = useSelector(

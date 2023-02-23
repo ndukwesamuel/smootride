@@ -15,28 +15,34 @@ const initialState = {
   isSuccess: false,
   isLoading: false,
   message: "",
+  notificationData: null,
+  notificationDataModal: false,
 };
 
 const Updateuserexpotoken_Service = async (usertoken, userdata) => {
-  let url = process.env.SMOOTHRIDE_NEWAPI + "updateuserexpotoken";
+  try {
+    let url = process.env.SMOOTHRIDE_NEWAPI + "updateuserexpotoken";
 
-  console.log({ userdata });
+    console.log({ userdata });
 
-  console.log({ usertoken });
+    console.log({ usertoken });
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${usertoken}`,
-    },
-  };
+    const config = {
+      headers: {
+        Authorization: `Bearer ${usertoken}`,
+      },
+    };
 
-  const response = await axios.put(url, userdata, config);
-  console.log(response.data);
-  return response.data;
+    const response = await axios.put(url, userdata, config);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const Updateuserexpotoken_Fun = createAsyncThunk(
-  "auth/logout",
+  "auth/Updateuserexpotoken",
   async (userdata, thunkAPI) => {
     try {
       const token = thunkAPI.getState().LoginSlice.data.access_token;
@@ -61,12 +67,18 @@ export const UpdateuserexpotokenSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.message = "";
-      state.ResetUser = null;
+    UpdateuserexpotokenReset: (state) => initialState,
+    NotificationDatasReset: (state) => {
+      state.notificationData = null;
+      state.notificationDataModal = false;
+    },
+
+    NotificationDataModalFunC: (state) => {
+      state.notificationDataModal = !state.notificationDataModal;
+    },
+
+    NotificationDataFunC: (state, action) => {
+      state.notificationData = action.payload;
     },
   },
 
@@ -89,5 +101,10 @@ export const UpdateuserexpotokenSlice = createSlice({
   },
 });
 
-export const { reset } = UpdateuserexpotokenSlice.actions;
+export const {
+  NotificationDataFunC,
+  UpdateuserexpotokenReset,
+  NotificationDataModalFunC,
+  NotificationDatasReset,
+} = UpdateuserexpotokenSlice.actions;
 export default UpdateuserexpotokenSlice.reducer;

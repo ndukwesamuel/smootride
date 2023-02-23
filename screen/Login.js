@@ -1,10 +1,12 @@
 import {
   ActivityIndicator,
   Alert,
+  AppState,
   Button,
   Image,
   ImageBackground,
   KeyboardAvoidingView,
+  Modal,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -25,7 +27,15 @@ import { login, reset } from "../Slice/auth/LoginSlice";
 import { StatusBar } from "expo-status-bar";
 import Checkbox from "expo-checkbox";
 import * as Notifications from "expo-notifications";
-import { Updateuserexpotoken_Fun } from "../Slice/auth/UpdateuserexpotokenSlice";
+import {
+  NotificationDataFunC,
+  NotificationDataModalFunC,
+  Updateuserexpotoken_Fun,
+} from "../Slice/auth/UpdateuserexpotokenSlice";
+import { GetLastAssignTrip } from "../Slice/Driver/GetLastAssignTripSlice";
+
+import { reset as resetGetAllDriverTripsSlice } from "../Slice/Driver/GetAllDriverTripsSlice";
+import { reset as resetLoginSlice } from "../Slice/auth/LoginSlice";
 
 const image = { uri: "https://reactjs.org/logo-og.png" };
 
@@ -43,44 +53,69 @@ const Login = () => {
     (state) => state.LoginSlice
   );
 
-  const SwitchUserType = () => {
+  const GAme = useSelector((state) => state);
+
+  console.log({ GetAllDriverTripsSlice: GAme.GetAllDriverTripsSlice });
+
+  console.log({ userlog: data?.user.email });
+  console.log({ userlog: data?.user.id });
+
+  const ActivateGetLastAssignTrip = () => {
+    dispatch(
+      GetLastAssignTrip({
+        user_id: data?.user.id,
+      })
+    );
+  };
+
+  function SwitchUserType() {
     if (data?.user.userType == "staff") {
-      navigation.navigate("TabNavigation", { screen: "RiderRequest" });
+      console.log({ quserlog: data?.user.userType });
+
+      // navigation.navigate("forgetpassword");
+
+      navigation.navigate("TabNavigation", { screen: "Driver" });
+
+      // return navigation.navigate("TabNavigation", { screen: "RiderRequest" });
     } else if (data?.user.userType == "driver") {
+      console.log({ quserlog: data?.user.userType });
+
       navigation.navigate("DriverTabNavigation", { screen: "Driver" });
     }
+  }
 
-    return;
-  };
+  // const SwitchUserType = () => {
+  //   console.log("skdjsdkj");
+
+  //   // if (data?.user.userType == "staff") {
+  //   //   navigation.navigate("TabNavigation", { screen: "RiderRequest" });
+  //   // } else if (data?.user.userType == "driver") {
+  //   //   navigation.navigate("DriverTabNavigation", { screen: "Driver" });
+  //   // }
+
+  //   // return;
+  // };
 
   useEffect(() => {
     const AutheticationFun = async () => {
       const value = await AsyncStorage.getItem("PushToken");
-      let valuew = "dkfjdfkjdfkdfj";
-      if (user == true) {
-        if (data?.user) {
-          let databaseToken = data?.user.pushToken;
+      if (data) {
+        let databaseToken = data?.user.pushToken;
 
-          console.log({ databaseToken });
-
-          if (databaseToken === value) {
-            SwitchUserType();
-            return;
-          } else if (databaseToken === null) {
-            console.log({ value });
-            let userobj = {
-              pushToken: value,
-            };
-            dispatch(Updateuserexpotoken_Fun(userobj));
-          } else if (databaseToken != value) {
-            let userobj = {
-              pushToken: value,
-            };
-            dispatch(Updateuserexpotoken_Fun(userobj));
-          }
-
-          return;
+        if (value != databaseToken) {
+          let userobj = {
+            pushToken: value,
+          };
+          dispatch(Updateuserexpotoken_Fun(userobj));
+        } else {
+          SwitchUserType();
         }
+      } else {
+        // Alert.alert("Alert", "Try loging again ", [{ text: "OK" }], {
+        //   cancelable: false,
+        // });
+
+        console.log("error");
       }
     };
 
@@ -127,6 +162,80 @@ const Login = () => {
 
   useEffect(() => {
     retrieveData();
+  }, []);
+
+  // start here
+
+  Notifications.setNotificationHandler({
+    handleNotification: async () => {
+      return {
+        shouldShowAlert: true,
+      };
+    },
+  });
+
+  const [pushToken, setPushToken] = useState();
+
+  useEffect(() => {
+    async function getNotificationPermission() {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== "granted") {
+        const { status } = await Notifications.requestPermissionsAsync();
+      }
+      if (status !== "granted") {
+        // Handle the case where the user declines permission
+        console.log("Failed to get push token for push notification!");
+        return;
+      }
+
+      let token;
+      token = (await Notifications.getExpoPushTokenAsync()).data;
+
+      console.log({ first_token: token });
+      // Permission granted, handle accordingly
+      await AsyncStorage.setItem("PushToken", token);
+      const value = await AsyncStorage.getItem("PushToken");
+
+      console.log({ value });
+      setPushToken(value);
+    }
+
+    getNotificationPermission();
+    // getNotificationPermission();
+  }, []);
+
+  useEffect(() => {
+    const backgroundSubscription =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log({ response });
+
+        const data = response.notification.request.content.data;
+        dispatch(NotificationDataModalFunC(true));
+
+        dispatch(NotificationDataFunC(response));
+      });
+
+    const foregroundSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log({ notification });
+
+        dispatch(NotificationDataModalFunC(true));
+        dispatch(NotificationDataFunC(notification));
+      });
+
+    return () => {
+      backgroundSubscription.remove();
+      foregroundSubscription.remove();
+    };
+  }, []);
+
+  console.log({ pushToken });
+
+  useEffect(() => {
+    dispatch(resetGetAllDriverTripsSlice());
+    // dispatch(resetLoginSlice());
+
+    return () => {};
   }, []);
 
   return (

@@ -5,7 +5,7 @@ import Login from "./screen/Login";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Tripmap from "./screen/Tripmap";
-import { Provider } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { store, persistor } from "./store";
@@ -96,93 +96,7 @@ export function TabNavigation() {
   );
 }
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => {
-    return {
-      shouldShowAlert: true,
-    };
-  },
-});
 export default function App() {
-  const [pushToken, setPushToken] = useState();
-
-  useEffect(() => {
-    async function getNotificationPermission() {
-      const { status } = await Notifications.getPermissionsAsync();
-      if (status !== "granted") {
-        const { status } = await Notifications.requestPermissionsAsync();
-      }
-      if (status !== "granted") {
-        // Handle the case where the user declines permission
-        console.log("Failed to get push token for push notification!");
-        return;
-      }
-
-      let token;
-      token = (await Notifications.getExpoPushTokenAsync()).data;
-
-      console.log({ first_token: token });
-      // Permission granted, handle accordingly
-      await AsyncStorage.setItem("PushToken", token);
-      const value = await AsyncStorage.getItem("PushToken");
-
-      console.log({ value });
-      setPushToken(value);
-    }
-
-    getNotificationPermission();
-    // getNotificationPermission();
-  }, []);
-
-  useEffect(() => {
-    const backgroundSubscription =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log({ response });
-
-        let info = response.request.trigger.remoteMessage.data.message;
-        let title = response.request.trigger.remoteMessage.data.title;
-
-        Alert.alert(
-          "Alert",
-          `${info}  ${title}`,
-          [{ text: "Yes" }, { text: "No" }],
-          { cancelable: false }
-        );
-      });
-
-    const foregroundSubscription =
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log({ notification });
-
-        console.log({
-          fire: notification.request.trigger.remoteMessage.data.message,
-        });
-
-        let info = notification.request.trigger.remoteMessage.data.message;
-        let title = notification.request.trigger.remoteMessage.data.title;
-
-        Alert.alert(
-          "Alert",
-
-          `${info}  ${title}`,
-          [{ text: "Yes" }, { text: "No" }],
-          { cancelable: false }
-        );
-        //}
-        // let data = notification;
-        // console.log({ data });
-        // GetAddress_OF_Location(notification);
-
-        return;
-      });
-
-    return () => {
-      backgroundSubscription.remove();
-      foregroundSubscription.remove();
-    };
-  }, []);
-
-  console.log({ pushToken });
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
