@@ -57,8 +57,8 @@ const Login = () => {
 
   // console.log({ GetAllDriverTripsSlice: GAme });
 
-  console.log({ userlog: data?.user.email });
-  console.log({ userlog: data?.user.id });
+  // console.log({ userlog: data?.user.email });
+  // console.log({ userlog: data?.user.id });
 
   const ActivateGetLastAssignTrip = () => {
     dispatch(
@@ -70,7 +70,7 @@ const Login = () => {
 
   function SwitchUserType() {
     if (data?.user.userType == "staff") {
-      console.log({ quserlog: data?.user.userType });
+      // console.log({ quserlog: data?.user.userType });
 
       // navigation.navigate("forgetpassword");
 
@@ -78,7 +78,7 @@ const Login = () => {
 
       // return navigation.navigate("TabNavigation", { screen: "RiderRequest" });
     } else if (data?.user.userType == "driver") {
-      console.log({ quserlog: data?.user.userType });
+      // console.log({ quserlog: data?.user.userType });
 
       navigation.navigate("DriverTabNavigation", { screen: "Driver" });
     }
@@ -232,7 +232,7 @@ const Login = () => {
     };
   }, []);
 
-  console.log({ pushToken });
+  // console.log({ pushToken });
 
   useEffect(() => {
     dispatch(resetGetAllDriverTripsSlice());
