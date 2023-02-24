@@ -273,6 +273,19 @@ const handleOntrip = async () => {
         await dispatch(KnowTrip(onLoaddata?.data?.id));
     }
   }
+  
+  else if(notificationData?.request?.content?.title == "Trip Update"){
+    await dispatch(NotificationDataModalFunC());
+  }
+  
+  else if(notificationData?.request?.content?.title == "Trip-completed"){
+    if(onLoaddata?.driverdetails?.driverId){
+        await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
+    }else if(assignedDet?.driverdetails?.driverId){
+      await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
+  }
+    await dispatch(NotificationDatasReset());
+  }
     };
 
   // this must never be remove
@@ -296,11 +309,18 @@ const handleOntrip = async () => {
           if(!assignedDet?.driverdetails?.driverId){
           await dispatch(AssignedDriver(userdet));
           }
+          else if(notificationData?.request?.content?.title == "Trip-completed"){
+            if(onLoaddata?.driverdetails?.driverId){
+                await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
+            }else if(assignedDet?.driverdetails?.driverId){
+              await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
+          }
+            await dispatch(NotificationDatasReset());
+          }
+
           if(onLoaddata?.driverdetails?.driverId){
-            console.log("showing here ", tripStatus)
               await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
           }else if(assignedDet?.driverdetails?.driverId){
-            console.log("showing here too", tripStatus)
             await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
         }
           
@@ -532,6 +552,19 @@ const handleOntrip = async () => {
                       </TouchableOpacity>
                     </View> 
                     :
+                    notificationData?.request?.content?.title == "Trip Update"? 
+                    <View style={{ width: "40%" }}>
+                      <Text
+                          style={{
+                            alignSelf: "center",
+                            color: "#005091",
+                            fontSize: 16,
+                          }}
+                        >
+                          Trip paused
+                        </Text>
+                    </View>
+                    :
                     <View style={{ width: "40%" }}>
                       <TouchableOpacity
                         // onPress={this.oncompleted}
@@ -707,6 +740,19 @@ const handleOntrip = async () => {
                           SHARE DETAILS
                         </Text>
                       </TouchableOpacity>
+                    </View>
+                    :
+                    notificationData?.request?.content?.title == "Trip Update"? 
+                    <View style={{ width: "40%" }}>
+                      <Text
+                          style={{
+                            alignSelf: "center",
+                            color: "#005091",
+                            fontSize: 16,
+                          }}
+                        >
+                          Trip paused
+                        </Text>
                     </View> 
                      : 
                      <View style={{ width: "40%" }}>
