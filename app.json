@@ -11,9 +11,9 @@
         "expo-notifications"  ]
     ],
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/images/splash2.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#005091"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
