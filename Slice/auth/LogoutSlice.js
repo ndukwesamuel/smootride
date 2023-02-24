@@ -20,11 +20,6 @@ const initialState = {
 const logout_Service = async (usertoken) => {
   let url = process.env.SMOOTHRIDE_NEWAPI + "logout";
 
-  //   const response = await axios.post(url, userData);
-
-  // console.log(response.data);
-  //   return response.data;
-
   const config = {
     headers: {
       Authorization: `Bearer ${usertoken}`,
@@ -62,13 +57,7 @@ export const LogoutSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isSuccess = false;
-      state.isError = false;
-      state.message = "";
-      state.LogoutData = null;
-    },
+    reset: (state) => initialState,
   },
 
   extraReducers: (builder) => {

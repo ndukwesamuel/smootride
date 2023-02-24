@@ -53,9 +53,9 @@ const Login = () => {
     (state) => state.LoginSlice
   );
 
-  const GAme = useSelector((state) => state);
+  // const GAme = useSelector((state) => state);
 
-  console.log({ GetAllDriverTripsSlice: GAme.GetAllDriverTripsSlice });
+  // console.log({ GetAllDriverTripsSlice: GAme });
 
   // console.log({ userlog: data?.user.email });
   // console.log({ userlog: data?.user.id });
@@ -74,7 +74,7 @@ const Login = () => {
 
       // navigation.navigate("forgetpassword");
 
-      navigation.navigate("TabNavigation", { screen: "Driver" });
+      navigation.navigate("TabNavigation", { screen: "RiderRequest" });
 
       // return navigation.navigate("TabNavigation", { screen: "RiderRequest" });
     } else if (data?.user.userType == "driver") {
@@ -123,6 +123,9 @@ const Login = () => {
   }, [user, data, isLoading, isError]);
 
   const handleLogin = () => {
+    dispatch(resetGetAllDriverTripsSlice());
+    dispatch(resetLoginSlice());
+
     if (email == "" || password == "") {
       Alert.alert(
         "Alert",

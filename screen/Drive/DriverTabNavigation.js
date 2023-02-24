@@ -136,82 +136,86 @@ const DriverTabNavigation = () => {
         />
       </Tab.Navigator>
 
-      <Modal
-        visible={notificationDataModal}
-        animationType="slide"
-        transparent={true}
-        // isVisible={this.state.getlocationmodal}
-      >
-        <View className=" justify-center flex-1 items-center">
-          <View className="bg-white  items-center w-[90%] rounded-lg p-2">
-            {notificationData?.notification && (
-              <>
-                {notificationData && (
-                  <Text className="px-3 text-[#877A80] text-[15px]">
-                    {notificationData?.notification.request.content.body}
-                  </Text>
-                )}
+      {notificationData && (
+        <Modal
+          visible={notificationDataModal}
+          animationType="slide"
+          transparent={true}
+          // isVisible={this.state.getlocationmodal}
+        >
+          <View className=" justify-center flex-1 items-center">
+            <View className="bg-white  items-center w-[90%] rounded-lg p-2">
+              {notificationData?.notification && (
+                <>
+                  {notificationData && (
+                    <Text className="px-3 text-[#877A80] text-[15px]">
+                      {notificationData?.notification.request.content.body}
+                    </Text>
+                  )}
 
-                {notificationData?.notification.request.content.data.type !=
-                  "trip-request" && (
-                  <>
+                  {notificationData?.notification.request.content.data.type !=
+                    "trip-request" && (
+                    <>
+                      <Pressable
+                        className="bg-red-400 mt-10 w-[30%] rounded "
+                        onPress={notificationChange}
+                      >
+                        <Text className="text-white  p-2 text-center">
+                          Close
+                        </Text>
+                      </Pressable>
+                    </>
+                  )}
+
+                  {notificationData?.notification.request.content.data.type ===
+                    "trip-request" && (
+                    <Pressable
+                      className="bg-black mt-10 w-[30%] rounded "
+                      onPress={notificationGetTrip}
+                    >
+                      <Text className="text-white  p-2 text-center">
+                        trip request
+                      </Text>
+                    </Pressable>
+                  )}
+                </>
+              )}
+
+              {notificationData?.request && (
+                <>
+                  {notificationData && (
+                    <Text className="px-3 text-[#877A80] text-[15px]">
+                      {notificationData?.request.content.body}
+                    </Text>
+                  )}
+
+                  {notificationData?.request.content.data.type !=
+                    "trip-request" && (
                     <Pressable
                       className="bg-red-400 mt-10 w-[30%] rounded "
                       onPress={notificationChange}
                     >
-                      <Text className="text-white  p-2 text-center">Close</Text>
+                      <Text className="text-white  p-2 text-center">CLose</Text>
                     </Pressable>
-                  </>
-                )}
+                  )}
 
-                {notificationData?.notification.request.content.data.type ===
-                  "trip-request" && (
-                  <Pressable
-                    className="bg-black mt-10 w-[30%] rounded "
-                    onPress={notificationGetTrip}
-                  >
-                    <Text className="text-white  p-2 text-center">
-                      trip request
-                    </Text>
-                  </Pressable>
-                )}
-              </>
-            )}
-
-            {notificationData?.request && (
-              <>
-                {notificationData && (
-                  <Text className="px-3 text-[#877A80] text-[15px]">
-                    {notificationData?.request.content.body}
-                  </Text>
-                )}
-
-                {notificationData?.request.content.data.type !=
-                  "trip-request" && (
-                  <Pressable
-                    className="bg-red-400 mt-10 w-[30%] rounded "
-                    onPress={notificationChange}
-                  >
-                    <Text className="text-white  p-2 text-center">CLose</Text>
-                  </Pressable>
-                )}
-
-                {notificationData?.request.content.data.type ===
-                  "trip-request" && (
-                  <Pressable
-                    className="bg-black mt-10 w-[30%] rounded "
-                    onPress={notificationGetTrip}
-                  >
-                    <Text className="text-white  p-2 text-center">
-                      trip request
-                    </Text>
-                  </Pressable>
-                )}
-              </>
-            )}
+                  {notificationData?.request.content.data.type ===
+                    "trip-request" && (
+                    <Pressable
+                      className="bg-black mt-10 w-[30%] rounded "
+                      onPress={notificationGetTrip}
+                    >
+                      <Text className="text-white  p-2 text-center">
+                        trip request
+                      </Text>
+                    </Pressable>
+                  )}
+                </>
+              )}
+            </View>
           </View>
-        </View>
-      </Modal>
+        </Modal>
+      )}
     </>
   );
 };
