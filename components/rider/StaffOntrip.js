@@ -82,6 +82,8 @@ const StaffOntrip = ({accepted, notificationData, handleOntrip}) => {
                     
                     <Text style={{color:'#000',alignSelf:'center',fontSize:17,padding:12,marginRight:5, fontWeight:"bold"}}> {notificationData?.request?.content?.title}</Text>
                     <Text style={{color:'#000',alignSelf:'center',fontSize:13,marginRight:5}}> {notificationData?.request?.content?.body}</Text> 
+                    <Text style={{color:'#000',alignSelf:'center',fontSize:13,marginRight:5}}> Price of Trip: {notificationData?.request?.content?.data?.data?.tripAmt} naira</Text> 
+
 
                         <View style={{padding:10,alignSelf:'center',marginTop:5,width:'100%'}}>
                             <TouchableOpacity onPress = {handleOntrip} style={{width:'100%',backgroundColor:'#fff',borderWidth:1,borderColor:'#005091',backgroundColor:'#005091',marginTop:2,borderRadius:5}}>
