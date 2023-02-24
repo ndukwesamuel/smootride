@@ -80,7 +80,9 @@ const EndTripButtton = () => {
     (state) => state.CompleteDriverTripSlice
   );
 
-  // console.log("dsd");
+  // console.log({ change: holdriderdata.driverdetails.pushToken });
+
+  // data.pushToken
 
   const { getuserDATA } = useSelector((state) => state.GetUserConfigSlice);
 
@@ -207,6 +209,28 @@ const EndTripButtton = () => {
       dispatch(CompletedTripActivated(TripSummaryData));
       dispatch(ActivateStartTrip());
       dispatch(resetGetLastAssignTripSlice());
+
+      let Data_to_be_Sent_to_rider = {
+        trip_start_time: First_Trip_start_time,
+        Distant_Covered: total_distance_covered,
+        tripAmt: parseFloat(basefare) + Amount_without_Base_fare,
+        date_End: EndTime,
+      };
+
+      fetch("https://exp.host/--/api/v2/push/send", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Accept-Encoding": "gzip, deflate",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          to: holdriderdata.driverdetails.pushToken,
+          data: { extraData: Data_to_be_Sent_to_rider },
+          title: "Trip Update",
+          body: "This is a summary of the recently completed trip.  ",
+        }),
+      });
     }
 
     setEndingTrip(false);
