@@ -130,6 +130,8 @@ const Driver = () => {
 
   const { riderdata } = useSelector((state) => state.GetLastAssignTripSlice);
 
+  // console.log({ riderdata });
+
   const { drivestatus } = useSelector((state) => state.UpdateDriverStatusSlice);
 
   const { IsError, AcceptTrip, IsSucess, message, IsLoading } = useSelector(
@@ -168,25 +170,6 @@ const Driver = () => {
       // dispatch(reset());
     };
   }, [reload]);
-
-  // this must never be remove
-  // const [counter, setCounter] = useState(0);
-  // useEffect(() => {
-  //   if (!startTripdata) {
-  //     const interval = setTimeout(() => {
-  //       setCounter(counter + 1);
-  //       dispatch(
-  //         GetLastAssignTrip({
-  //           user_id: 1,
-  //         })
-  //       );
-  //     }, 5000);
-
-  //     return () => clearTimeout(interval);
-  //   }
-  // }, [counter]);
-
-  // console.log({ counter });
 
   let dataforDriverRequest = {
     isrequesting: false,
