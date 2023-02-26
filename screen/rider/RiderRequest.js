@@ -279,12 +279,18 @@ const handleOntrip = async () => {
   }
   
   else if(notificationData?.request?.content?.title == "Trip-completed"){
+    const userdet = {
+            user_id: user_id,
+          };
+    setReboot(true);
     if(onLoaddata?.driverdetails?.driverId){
         await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
     }else if(assignedDet?.driverdetails?.driverId){
       await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
   }
     await dispatch(NotificationDatasReset());
+    await dispatch(AssignedDriver(userdet));
+    setReboot(false);
   }
     };
 
@@ -306,26 +312,29 @@ const handleOntrip = async () => {
             user_id: user_id,
           };
           
-          if(!assignedDet?.driverdetails?.driverId){
-          await dispatch(AssignedDriver(userdet));
-          }
-          else if(notificationData?.request?.content?.title == "Trip-completed"){
+          // if(!assignedDet?.driverdetails?.driverId){
+          // await dispatch(AssignedDriver(userdet));
+          // }
+          if(notificationData?.request?.content?.title == "Trip-completed"){
+            setReboot(true);
             if(onLoaddata?.driverdetails?.driverId){
                 await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
             }else if(assignedDet?.driverdetails?.driverId){
               await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
           }
             await dispatch(NotificationDatasReset());
+            await dispatch(AssignedDriver(userdet));
+            setReboot(false);
           }
 
-          if(onLoaddata?.driverdetails?.driverId){
-              await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
-          }else if(assignedDet?.driverdetails?.driverId){
-            await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
-        }
+        //   if(onLoaddata?.driverdetails?.driverId){
+        //       await dispatch(TripStatus(onLoaddata?.driverdetails?.driverId))
+        //   }else if(assignedDet?.driverdetails?.driverId){
+        //     await dispatch(TripStatus(assignedDet?.driverdetails?.driverId))
+        // }
           
   
-    }, 15000);
+    }, 30000);
   
     return () => clearTimeout(interval);
   }, [counter])
