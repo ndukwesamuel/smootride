@@ -80,7 +80,7 @@ const EndTripButtton = () => {
     (state) => state.CompleteDriverTripSlice
   );
 
-  // console.log({ change: holdriderdata.driverdetails.pushToken });
+  console.log({ change: holdriderdata.data.pushToken });
 
   // data.pushToken
 
@@ -225,7 +225,7 @@ const EndTripButtton = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          to: holdriderdata.driverdetails.pushToken,
+          to: holdriderdata.data.pushToken,
           data: { extraData: Data_to_be_Sent_to_rider },
           title: "Trip Update",
           body: "This is a summary of the recently completed trip.  ",

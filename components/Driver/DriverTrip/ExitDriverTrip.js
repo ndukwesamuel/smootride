@@ -165,6 +165,24 @@ const ExitDriverTrip = () => {
 
     dispatch(CompleteDriverTripFunc(maindata));
 
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: holdriderdata.data.pushToken,
+        data: {
+          type: "Trip-completed",
+          data: maindata,
+        },
+        title: "Trip-completed",
+        body: "This trip has been completed..  ",
+      }),
+    });
+
     setTimeout(() => {
       setExitTripIsloading(false);
     }, 1000);
