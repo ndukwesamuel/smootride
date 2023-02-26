@@ -110,10 +110,6 @@ const StartTrip = () => {
   //   getPermissions();
   // }, []);
 
-  console.log(
-    "startTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTrip"
-  );
-
   const [startLoading, setStartLoading] = useState(false);
 
   const startTrip = () => {

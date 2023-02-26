@@ -21,6 +21,7 @@ import {
   CurrentLocationActivated,
   DestAddressDataFun,
   EndTimeLastDestinationLocationActivated,
+  Google_Distance_Matrix_API_FUN,
   LastDestinationLocationActivated,
   MapLocationActivated,
   resetAll_Excerpt_startTripdata,
@@ -47,6 +48,7 @@ const EndTripButtton = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [EndingTrip, setEndingTrip] = useState(false);
+  const [claculated, setClaculated] = useState(null);
 
   const {
     currentLocationData,
@@ -146,11 +148,59 @@ const EndTripButtton = () => {
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
     }
-    let destination = await Location.getCurrentPositionAsync({});
+    let destination = await Location.getCurrentPositionAsync({
+      enableHighAccuracy: true,
+      accuracy: Location.Accuracy.High,
+    });
     let EndTime = new Date().toISOString();
 
     let adddressResult = await GetAddress_OF_Location(destination);
     dispatch(DestAddressDataFun(adddressResult));
+
+    function GoogleMetixFomular(
+      currentLocationData,
+      destination,
+      First_Trip_start_time,
+      EndTime
+    ) {
+      let googleorigin = [
+        First_Trip_Location.coords.latitude,
+        First_Trip_Location.coords.longitude,
+      ];
+      let googledestination = [
+        destination.coords.latitude,
+        destination.coords.longitude,
+      ];
+      let API_KEY = "AIzaSyAsjKM16fbsmVRNU4jlrhn3yinTyu3z5JU";
+
+      const API_URL = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${googleorigin}&destinations=${googledestination}&key=${API_KEY}`;
+
+      fetch(API_URL)
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          setClaculated(data);
+          dispatch(Google_Distance_Matrix_API_FUN(data));
+          // Use the data to display the distance and time on your map
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
+    if (
+      currentLocationData &&
+      destination &&
+      First_Trip_start_time &&
+      EndTime
+    ) {
+      GoogleMetixFomular(
+        currentLocationData,
+        destination,
+        First_Trip_start_time,
+        EndTime
+      );
+    }
 
     if (
       currentLocationData &&
@@ -204,9 +254,12 @@ const EndTripButtton = () => {
         Distant_Covered: total_distance_covered,
         travelTime: travelTime,
         tripPoints: JSON.stringify(totalpointData),
+        googlemetix: claculated,
       };
 
       dispatch(CompletedTripActivated(TripSummaryData));
+
+      // dispatch(CompletedTripActivated(TripSummaryData));
       dispatch(ActivateStartTrip());
       dispatch(resetGetLastAssignTripSlice());
 
@@ -235,8 +288,6 @@ const EndTripButtton = () => {
 
     setEndingTrip(false);
   };
-
-  const stop2 = () => {};
 
   return (
     <View className="">

@@ -81,9 +81,6 @@ const TakeAnotherStartTrip = () => {
   const [startLoading, setStartLoading] = useState(false);
 
   const startTrip = () => {
-    console.log(
-      "startTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTripstartTrip"
-    );
     setStartLoading(true);
 
     getPermissions();
