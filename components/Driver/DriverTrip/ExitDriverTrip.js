@@ -83,8 +83,6 @@ const ExitDriverTrip = () => {
     Google_Distance_Matrix_API,
   } = useSelector((state) => state.StartTripSlice);
 
-  console.log({ Google_Distance_Matrix_API });
-
   console.log({ googlemetix: completedTripdata.googlemetix });
   const { getuserDATA } = useSelector((state) => state.GetUserConfigSlice);
 
@@ -106,7 +104,16 @@ const ExitDriverTrip = () => {
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
   let finalaTotalCost = parseFloat(basefare) + completedTripdata.tripAmt;
 
-  // google final cost  =
+  let google_final_cost =
+    Google_Distance_Matrix_API?.rows[0].elements[0].distance.text;
+  // console.log({ google_final_cost });
+
+  let cal_google_final_cost = parseInt(google_final_cost.replace(/[^\d]/g, ""));
+  console.log(cal_google_final_cost);
+
+  let finalaTotalCostGoogle = parseFloat(basefare) + cal_google_final_cost;
+
+  console.log({ finalaTotalCostGoogle });
 
   let data22 = {
     srcLat: completedTripdata.srcLat,
@@ -348,17 +355,7 @@ const ExitDriverTrip = () => {
                 Start Time: <Text style={styles.time}>{startDate}</Text>
               </Text>
             </Card>
-            <Card
-              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
-            >
-              <Text style={styles.details}>
-                Distant Covered:
-                <Text style={styles.time}>
-                  {/* this.props.drivertrip.distance_covered Meters */}
-                  {completedTripdata.Distant_Covered}
-                </Text>
-              </Text>
-            </Card>
+
             <Card
               style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
             >
@@ -370,12 +367,43 @@ const ExitDriverTrip = () => {
               style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
             >
               <Text style={styles.details}>
+                Distant Covered:
+                <Text style={styles.time}>
+                  {/* this.props.drivertrip.distance_covered Meters */}
+                  {completedTripdata.Distant_Covered}
+                </Text>
+              </Text>
+            </Card>
+
+            <Card
+              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
+            >
+              <Text style={styles.details} className="text-200-red">
+                Google Distance: {google_final_cost}
+                <Text style={styles.time} className="pl-10 border-2"></Text>
+              </Text>
+            </Card>
+
+            <Card
+              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
+            >
+              <Text style={styles.details}>
                 Cost of Trip (NGN):{" "}
                 <Text style={styles.time}>
                   {parseFloat(basefare) + completedTripdata.tripAmt}
                 </Text>
               </Text>
             </Card>
+
+            <Card
+              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
+            >
+              <Text style={styles.details} className="text-200-red">
+                Google Amount: {finalaTotalCostGoogle} naria
+                <Text style={styles.time} className="pl-10 border-2"></Text>
+              </Text>
+            </Card>
+
             <Card
               style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
             >
@@ -397,15 +425,6 @@ const ExitDriverTrip = () => {
                 .replace(/\d(?=(\d{3})+\.)/g, "$&,") */}
                   {cost_W}
                 </Text>
-              </Text>
-            </Card>
-
-            <Card
-              style={{ marginTop: 20, padding: 7, backgroundColor: "#fff" }}
-            >
-              <Text style={styles.details} className="text-200-red">
-                Google Distance:
-                <Text style={styles.time} className="pl-10 border-2"></Text>
               </Text>
             </Card>
 
