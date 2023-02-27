@@ -119,6 +119,24 @@ const StartTrip = () => {
     // }
     getPermissions();
     dispatch(ActivateStartTrip());
+
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: holdriderdata.data.pushToken,
+
+        data: {
+          type: "trip-start",
+        },
+        title: "Trip-starting again",
+        body: "we are going on another ride  ",
+      }),
+    });
     // setStartLoading(true);
     // console.log();
     setTimeout(() => {
