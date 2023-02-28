@@ -16,6 +16,9 @@ import {
   NotificationDatasReset,
 } from "../../Slice/auth/UpdateuserexpotokenSlice";
 import { GetLastAssignTrip } from "../../Slice/Driver/GetLastAssignTripSlice";
+import * as Network from "expo-network";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const Tab = createBottomTabNavigator();
 
