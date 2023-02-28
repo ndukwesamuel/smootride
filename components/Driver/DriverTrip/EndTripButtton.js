@@ -63,6 +63,7 @@ const EndTripButtton = () => {
     pickUpAddressData,
     destAddressData,
     totalpointData,
+    Google_Distance_Matrix_API,
   } = useSelector((state) => state.StartTripSlice);
 
   const { First_Trip_start_time, First_Trip_Location } = useSelector(
@@ -206,7 +207,8 @@ const EndTripButtton = () => {
       currentLocationData &&
       destination &&
       First_Trip_start_time &&
-      EndTime
+      EndTime &&
+      Google_Distance_Matrix_API
     ) {
       let start_lat = currentLocationData.coords.latitude;
       let start_log = currentLocationData.coords.longitude;

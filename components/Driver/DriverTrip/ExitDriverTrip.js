@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import { Card } from "react-native-shadow-cards";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
+import { Network } from "expo";
 
 import {
   ExitTripFunc,
@@ -45,9 +46,32 @@ import StartTrip from "./StartTrip";
 import TakeAnotherStartTrip from "./TakeAnotherStartTrip";
 import ExitDriverModal from "./ExitDriverModal";
 import { WaitingTimeFun } from "../../../Config/GoogleLocationAPi";
+// import * as Network from "expo-network";
 
 const ExitDriverTrip = () => {
   const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   const unsubscribe = Network.addNetworkChangeListener(() => {
+  //     checkNetwork();
+  //   });
+
+  //   const checkNetwork = async () => {
+  //     const networkState = await Network.getNetworkStateAsync();
+
+  //     console.log({ networkState });
+  //     // setIsConnected(networkState.isConnected);
+  //     // setIsModalVisible(!networkState.isConnected);
+  //   };
+
+  //   checkNetwork();
+
+  //   return () => {
+  //     unsubscribe.remove();
+  //   };
+  // }, []);
+
+  const [isConnected, setIsConnected] = useState(false);
 
   const [cancle_Ride_Finally, setCancle_Ride_Finally] = useState(false);
 
@@ -104,9 +128,9 @@ const ExitDriverTrip = () => {
   const [ExitTripIsloading, setExitTripIsloading] = useState(false);
   let finalaTotalCost = parseFloat(basefare) + completedTripdata.tripAmt;
 
+  console.log({ Google_Distance_Matrix_API });
   let google_final_cost =
     Google_Distance_Matrix_API?.rows[0].elements[0].distance.text;
-  // console.log({ google_final_cost });
 
   let cal_google_final_cost = parseInt(google_final_cost.replace(/[^\d]/g, ""));
   console.log(cal_google_final_cost);
