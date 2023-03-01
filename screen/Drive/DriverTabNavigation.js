@@ -19,6 +19,7 @@ import { GetLastAssignTrip } from "../../Slice/Driver/GetLastAssignTripSlice";
 import * as Network from "expo-network";
 import { useState } from "react";
 import { useEffect } from "react";
+import NetInfo from "@react-native-community/netinfo";
 
 const Tab = createBottomTabNavigator();
 
@@ -54,32 +55,22 @@ const DriverTabNavigation = () => {
     dispatch(NotificationDatasReset());
   };
 
-  const [first, setfirst] = useState(false);
+  const [first, setFirst] = useState(false);
 
-  const NETWORK_CHECK_DELAY = 5000; // 5 seconds
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      console.log("Connection type:", state.type);
+      console.log("Is connected?", state.isConnected);
 
-  const checkNetwork = async () => {
-    try {
-      const { isConnected } = await Network.getNetworkStateAsync();
-      console.log("Network is connected:", isConnected);
-      if (!isConnected) {
-        console.log("No network");
-        setfirst(true);
+      if (state.isConnected) {
+        setFirst(false);
+      } else {
+        setFirst(true);
       }
-    } catch (error) {
-      console.error("Error checking network state:", error);
-    }
-  };
+    });
 
-  const startNetworkCheck = () => {
-    setTimeout(async () => {
-      await checkNetwork();
-      startNetworkCheck();
-    }, NETWORK_CHECK_DELAY);
-  };
-
-  // Call startNetworkCheck() to begin checking for network connectivity
-  startNetworkCheck();
+    return () => unsubscribe();
+  }, []);
 
   return (
     <>
@@ -166,7 +157,7 @@ const DriverTabNavigation = () => {
         />
       </Tab.Navigator>
 
-      {/* <Modal
+      <Modal
         visible={first}
         animationType="slide"
         transparent={true}
@@ -177,7 +168,7 @@ const DriverTabNavigation = () => {
             <Text>The main Guy</Text>
           </View>
         </View>
-      </Modal> */}
+      </Modal>
 
       {notificationData && (
         <Modal
