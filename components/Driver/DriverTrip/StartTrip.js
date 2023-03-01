@@ -29,6 +29,7 @@ import {
   First_Trip_StartTime_Activated,
 } from "../../../Slice/Driver/FristTripSlice";
 import { GetAddress_OF_Location } from "../../../Config/GoogleLocationAPi";
+import { GetUserConfigFun } from "../../../Slice/Driver/GetUserConfig";
 let driverIcon = require("../../../assets/images/profile.jpg");
 
 const StartTrip = () => {
@@ -48,8 +49,15 @@ const StartTrip = () => {
 
   useEffect(() => {
     dispatch(HoldRiderInfoActivated(riderdata));
+    dispatch(GetUserConfigFun(riderdata));
     return () => {};
   }, [riderdata]);
+
+  // useEffect(() => {
+  //   dispatch(GetUserConfigFun(riderdata));
+
+  //   return () => {};
+  // }, []);
 
   let dataforDriverRequest = {
     isrequesting: false,
