@@ -20,6 +20,7 @@ import * as Network from "expo-network";
 import { useState } from "react";
 import { useEffect } from "react";
 import NetInfo from "@react-native-community/netinfo";
+import { NetworkFun } from "../../Slice/Driver/StartTripSlice";
 
 const Tab = createBottomTabNavigator();
 
@@ -34,6 +35,9 @@ const DriverTabNavigation = () => {
     (state) => state.LoginSlice
   );
 
+  const { Networkdata } = useSelector((state) => state.StartTripSlice);
+
+  console.log({ Networkdata });
   console.log({ userlog: data?.user.email });
   console.log({ userlog: data?.user.id });
 
@@ -63,9 +67,9 @@ const DriverTabNavigation = () => {
       console.log("Is connected?", state.isConnected);
 
       if (state.isConnected) {
-        setFirst(false);
+        dispatch(NetworkFun(false));
       } else {
-        setFirst(true);
+        dispatch(NetworkFun(true));
       }
     });
 
@@ -157,18 +161,19 @@ const DriverTabNavigation = () => {
         />
       </Tab.Navigator>
 
-      <Modal
+      {/* <Modal
         visible={first}
         animationType="slide"
         transparent={true}
         // isVisible={this.state.getlocationmodal}
-      >
-        <View className=" justify-center flex-1 items-center">
-          <View className="bg-white  items-center w-[90%] rounded-lg p-2">
-            <Text>The main Guy</Text>
-          </View>
-        </View>
-      </Modal>
+      > */}
+
+      {Networkdata && (
+        <Text className="text-center text-red-500 font-extrabold ">
+          "No network connection"
+        </Text>
+      )}
+      {/* </Modal> */}
 
       {notificationData && (
         <Modal
