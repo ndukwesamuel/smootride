@@ -54,6 +54,33 @@ const DriverTabNavigation = () => {
     dispatch(NotificationDatasReset());
   };
 
+  const [first, setfirst] = useState(false);
+
+  const NETWORK_CHECK_DELAY = 5000; // 5 seconds
+
+  const checkNetwork = async () => {
+    try {
+      const { isConnected } = await Network.getNetworkStateAsync();
+      console.log("Network is connected:", isConnected);
+      if (!isConnected) {
+        console.log("No network");
+        setfirst(true);
+      }
+    } catch (error) {
+      console.error("Error checking network state:", error);
+    }
+  };
+
+  const startNetworkCheck = () => {
+    setTimeout(async () => {
+      await checkNetwork();
+      startNetworkCheck();
+    }, NETWORK_CHECK_DELAY);
+  };
+
+  // Call startNetworkCheck() to begin checking for network connectivity
+  startNetworkCheck();
+
   return (
     <>
       <Tab.Navigator
@@ -138,6 +165,19 @@ const DriverTabNavigation = () => {
           }}
         />
       </Tab.Navigator>
+
+      {/* <Modal
+        visible={first}
+        animationType="slide"
+        transparent={true}
+        // isVisible={this.state.getlocationmodal}
+      >
+        <View className=" justify-center flex-1 items-center">
+          <View className="bg-white  items-center w-[90%] rounded-lg p-2">
+            <Text>The main Guy</Text>
+          </View>
+        </View>
+      </Modal> */}
 
       {notificationData && (
         <Modal

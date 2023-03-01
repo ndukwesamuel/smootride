@@ -129,8 +129,8 @@ const ExitDriverTrip = () => {
   let finalaTotalCost = parseFloat(basefare) + completedTripdata.tripAmt;
 
   console.log({ Google_Distance_Matrix_API });
-  let google_final_cost =
-    Google_Distance_Matrix_API?.rows[0].elements[0].distance.text;
+  let google_final_cost = "2 m";
+  // Google_Distance_Matrix_API?.rows[0].elements[0].distance.text;
 
   let cal_google_final_cost = parseInt(google_final_cost.replace(/[^\d]/g, ""));
   console.log(cal_google_final_cost);

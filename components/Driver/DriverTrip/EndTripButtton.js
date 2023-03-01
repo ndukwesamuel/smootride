@@ -144,7 +144,6 @@ const EndTripButtton = () => {
 
   const stopTrip = async () => {
     setEndingTrip(true);
-
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
@@ -154,7 +153,6 @@ const EndTripButtton = () => {
       accuracy: Location.Accuracy.High,
     });
     let EndTime = new Date().toISOString();
-
     let adddressResult = await GetAddress_OF_Location(destination);
     dispatch(DestAddressDataFun(adddressResult));
 
@@ -173,7 +171,6 @@ const EndTripButtton = () => {
         destination.coords.longitude,
       ];
       let API_KEY = "AIzaSyAsjKM16fbsmVRNU4jlrhn3yinTyu3z5JU";
-
       const API_URL = `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${googleorigin}&destinations=${googledestination}&key=${API_KEY}`;
 
       fetch(API_URL)
@@ -252,7 +249,7 @@ const EndTripButtton = () => {
         tripAmt: Amount_without_Base_fare,
         date_End: EndTime,
         WaitedTime: "this is the time they waite",
-        Cost_of_waiting: "this iw the waiting period",
+        Cost_of_waiting: "this is the waiting period",
         Distant_Covered: total_distance_covered,
         travelTime: travelTime,
         tripPoints: JSON.stringify(totalpointData),
