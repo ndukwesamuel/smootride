@@ -161,20 +161,6 @@ const DriverTabNavigation = () => {
         />
       </Tab.Navigator>
 
-      {/* <Modal
-        visible={first}
-        animationType="slide"
-        transparent={true}
-        // isVisible={this.state.getlocationmodal}
-      > */}
-
-      {Networkdata && (
-        <Text className="text-center text-red-500 font-extrabold ">
-          "No network connection"
-        </Text>
-      )}
-      {/* </Modal> */}
-
       {notificationData && (
         <Modal
           visible={notificationDataModal}

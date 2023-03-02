@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "967674713493",
-    "firebase_url": "https://testingproject-81354-default-rtdb.firebaseio.com",
-    "project_id": "testingproject-81354",
-    "storage_bucket": "testingproject-81354.appspot.com"
+    "project_number": "810295842972",
+    "project_id": "smoothride-7d7df",
+    "storage_bucket": "smoothride-7d7df.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:967674713493:android:2cff47cc217fbfb804929c",
+        "mobilesdk_app_id": "1:810295842972:android:5a3d51f9f43746bb317559",
         "android_client_info": {
-          "package_name": "com.bct.pushNotificationFolder"
+          "package_name": "com.samheart.Smoothride"
         }
       },
       "oauth_client": [
         {
-          "client_id": "967674713493-27gjbnbn2lqgrnqcp3q9qi20qhrmpkvp.apps.googleusercontent.com",
+          "client_id": "810295842972-u6jptlb4eq46sj0h2tcqt38kcf46l1rv.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCLZOco4yJjEoJ57JdhhU8avcBZKw0QE4M"
+          "current_key": "AIzaSyAv4oAOEXZVeCrh8eg_HnqdbVw0HGCPtrI"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "967674713493-27gjbnbn2lqgrnqcp3q9qi20qhrmpkvp.apps.googleusercontent.com",
+              "client_id": "810295842972-u6jptlb4eq46sj0h2tcqt38kcf46l1rv.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
