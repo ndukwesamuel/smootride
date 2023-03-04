@@ -1,8 +1,6 @@
 import {
   ActivityIndicator,
   Alert,
-  Modal,
-  Pressable,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,8 +15,6 @@ import Geolocation from "react-native-geolocation-service";
 import { useDispatch, useSelector } from "react-redux";
 
 import * as Location from "expo-location";
-
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   ActivateStartTrip,
   CompletedTripActivated,
@@ -68,7 +64,6 @@ const EndTripButtton = () => {
     destAddressData,
     totalpointData,
     Google_Distance_Matrix_API,
-    Networkdata,
   } = useSelector((state) => state.StartTripSlice);
 
   const { First_Trip_start_time, First_Trip_Location } = useSelector(
@@ -88,13 +83,15 @@ const EndTripButtton = () => {
     (state) => state.CompleteDriverTripSlice
   );
 
+  // data.pushToken
+
   const { getuserDATA } = useSelector((state) => state.GetUserConfigSlice);
 
-  // useEffect(() => {
-  //   dispatch(GetUserConfigFun(holdriderdata));
+  useEffect(() => {
+    dispatch(GetUserConfigFun(holdriderdata));
 
-  //   return () => {};
-  // }, []);
+    return () => {};
+  }, []);
 
   const [counter, setCounter] = useState(0);
   const getPermissions = async () => {
@@ -143,7 +140,7 @@ const EndTripButtton = () => {
     return () => unsubscribe();
   }, []);
 
-  const Network_stopTrip = async () => {
+  const stopTrip = async () => {
     setEndingTrip(true);
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
@@ -289,225 +286,38 @@ const EndTripButtton = () => {
     setEndingTrip(false);
   };
 
-  const No_Network_stopTrip = async () => {
-    setEndingTrip(true);
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
-    }
-    let destination = await Location.getCurrentPositionAsync({
-      enableHighAccuracy: true,
-      accuracy: Location.Accuracy.Lowest,
-    });
-
-    let EndTime = new Date().toISOString();
-    let adddressResult = await GetAddress_OF_Location(destination);
-    dispatch(DestAddressDataFun(adddressResult));
-
-    console.log(destination);
-
-    console.log("what happen g");
-
-    if (
-      currentLocationData &&
-      destination &&
-      First_Trip_start_time &&
-      EndTime
-      // &&
-      // Google_Distance_Matrix_API
-    ) {
-      let start_lat = currentLocationData.coords.latitude;
-      let start_log = currentLocationData.coords.longitude;
-
-      let end_lat = destination.coords.latitude;
-      let end_log = destination.coords.longitude;
-
-      const startCoords = { latitude: start_lat, longitude: start_log };
-      const endCoords = { latitude: end_lat, longitude: end_log };
-
-      let Result_Of_Meters_Corverd = haversine(startCoords, endCoords);
-
-      let distance__2 =
-        parseFloat(Result_Of_Meters_Corverd) +
-        parseFloat(total_distance_covered);
-
-      dispatch(TotalDistanceCoveredFun(distance__2));
-
-      // formular = base + km + time
-      let basefare = getuserDATA?.config.basefare;
-      let km = total_distance_covered * getuserDATA?.config.perkm;
-
-      const timestamp1 = First_Trip_start_time;
-      const timestamp2 = EndTime;
-      const date1 = new Date(timestamp1);
-      const date2 = new Date(timestamp2);
-      const diffInMs = date2 - date1;
-      const travelTime = diffInMs / 1000 / 60;
-
-      let travelTimeCost = travelTime * getuserDATA?.config.permin;
-      let Amount_without_Base_fare = travelTimeCost + km;
-
-      console.log({ Amount_without_Base_fare });
-
-      let TripSummaryData = {
-        srcLat: First_Trip_Location.coords.latitude,
-        srcLong: First_Trip_Location.coords.longitude,
-        destLat: end_lat,
-        destLong: end_log,
-        trip_start_time: First_Trip_start_time,
-        tripAmt: Amount_without_Base_fare,
-        date_End: EndTime,
-        WaitedTime: "this is the time they waite",
-        Cost_of_waiting: "this is the waiting period",
-        Distant_Covered: total_distance_covered,
-        travelTime: travelTime,
-        tripPoints: JSON.stringify(totalpointData),
-        googlemetix: claculated,
-      };
-
-      // console.log({ TripSummaryData });
-
-      dispatch(CompletedTripActivated(TripSummaryData));
-
-      dispatch(CompletedTripActivated(TripSummaryData));
-      dispatch(ActivateStartTrip());
-      dispatch(resetGetLastAssignTripSlice());
-
-      let Data_to_be_Sent_to_rider = {
-        trip_start_time: First_Trip_start_time,
-        Distant_Covered: total_distance_covered,
-        tripAmt: parseFloat(basefare) + Amount_without_Base_fare,
-        date_End: EndTime,
-      };
-
-      // fetch("https://exp.host/--/api/v2/push/send", {
-      //   method: "POST",
-      //   headers: {
-      //     Accept: "application/json",
-      //     "Accept-Encoding": "gzip, deflate",
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     to: holdriderdata.data.pushToken,
-      //     data: { extraData: Data_to_be_Sent_to_rider },
-      //     title: "Trip Update",
-      //     body: "This is a summary of the recently completed trip.  ",
-      //   }),
-      // });
-    }
-
-    setEndingTrip(false);
-  };
-
-  const [networkModal, setNetworkModal] = useState(false);
-  const PressToEndTrip = () => {
-    setNetworkModal(true);
-  };
-
-  // const changeYYY = () => {
-  //   // setNetworkModal(false);
-
-  //   setNetworkModal(false);
-  // };
-
   return (
-    <>
-      <Modal
-        visible={networkModal}
-        animationType="slide"
-        transparent={true}
-        // isVisible={this.state.getlocationmodal}
-      >
-        <View className=" justify-center flex-1 items-center">
-          <View className="bg-white  items-center w-[90%] rounded-lg p-2">
-            {Networkdata && (
-              <View className=" flex-row items-center">
-                <MaterialCommunityIcons
-                  name="access-point-network-off"
-                  size={24}
-                  color="red"
-                />
+    <View className="">
+      <Card className="p-5 w-full ">
+        <TouchableOpacity
+          onPress={stopTrip}
+          style={{ backgroundColor: "#a31225", padding: 10 }}
+        >
+          {EndingTrip && (
+            <TouchableOpacity
+              style={{ backgroundColor: "#a31225", padding: 10 }}
+            >
+              <ActivityIndicator color="#fff" size="small" />
+            </TouchableOpacity>
+          )}
 
-                <Text className="text-center  font-extrabold ">
-                  "No network connection"
-                </Text>
-              </View>
-            )}
+          {/* CompleteDriverTripData */}
 
-            <Text className="text-center  font-extrabold ">
-              You are about to complete the current Trip. 
+          {!EndingTrip && (
+            <Text
+              style={{
+                alignSelf: "center",
+                color: "#fff",
+                fontSize: 15,
+                //   fontFamily: "Roboto-Regular",
+              }}
+            >
+              End Trip
             </Text>
-
-            <View className="">
-              <Pressable
-                onPress={() => setNetworkModal(false)}
-                className="text-center px-2 py-2  rounded-lg mt-3  bg-green-400"
-              >
-                <Text className="text-white  text-center" style={styles.text}>
-                  Back to Trip
-                </Text>
-              </Pressable>
-
-              {Networkdata && (
-                <Pressable
-                  onPress={No_Network_stopTrip}
-                  className="text-center  px-2 py-2  rounded-lg mt-3  bg-[#a31225]"
-                >
-                  <Text
-                    className="text-white px-2  text-center"
-                    style={styles.text}
-                  >
-                    End Trip
-                  </Text>
-                </Pressable>
-              )}
-
-              {!Networkdata && (
-                <Pressable
-                  onPress={Network_stopTrip}
-                  className="text-center py-2  rounded-lg mt-3  bg-[#005091]"
-                >
-                  <Text className="text-white  text-center" style={styles.text}>
-                    End Trip
-                  </Text>
-                </Pressable>
-              )}
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <View className="">
-        <Card className="p-5 w-full ">
-          <TouchableOpacity
-            onPress={PressToEndTrip}
-            style={{ backgroundColor: "#a31225", padding: 10 }}
-          >
-            {EndingTrip && (
-              <TouchableOpacity
-                style={{ backgroundColor: "#a31225", padding: 10 }}
-              >
-                <ActivityIndicator color="#fff" size="small" />
-              </TouchableOpacity>
-            )}
-
-            {/* CompleteDriverTripData */}
-
-            {!EndingTrip && (
-              <Text
-                style={{
-                  alignSelf: "center",
-                  color: "#fff",
-                  fontSize: 15,
-                  //   fontFamily: "Roboto-Regular",
-                }}
-              >
-                End Trip
-              </Text>
-            )}
-          </TouchableOpacity>
-        </Card>
-      </View>
-    </>
+          )}
+        </TouchableOpacity>
+      </Card>
+    </View>
   );
 };
 

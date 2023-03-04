@@ -13,6 +13,8 @@ const initialState = {
   pickUpAddressData: null,
   destAddressData: null,
   totalpointData: [],
+  Google_Distance_Matrix_API: null,
+  Networkdata: false,
 };
 
 export const StartTripSlice = createSlice({
@@ -34,8 +36,16 @@ export const StartTripSlice = createSlice({
       state.startTripdata = !state.startTripdata;
     },
 
+    NetworkFun: (state, action) => {
+      state.Networkdata = action.payload;
+    },
+
     MapLocationActivated: (state, action) => {
       state.maplocationdata = action.payload;
+    },
+
+    Google_Distance_Matrix_API_FUN: (state, action) => {
+      state.Google_Distance_Matrix_API = action.payload;
     },
 
     PickUpAddressFun: (state, action) => {
@@ -95,6 +105,8 @@ export const {
   PickUpAddressFun,
   DestAddressDataFun,
   TotalpointActivated,
+  Google_Distance_Matrix_API_FUN,
+  NetworkFun,
 } = StartTripSlice.actions;
 
 export default StartTripSlice.reducer;

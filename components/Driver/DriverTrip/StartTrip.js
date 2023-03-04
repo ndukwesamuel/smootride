@@ -29,6 +29,7 @@ import {
   First_Trip_StartTime_Activated,
 } from "../../../Slice/Driver/FristTripSlice";
 import { GetAddress_OF_Location } from "../../../Config/GoogleLocationAPi";
+import { GetUserConfigFun } from "../../../Slice/Driver/GetUserConfig";
 let driverIcon = require("../../../assets/images/profile.jpg");
 
 const StartTrip = () => {
@@ -48,8 +49,15 @@ const StartTrip = () => {
 
   useEffect(() => {
     dispatch(HoldRiderInfoActivated(riderdata));
+    dispatch(GetUserConfigFun(riderdata));
     return () => {};
   }, [riderdata]);
+
+  // useEffect(() => {
+  //   dispatch(GetUserConfigFun(riderdata));
+
+  //   return () => {};
+  // }, []);
 
   let dataforDriverRequest = {
     isrequesting: false,
@@ -119,6 +127,24 @@ const StartTrip = () => {
     // }
     getPermissions();
     dispatch(ActivateStartTrip());
+
+    fetch("https://exp.host/--/api/v2/push/send", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: holdriderdata.data.pushToken,
+
+        data: {
+          type: "trip-start",
+        },
+        title: "Trip-starting again",
+        body: "we are going on another ride  ",
+      }),
+    });
     // setStartLoading(true);
     // console.log();
     setTimeout(() => {

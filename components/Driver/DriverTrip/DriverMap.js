@@ -110,7 +110,10 @@ const DriverMap = () => {
       return false;
     }
 
-    let currentLocation = await Location.getCurrentPositionAsync({});
+    let currentLocation = await Location.getCurrentPositionAsync({
+      enableHighAccuracy: true,
+      accuracy: Location.Accuracy.High,
+    });
 
     let startTime = new Date().toISOString();
 

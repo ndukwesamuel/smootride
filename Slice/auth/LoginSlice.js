@@ -72,7 +72,6 @@ export const LoginSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.user = true;
-        console.log({ thisis: action });
         state.data = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
