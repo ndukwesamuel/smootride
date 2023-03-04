@@ -25,6 +25,8 @@
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
+      "useNextNotificationsApi":true,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyAsjKM16fbsmVRNU4jlrhn3yinTyu3z5JU"
