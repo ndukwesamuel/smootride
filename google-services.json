@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "810295842972",
-    "project_id": "smoothride-7d7df",
-    "storage_bucket": "smoothride-7d7df.appspot.com"
+    "project_number": "9760169781",
+    "project_id": "smoothridelatest",
+    "storage_bucket": "smoothridelatest.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:810295842972:android:5a3d51f9f43746bb317559",
+        "mobilesdk_app_id": "1:9760169781:android:d4ac59471ba361ac94f67c",
         "android_client_info": {
           "package_name": "com.samheart.Smoothride"
         }
       },
       "oauth_client": [
         {
-          "client_id": "810295842972-u6jptlb4eq46sj0h2tcqt38kcf46l1rv.apps.googleusercontent.com",
+          "client_id": "9760169781-v7u4l8k5o2vhotu0su1nae3fkgqh6qpf.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAv4oAOEXZVeCrh8eg_HnqdbVw0HGCPtrI"
+          "current_key": "AIzaSyDnxJ3rc5C6noX1NYJa-ndpRASrSOSN4ug"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "810295842972-u6jptlb4eq46sj0h2tcqt38kcf46l1rv.apps.googleusercontent.com",
+              "client_id": "9760169781-v7u4l8k5o2vhotu0su1nae3fkgqh6qpf.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
