@@ -1,34 +1,78 @@
 {
   "project_info": {
-    "project_number": "9760169781",
-    "project_id": "smoothridelatest",
-    "storage_bucket": "smoothridelatest.appspot.com"
+    "project_number": "644627894625",
+    "firebase_url": "https://taxismoothride.firebaseio.com",
+    "project_id": "taxismoothride",
+    "storage_bucket": "taxismoothride.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:9760169781:android:d4ac59471ba361ac94f67c",
+        "mobilesdk_app_id": "1:644627894625:android:8660dbc943f871da627520",
         "android_client_info": {
           "package_name": "com.samheart.Smoothride"
         }
       },
       "oauth_client": [
         {
-          "client_id": "9760169781-v7u4l8k5o2vhotu0su1nae3fkgqh6qpf.apps.googleusercontent.com",
+          "client_id": "644627894625-0nqba54g6uscc1npbr7qhr0fs4pochu6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDnxJ3rc5C6noX1NYJa-ndpRASrSOSN4ug"
+          "current_key": "AIzaSyBYFGfFtYq6RP4Wy5rYmuG5hlxuo8-5O1M"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "9760169781-v7u4l8k5o2vhotu0su1nae3fkgqh6qpf.apps.googleusercontent.com",
+              "client_id": "644627894625-0nqba54g6uscc1npbr7qhr0fs4pochu6.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "644627894625-11kd7a5llfh6o27vm7f5kl275b2o0pqe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smoothridetaxiapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644627894625:android:1fe9144a2387cf04627520",
+        "android_client_info": {
+          "package_name": "com.taxismoothrideapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644627894625-0nqba54g6uscc1npbr7qhr0fs4pochu6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBYFGfFtYq6RP4Wy5rYmuG5hlxuo8-5O1M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644627894625-0nqba54g6uscc1npbr7qhr0fs4pochu6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "644627894625-11kd7a5llfh6o27vm7f5kl275b2o0pqe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smoothridetaxiapp"
+              }
             }
           ]
         }
