@@ -36,8 +36,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.samheart.Smoothride",
-      "googleServicesFile": "./google-services.json",
-      "useNextNotificationsApi":true
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
